@@ -9,7 +9,7 @@ $args['administrator'] = array(
 reg_hook('reg_page',$args);
 
 class admin_kmi{
-	public function _reg(){
+	public static function _reg(){
 		$GLOBALS['body'] = 'page-header-fixed';
 		
 		$prefix = constant('_prefix');
@@ -22,11 +22,11 @@ class admin_kmi{
 		reg_hook('reg_sidebar',sidemenu_admin());
 	}
 
-	public function _page(){
+	public static function _page(){
 		theme_layout('load_here');
 	}
 
-	private function _script(){
+	private static function _script(){
 		$script = new vendor_script();
 		$theme = new theme_script();
 
@@ -76,7 +76,7 @@ class admin_kmi{
 		reg_hook("reg_script_foot",$custom);
 	}
 
-	private function load_script(){
+	private static function load_script(){
 		$args = array(
 			array(
 				'func'	=> '_quickbar',

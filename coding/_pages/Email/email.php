@@ -3,7 +3,7 @@
 require 'include/function.php';
 
 class blast_email{
-	public function _reg($status=false){
+	public static function _reg($status=false){
 		$GLOBALS['body'] = 'page-header-fixed';
 		
 		if(!isset($_SESSION[_prefix.'page'])){
@@ -15,11 +15,11 @@ class blast_email{
 		sobad_asset::_sidemenu('email');
 	}
 
-	public function _page(){
+	public static function _page(){
 		theme_layout('load_here');
 	}
 
-	private function _script(){
+	private static function _script(){
 		$script = new vendor_script();
 		$theme = new theme_script();
 	// libs
@@ -84,7 +84,7 @@ class blast_email{
 		reg_hook("reg_script_foot",$custom);
 	}
 
-	private function load_script(){
+	private static function load_script(){
 		$args = array(
 			array(
 				'func'	=> '_quickbar',

@@ -3,12 +3,12 @@
 
 class login_system{
 
-	public function _reg(){
+	public static function _reg(){
 		$GLOBALS['body'] = 'login';
 		self::script_login();
 	}
 
-	private function script_login(){
+	private static function script_login(){
 		$script = new vendor_script();
 		$theme = new theme_script();
 
@@ -48,7 +48,7 @@ class login_system{
 		reg_hook("reg_script_foot",$custom);
 	}
 
-	private function load_script(){
+	private static function load_script(){
 		$args = array(
 			array(
 				'func'	=> '_init_login',
@@ -67,11 +67,11 @@ class login_system{
 		return ob_get_clean();
 	}
 
-	public function _page(){
+	public static function _page(){
 		user_login::login();
 	}
 
-	public function check_login($args=array()){
+	public static function check_login($args=array()){
 		$data = sobad_asset::ajax_conv_json($args);
 		$user = $data['username'];
 		$pass = md5($data['password']);
