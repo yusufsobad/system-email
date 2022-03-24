@@ -12,9 +12,9 @@ function sobad_convToPdf($args = array()){
 	date_default_timezone_set('UTC');
 
 	if(convToPDF=="createpdf"){
-		conv_htmlToPDF($args);
+		return conv_htmlToPDF($args);
 	}else if(convToPDF=="mpdf"){
-		conv_mPDF($args);
+		return conv_mPDF($args);
 	}else{
 		if(is_callable("conv_toPDF")){
 			conv_toPDF($args);
@@ -100,6 +100,28 @@ function conv_htmlToPDF($args=array()){
 function conv_mPDF($args=array()){
 	$data = array();
 	$html = array();
+	$css = array();
+
+	$footer = '';
+	if(isset($args['footer'])){
+		$func = $args['footer'];
+
+		if(is_callable($func)){
+			ob_start();
+				$func();
+			$footer = ob_get_clean();
+		}
+	}
+
+	if(isset($args['style'])){
+		foreach($args['style'] as $key => $val){
+			if(is_callable($val)){
+				ob_start();
+					echo $val();
+				$css[] = ob_get_clean();
+			}
+		}
+	}
 
 	$type = gettype($args['html']);
 	if($type=='array'){
@@ -114,26 +136,30 @@ function conv_mPDF($args=array()){
 
 	if(development==1){
 		$content = '';
+
+		foreach ($css as $key => $val) {
+			$content .= '<style type="text/css">' . $val . '</style>';
+		}
+
 		foreach ($html as $key => $val) {
 			$content .= $val;
 		}
 
-		return $content;
+		return $content . $footer;
 	}
 
 	$pos = $args['setting']['posisi'];
+
+	$pos = strtoupper($pos)=='POTRAIT'?'P':$pos;
+	$pos = strtoupper($pos)=='LANDSCAPE'?'L':$pos;
+
 	$lay = $args['setting']['layout'];
 	$nama = $args['name save'];
 	
 	try{
-		$mpdf = new HTML2PDF($pos, $lay, 'en', true, 'UTF-8',array(0,0,0,0));
-		$html2pdf->pdf->SetDisplayMode('fullpage');
-		$html2pdf->setTestTdInOnePage(false);
-		$html2pdf->writeHTML($content, isset($_GET['vuehtml']));
-		$html2pdf->Output($nama.".pdf");
-
 		$mpdf = new \Mpdf\Mpdf([
-		    'format'          => '-', // Default Potrait (Landscape : 'A4-L')
+		    'format'          => $lay, // Default Potrait (Landscape : 'A4-L')
+		    'orientation'	  => $pos,
 		    'mode'            => 'UTF-8', // Unicode
 		    'lang'            => 'en', // Language
 		    'margin_top'      => isset($margin['top'])?$margin['top']:0,
@@ -145,14 +171,18 @@ function conv_mPDF($args=array()){
 		$mpdf->SetFooter($footer);  
 		$mpdf->SetDisplayMode('fullwidth');
 
+		foreach ($css as $key => $val) {
+			$mpdf->WriteHTML($val,1);
+		}
+
 		foreach ($html as $key => $val) {
 			$mpdf->WriteHTML($val);
 		}
 
-		$mpdf->Output('Tes.pdf'); // Format Download
+		$mpdf->Output($nama . '.pdf',"I"); // Format Preview
 	}
-	catch(HTML2PDF_exception $e) {
-		echo $e;
+	catch(\Mpdf\MpdfException $e) {
+		echo $e->getMessage();
 		exit;
 	}
 }
