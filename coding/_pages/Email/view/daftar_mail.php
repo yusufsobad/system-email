@@ -617,7 +617,6 @@ class daftar_mail extends _page{
 		$args = array(
 			'title'		=> 'Statistik Email Customer',
 			'button'	=> '',
-			'status'	=> array()
 		);
 
 		$args['func'] = array('_view_chart');
@@ -640,8 +639,7 @@ class daftar_mail extends _page{
 	}
 
 	protected static function _customer_mail_dough($id=0,$style=''){
-		$sMail = kmi_send::get_log_send("meta_mail='$id' AND status IN ('2','3','4','5')");
-		$sMail = count($sMail);
+		$sMail = kmi_send::count_log_metas("meta_mail='$id' AND status IN ('2','3','4','5')");
 
 		$omset = 'Jumlah Pengiriman '.$sMail;
 
@@ -684,13 +682,11 @@ class daftar_mail extends _page{
 		$days = array();
 
 	// --------------- Create Data Chart
-		$sMail = kmi_send::get_log_send("meta_mail='$id' AND status IN ('3','4','5')");
-		$fMail = kmi_send::get_log_send("meta_mail='$id' AND status='2'");
-		$rMail = kmi_send::get_log_send("meta_mail='$id' AND status IN ('4','5')");
-		$cMail = kmi_send::get_log_send("meta_mail='$id' AND status='5'");
+		$sMail = kmi_send::count_log_metas("meta_mail='$id' AND status IN ('3','4','5')");
+		$fMail = kmi_send::count_log_metas("meta_mail='$id' AND status='2'");
+		$rMail = kmi_send::count_log_metas("meta_mail='$id' AND status IN ('4','5')");
+		$cMail = kmi_send::count_log_metas("meta_mail='$id' AND status='5'");
 
-		$sMail = count($sMail);$fMail = count($fMail);
-		$rMail = count($rMail);$cMail = count($cMail);
 		$nMail = $sMail - $rMail;
 
 		$label = array('Belum di Read','Gagal Terkirim','Email Terbaca','Email di Click Link');
@@ -744,14 +740,11 @@ class daftar_mail extends _page{
 			$month = sprintf("%02d",$i+1);
 			$tanggal = "AND YEAR(meta_date)='$year' AND MONTH(meta_date)='$month'";
 
-			$sMail = kmi_send::get_log_send("meta_mail='$id' AND status IN ('3','4','5') $tanggal");
-			//$fMail = kmi_send::get_log_send("meta_mail='$id' AND status='2' $tanggal");
-			$rMail = kmi_send::get_log_send("meta_mail='$id' AND status IN ('4','5') $tanggal");
-			$cMail = kmi_send::get_log_send("meta_mail='$id' AND status='5' $tanggal");		
+			$sMail = kmi_send::count_log_metas("meta_mail='$id' AND status IN ('3','4','5') $tanggal");
+			//$fMail = kmi_send::count_log_metas("meta_mail='$id' AND status='2' $tanggal");
+			$rMail = kmi_send::count_log_metas("meta_mail='$id' AND status IN ('4','5') $tanggal");
+			$cMail = kmi_send::count_log_metas("meta_mail='$id' AND status='5' $tanggal");		
 
-			$sMail = count($sMail);
-			$rMail = count($rMail);
-			$cMail = count($cMail);
 			$nMail = $sMail - $rMail;
 
 			$data[0]['data'][$i] = $rMail;
