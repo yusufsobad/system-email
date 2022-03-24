@@ -1,7 +1,7 @@
 <?php
 
 $config = array();
-$config['email'] = array(
+$config['contact'] = array(
 	'status'	=> '',
 	'icon'		=> '',
 	'label'		=> 'Contacts',
@@ -31,7 +31,7 @@ $config['signature'] = array(
 $config['send'] = array(
 	'status'	=> '',
 	'icon'		=> '',
-	'label'		=> 'Sends & Histories',
+	'label'		=> 'Sends and Histories',
 	'func'		=> 'send_mail',
 	'loc'		=> 'Email.view',
 	'child'		=> NULL

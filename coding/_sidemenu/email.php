@@ -14,7 +14,7 @@ $config['dashboard'] = array(
 
 $config['mail'] = array(
 	'status'	=> '',
-	'icon'		=> 'fa fa-dashboard',
+	'icon'		=> 'fa fa-mail',
 	'label'		=> 'Email',
 	'func'		=> '#',
 	'child'		=> $email
@@ -22,7 +22,7 @@ $config['mail'] = array(
 
 $config['about'] = array(
 	'status'	=> '',
-	'icon'		=> 'fa fa-dashboard',
+	'icon'		=> 'fa fa-tool',
 	'label'		=> 'About',
 	'func'		=> '',
 	'child'		=> null
