@@ -91,7 +91,7 @@ class kmi_send extends _class{
 	public static function get_status_mail($status='0',$limit=''){
 		$id_user = get_id_user();
 		
-		$where = "status IN ($status) AND `email-log-meta`.user='$id_user' $limit";
+		$where = "AND status IN ($status) AND `email-log-meta`.user='$id_user' $limit";
 		return self::get_log_send($where);
 	}
 }

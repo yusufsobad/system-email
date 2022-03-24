@@ -1,4 +1,5 @@
 <?php
+require dirname(__FILE__).'/send_mail.php';
 require dirname(__FILE__).'/Dashboard/include.php';
 
 class dash_mail{

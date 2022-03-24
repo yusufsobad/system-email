@@ -1,6 +1,8 @@
 <?php
 
-include 'dash_mail.php';
+if(!class_exists('dash_mail')){
+	include 'dash_mail.php';
+}
 
 class daftar_mail extends _page{
 	protected static $object = 'daftar_mail';
