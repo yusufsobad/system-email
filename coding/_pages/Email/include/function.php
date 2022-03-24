@@ -35,13 +35,13 @@ function sobad_save_file($url,$txt){
 
 function kmi_encrypt( $q ) {
     $cryptKey  = 'qJB0rGtInG03efyCp';
-    $qEncoded      = base64_encode( mcrypt_encrypt( MCRYPT_RIJNDAEL_256, md5( $cryptKey ), $q, MCRYPT_MODE_CBC, md5( md5( $cryptKey ) ) ) );
+    $qEncoded      = $q;//base64_encode( mcrypt_encrypt( MCRYPT_RIJNDAEL_256, md5( $cryptKey ), $q, MCRYPT_MODE_CBC, md5( md5( $cryptKey ) ) ) );
     return( $qEncoded );
 }
 
 function kmi_decrypt( $q ) {
     $cryptKey  = 'qJB0rGtInG03efyCp';
-    $qDecoded      = rtrim( mcrypt_decrypt( MCRYPT_RIJNDAEL_256, md5( $cryptKey ), base64_decode( $q ), MCRYPT_MODE_CBC, md5( md5( $cryptKey ) ) ), "\0");
+    $qDecoded      = $q;//rtrim( mcrypt_decrypt( MCRYPT_RIJNDAEL_256, md5( $cryptKey ), base64_decode( $q ), MCRYPT_MODE_CBC, md5( md5( $cryptKey ) ) ), "\0");
     return( $qDecoded );
 }
 

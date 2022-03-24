@@ -1,6 +1,9 @@
 <?php
 
-include 'daftar_mail.php';
+if(!class_exists('daftar_mail')){
+	include 'daftar_mail.php';
+}
+
 include 'contents_mail.php';
 
 class send_mail extends _page{
