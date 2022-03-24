@@ -19,6 +19,7 @@ class daftar_mail extends _page{
 			'name',
 			'email',
 			'note',
+			'type',
 			'meta_value',
 			'mail_secure',
 			'mail_host',
@@ -213,7 +214,10 @@ class daftar_mail extends _page{
 	// ----------------------------------------------------------
 
 	public static function add_form(){
-		$vals = array(0,'','','','',1,'','');
+		$type = str_replace('mail_', '', $_POST['type']);
+		intval($type);
+
+		$vals = array(0,'','','',$type,'',1,'','');
 		$vals = array_combine(self::_array(), $vals);
 
 		self::$post = self::_conv_type($_POST['type']);
@@ -586,6 +590,20 @@ class daftar_mail extends _page{
 	public static function _search_group($args=array()){
 		$args = sobad_asset::ajax_conv_array_json($args);
 		return self::_get_tableGroup(1,$args);
+	}
+
+	// ----------------------------------------------------------
+	// Simpan database ------------------------------------------
+	// ----------------------------------------------------------
+
+	public static function _callback($args=array()){
+		if($args['type']==1){
+			self::$post = 'produsen';
+		}else if($args['type']==4){
+			self::$post = 'group';
+		}
+
+		return $args;
 	}
 
 	// ------------------------------------------------------

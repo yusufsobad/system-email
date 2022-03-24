@@ -8,7 +8,13 @@ $config = array(
 		'key'			=> 'ID',
 		'value'			=> $data['ID']
 	),
-	1 => array(
+	array(
+		'func'			=> 'opt_hidden',
+		'type'			=> 'hidden',
+		'key'			=> 'type',
+		'value'			=> $data['type']
+	),
+	array(
 		'func'			=> 'opt_input',
 		'type'			=> 'text',
 		'key'			=> 'name',
@@ -17,7 +23,7 @@ $config = array(
 		'value'			=> $data['name'],
 		'data'			=> 'placeholder="Nama"'
 	),
-	2 => array(
+	array(
 		'func'			=> 'opt_input',
 		'type'			=> 'text',
 		'key'			=> 'email',
