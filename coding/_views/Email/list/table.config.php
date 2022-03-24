@@ -54,9 +54,9 @@ foreach($data as $key => $val){
 
 	$status = '';$view = '';
 	if($type=='mail_2'){
-		$tMail = kmi_send::count("meta_mail='$id_meta' AND status IN ('3','4','5')");
-		$rMail = kmi_send::count("meta_mail='$id_meta' AND status IN ('4','5')");
-		$cMail = kmi_send::count("meta_mail='$id_meta' AND status = '5'");
+		$tMail = kmi_send::count_log_metas("meta_mail='$id_meta' AND status IN ('3','4','5')");
+		$rMail = kmi_send::count_log_metas("meta_mail='$id_meta' AND status IN ('4','5')");
+		$cMail = kmi_send::count_log_metas("meta_mail='$id_meta' AND status = '5'");
 
 		$tMail = '<span class="badge badge-success">'.$tMail.'</span>';
 		$rMail = '<span class="badge badge-success" style="background-color:#578ebe;">'.$rMail.'</span>';

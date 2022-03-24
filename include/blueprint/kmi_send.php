@@ -61,6 +61,11 @@ class kmi_send extends _class{
 		return self::get_log_send($where);
 	}	
 
+	public static function count_log_metas($limit=''){
+		$data = self::get_log_metas(array('ID'),"AND ". $limit);
+		return count($data);
+	}
+
 	public static function get_log_metas($args=array(),$limit=''){
 		self::$table = 'email-log-meta';
 		$id_user = get_id_user();
