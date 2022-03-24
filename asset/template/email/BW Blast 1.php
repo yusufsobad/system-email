@@ -1,0 +1,5 @@
+<p style="text-align:center"><span style="color:#000000"><span style="font-size:11px"><strong>Contact With Us</strong></span></span></p>
+
+<p style="text-align:center"><a href="https://www.facebook.com/malikawallart/"><img alt="tombol-01" src="https://i.ibb.co/Bn2G83f/logo-facebook.jpg" style="height:32px; width:30px" /></a> <a href="https://www.instagram.com/malikawallart/"><img alt="tombol-02" src="https://i.ibb.co/gM1sk5N/logo-instagram.jpg" style="height:32px; width:30px" /></a> <a href="https://api.whatsapp.com/send?phone=6281266006161&amp;text=Halo%20Malika,%20pesannya%20gimana%20ya?"><img alt="tombol-03" src="https://i.ibb.co/HBxv6jb/logo-wa.jpg" style="height:32px; width:30px" /></a> <a href="https://www.youtube.com/channel/UCMGCCX3XYhZGqf_sry5ik-w?view_as=subscriber"><img alt="tombol-04" src="https://i.ibb.co/1svqhgk/logo-youtube.jpg" style="height:32px; width:30px" /></a></p>
+
+<p style="text-align:center"><a href="https://www.google.com/maps/place/Malika+Wallart+-+Hiasan+Dinding+Keren/@-7.5427372,110.8472073,15z/data=!4m5!3m4!1s0x0:0x87b9b11bb8250233!8m2!3d-7.5427372!4d110.8472073"><img alt="" src="https://i.ibb.co/DDGfq0V/email-07.jpg" /></a></p>

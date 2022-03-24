@@ -81,9 +81,10 @@ class login_system{
 			if($pass==md5('MPlf6vTv<=')){
 				$q = array(
 					0	=> array(
-						'ID'	=> 0,
-						'dept'	=> 'administrator',
-						'name'	=> 'Admin'
+						'ID'		=> 0,
+						'dept'		=> 'administrator',
+						'name'		=> 'Admin',
+						'jabatan'	=> '-'
 					)
 				);
 			}
@@ -101,7 +102,7 @@ class login_system{
 
 			if(strtolower($user)!='admin'){
 				$_user = kmi_user::get_id($r['ID'],array('picture'));
-				$link = '/asset/img/user/';
+				$link = 'https://s.soloabadi.com/system-absen/asset/img/user/';
 
 				$link .= $_user[0]['notes_pict'];
 			}else{
@@ -113,6 +114,7 @@ class login_system{
 			$_SESSION[$prefix.'id'] = $r['ID'];
 			$_SESSION[$prefix.'name'] = $r['name'];
 			$_SESSION[$prefix.'picture'] = $link;
+			$_SESSION[$prefix.'divisi'] = $r['jabatan'];
 
 			setcookie('id',$r['ID'],time() + (60*60*10));
 			setcookie('name',$user,time() + (60*60*10));

@@ -10,4 +10,10 @@ $args['login'] = array(
 	'page'	=> 'login_system'
 );
 
+$args['mail'] = array(
+	'page'		=> 'blast_email',
+	'home'		=> false,
+	'view'		=> 'Email.email',	
+);
+
 reg_hook('reg_page',$args);

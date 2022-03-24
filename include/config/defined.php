@@ -18,7 +18,7 @@ define('USERNAME',"root");
 define('PASSWORD','');
 
 // set Database
-define('DB_NAME','cordova');
+define('DB_NAME','sobad_mail700');
 $GLOBALS['DB_NAME'] = DB_NAME;
 
 // set rule database
@@ -40,7 +40,7 @@ define('SITE','http');
 define('HOSTNAME',$_SERVER['SERVER_NAME']);
 
 // set name url
-define('URL','cordova-v3');
+define('URL','system-email');
 
 // set check table
 define('ABOUT','');
@@ -48,7 +48,7 @@ define('ABOUT','');
 // Setting -------------------------------------------
 
 // prefix SESSION
-define('_prefix','cordova_');
+define('_prefix','blastmail_');
 		
 // authentic include
 define('AUTH_KEY','qJB0rGtInG03efyCpWs');
@@ -60,10 +60,10 @@ define('DEFPATH',dirname(__FILE__));
 define('language',true);
 
 // set nama Perusahaan
-define('company','Cordova');
+define('company','SASI');
 
 // set judul Website
-define('title','Cordova');
+define('title','System Blast Email');
 
 // set Auto Include Page
 define('include_pages', true);
@@ -82,7 +82,7 @@ define('_library',serialize($library_sc));
 
 // Mode Development
 
-define('development',0);
+define('development',1);
 
 // Default Theme
 
