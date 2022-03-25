@@ -400,6 +400,58 @@ class send_mail extends _page{
 	}
 
 	// ----------------------------------------------------------
+	// Database send mail ---------------------------------------
+	// ----------------------------------------------------------	
+
+	public static function _callback($args=array()){
+		$args['user'] = get_id_user();
+		return $args;
+	}
+
+	protected static function _addDetail($args=array()){
+		$q = self::send_set_log_meta($args['index'],$args['value']['to_mail']);
+		return $q;
+	}
+
+	protected static function _updateDetail($args=array()){
+		$id = $args['index'];
+
+		$where = "meta_id='$id'";
+		$q = sobad_db::_update_multiple($where,'email-log-meta',array('meta_id' => 0,'log' => $id));
+
+		$q = self::send_set_log_meta($args['index'],$args['value']['to_mail']);
+		return $q;
+	}
+
+	private static function send_set_log_meta($args=array(),$idx=0){
+		// set log meta
+		$email = kmi_mail::get_email($idx);
+		if($email[0]['type']==4){
+			$q2 = $q;
+			
+			// get data group
+			$email = kmi_mail::get_group($idx,array('id_mail'));
+			$email = explode(',',$email[0]['id_mail']);
+			
+			foreach($email as $key => $mail_to){
+				$metas = array(
+					'meta_id'		=> $q2,
+					'meta_mail'		=> $mail_to,
+				);
+			
+				$q = sobad_db::_insert_table('email-log-meta',$metas);
+			}
+		}else{
+			$metas = array(
+				'meta_id'		=> $q,
+				'meta_mail'		=> $idx,
+			);
+			
+			$q = sobad_db::_insert_table('email-log-meta',$metas);
+		}
+	}
+
+	// ----------------------------------------------------------
 	// View data send mail --------------------------------------
 	// ----------------------------------------------------------
 	public static function readView_send($id=0){

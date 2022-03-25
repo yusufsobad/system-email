@@ -610,6 +610,7 @@ class daftar_mail extends _page{
 			self::$post = 'group';
 		}
 
+		$args['user'] = get_id_user();
 		return $args;
 	}
 
