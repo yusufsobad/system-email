@@ -126,6 +126,11 @@ class kmi_mail extends _class{
 	public static function get_group($id=0,$args=array(),$where=''){
 		return self::get_id($id,$args,$where,'group');
 	}
+
+	public static function get_exgroup($id=0,$args=array()){
+		$where = "`email-list`.ID NOT IN ('0','$id')";
+		return self::get_id($id,$args,$where,'group');
+	}
 	
 	public static function get_customers($args=array(),$limit=''){
 		$id_user = get_id_user();
@@ -138,13 +143,20 @@ class kmi_mail extends _class{
 		$id_user = get_id_user();
 
 		$where = "`email-list`.type='1' AND `email-list`.user='$id_user' $limit";
-		return self::get_all($args,$where);
+		return self::get_all($args,$where,'produsen');
 	}
 
 	public static function get_groups($args=array(),$limit=''){
 		$id_user = get_id_user();
 
 		$where = "`email-list`.type='4' AND `email-list`.user='$id_user' $limit";
-		return self::get_all($args,$where);
+		return self::get_all($args,$where,'group');
 	}
+
+	public static function get_exgroups($args=array(),$limit=''){
+		$id_user = get_id_user();
+
+		$where = "`email-list`.type='4' AND `email-list`.user NOT IN ('0','$id_user') $limit";
+		return self::get_all($args,$where,'group');
+	}	
 }

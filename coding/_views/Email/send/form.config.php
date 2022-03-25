@@ -3,6 +3,7 @@
 $my = kmi_mail::get_produsens(array('ID','name'));
 $cust = kmi_mail::get_customers(array('ID','name'),"LIMIT 20");
 $group = kmi_mail::get_groups(array('ID','name'),"LIMIT 20");
+$exgroup = kmi_mail::get_exgroups(array('ID','name'),"LIMIT 20");
 
 $cont = kmi_template::get_contents(array('ID','name'));
 $sign = kmi_template::get_signatures(array('ID','name'));
@@ -10,10 +11,12 @@ $sign = kmi_template::get_signatures(array('ID','name'));
 $my = convToOption($my,'ID','name');
 $cust = convToOption($cust,'ID','name');
 $group = convToOption($group,'ID','name');
+$exgroup = convToOption($exgroup,'ID','name');
+
 $cont = convToOption($cont,'ID','name');
 $sign = convToOption($sign,'ID','name');
 
-$opt_grp = array('Email' => $cust,'Group' => $group);
+$opt_grp = array('Email' => $cust,'Group' => $group,'ExGroup' => $exgroup);
 
 $status = '';
 if($data['status']==1){

@@ -132,4 +132,9 @@ foreach($data as $key => $val){
 		unset($config['table'][$key]['td']['jumlah']);
 		unset($config['table'][$key]['td']['description']);
 	}
+
+	if($type=='mail_5'){
+		//unset($config['table'][$key]['td']['Edit']);
+		unset($config['table'][$key]['td']['Hapus']);
+	}
 }

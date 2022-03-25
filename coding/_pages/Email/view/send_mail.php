@@ -229,10 +229,12 @@ class send_mail extends _page{
 		$where = empty($search)?"":"AND name LIKE '%$search%' ";
 		$cust = kmi_mail::get_customers(array('ID','name'),$where . "LIMIT 20");
 		$group = kmi_mail::get_groups(array('ID','name'),$where. "LIMIT 20");
+		$exgroup = kmi_mail::get_exgroups(array('ID','name'),$where. "LIMIT 20");
 
 		$groups = array(
 			'Email'		=> $cust,
-			'Group'		=> $group
+			'Group'		=> $group,
+			'ExGroup'	=> $exgroup
 		);
 
 		$des = '';
@@ -404,14 +406,14 @@ class send_mail extends _page{
 		$id = str_replace('read_','',$id);
 		intval($id);
 
-		return view_send($id,"AND `email-log-meta`.status='4'");
+		return self::view_send($id,"AND `email-log-meta`.status='4'");
 	}
 
 	public static function clickView_send($id=0){
 		$id = str_replace('click_','',$id);
 		intval($id);
 
-		return view_send($id,"AND `email-log-meta`.status='5'");	
+		return self::view_send($id,"AND `email-log-meta`.status='5'");	
 	}
 
 	public static function view_send($id=0,$limit=''){

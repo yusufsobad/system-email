@@ -49,13 +49,14 @@ class daftar_mail extends _page{
 		$nLimit = intval(parent::$limit);
 
 		$tabs = str_replace('mail_', '', $type);
-		$post = $tabs==4?'group':'email';
+		$post = $tabs==4 || $tabs==5?'group':'email';
 
 		$_search = '';$kata = '';
 
 		$user = get_id_user();
-		$where = "AND `email-list`.type='$tabs' AND `email-list`.user='$user'";
-		if(self::$search){		
+
+		$where = $tabs==5?"AND `email-list`.type='4' AND `email-list`.user!='$user'":"AND `email-list`.type='$tabs' AND `email-list`.user='$user'";
+		if(self::$search){
 			$src = self::like_search($args,$where);
 			$cari = $src[0];
             $where = $src[0];
@@ -126,6 +127,7 @@ class daftar_mail extends _page{
 		$qty1 = kmi_mail::count("type='1' AND user='$user'");
 		$qty2 = kmi_mail::count("type='2' AND user='$user'");
 		$qty3 = kmi_mail::count("type='4' AND user='$user'");
+		$qty4 = kmi_mail::count("type='4' AND user!='$user'");
 
 		$tabs = array(
 			'tab'	=> array(
@@ -143,6 +145,11 @@ class daftar_mail extends _page{
 					'key'	=> 'mail_4',
 					'label'	=> 'Group',
 					'qty'	=> $qty3
+				),
+				3	=> array(
+					'key'	=> 'mail_5',
+					'label'	=> 'ExGroup',
+					'qty'	=> $qty4
 				)
 			),
 			'active'=> 'mail_1',
