@@ -5,7 +5,7 @@ session_start();
 
 if(!isset($_GET['send'])){
 	include 'err.php';
-	
+
 	$err = _error::_alert_db("Sending not load");
 	die($err);
 }else{
@@ -59,6 +59,8 @@ if(!isset($_GET['send'])){
 
 class sobad_cronjob{
 	public static function _get($args=array()){
+		new _libs_(array('phpmailer'));
+
 		$check = array_filter($args);
 		if(empty($check)){
 			$ajax = array(
