@@ -662,7 +662,7 @@ class send_mail extends _page{
 						$args = array(
 							'index'		=> $id_mail,
 							'meta_id'	=> $idx,
-							'data'		=> self::setMail_option($log[0],$vl)
+							'data'		=> self::setMail_option($log[0])
 						);
 					
 						$mail_send[] = $args;
@@ -782,8 +782,8 @@ class send_mail extends _page{
 			'name_from'		=> $args['name_from'],
 			'subject'		=> $args['subject_mail'],
 			'attachment'	=> $args['attachment'],
-			'mail_to'		=> $metas['email_to_m'],
-			'name_to'		=> $metas['name_to_m'],
+			'mail_to'		=> $args['email_to_m'],
+			'name_to'		=> $args['name_to_m'],
 			'html'			=> $html
 		);
 		
@@ -806,7 +806,7 @@ class send_mail extends _page{
 		$read = '<img style="display:none;" src="'.$dt_read.'"></br>';	
 		$link = $dt_link.'&link=';
 		
-		$html = str_replace('::full_name::',$args['name'],$html); // ::full_name::
+		$html = str_replace('::full_name::',$args['name_meta'],$html); // ::full_name::
 		//$html = str_replace('::link::',$link,$html); // ::link::
 		$html = str_replace('href="', 'href="'.$link, $html);
 		
@@ -821,9 +821,9 @@ class send_mail extends _page{
 		}
 		
 		//check validasi email
-		$mail_to = explode(';',$args['to_mail']);
+		$mail_to = explode(';',$args['mail_to']);
 		if(!is_array($mail_to)){
-			$mail_to[0] = $args['to_mail'];
+			$mail_to[0] = $args['mail_to'];
 		}
 		
 		foreach($mail_to as $ky => $vl){
@@ -866,7 +866,7 @@ class send_mail extends _page{
 		$mail->SMTPAuth = true;
 		$mail->Username = $args['from_mail']; //user email
 		$mail->Password = $args['pass']; //password email
-		$mail->SetFrom($args['from_mail'],$args['name_from']); //set email pengirim
+		$mail->SetFrom($args['mail_from'],$args['name_from']); //set email pengirim
 
 		if(!empty($attach)){
 			$attach = explode(',',$args['attachment']);
@@ -876,8 +876,8 @@ class send_mail extends _page{
 		}
 		
 		foreach($mail_to as $ky => $val){
-		    $mail->Subject = str_replace('::full_name::',$args['name_to_m'],$args['subject']); //subyek email
-			$mail->AddAddress($val,$args['name_to_m']); //tujuan email
+		    $mail->Subject = str_replace('::full_name::',$args['name_to'],$args['subject']); //subyek email
+			$mail->AddAddress($val,$args['name_to']); //tujuan email
 		}
 		
 		$mail->MsgHTML($args['html']);
