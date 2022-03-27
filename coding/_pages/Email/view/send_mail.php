@@ -540,7 +540,7 @@ class send_mail extends _page{
 	// Function send Mail Option --------------------------------
 	// ----------------------------------------------------------
 	public static function _conv_limit_mail($load=0,$total=0,$limit=0){
-		return $limit / $total * $load;
+		return floor($limit / $total * $load);
 	}
 
 	public static function setMail_send($id=0){
