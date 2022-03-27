@@ -698,7 +698,7 @@ class send_mail extends _page{
 						'status' 	=> $type
 					);
 					
-					$q = sobad_db::_update_table($meta,'email-log',$args);
+					$q = sobad_db::_update_single($meta,'email-log',$args);
 				}
 				break;
 			case 4:
