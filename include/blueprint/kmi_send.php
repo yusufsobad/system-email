@@ -45,7 +45,8 @@ class kmi_send extends _class{
 		return $args;
 	}
 	
-	public static function get_log($id=0,$args=array()){
+	public static function get_log($id=0){
+		$args = self::_list();
 		return self::get_id($id,$args);
 	}
 	

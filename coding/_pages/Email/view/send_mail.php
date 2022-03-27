@@ -654,7 +654,7 @@ class send_mail extends _page{
 
 						$id_mail = $vl['ID'];
 						$idx = $vl['meta_id'];
-						$log = kmi_send::get_id($idx);
+						$log = kmi_send::get_log($idx);
 			
 						$args = array(
 							'index'		=> $id_mail,

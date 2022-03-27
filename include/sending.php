@@ -4,6 +4,8 @@ date_default_timezone_set('Asia/Jakarta');
 session_start();
 
 if(!isset($_GET['send'])){
+	include 'err.php';
+	
 	$err = _error::_alert_db("Sending not load");
 	die($err);
 }else{
