@@ -588,7 +588,7 @@ class send_mail extends _page{
 		$id = str_replace('send_','',$id);
 		intval($id);
 		
-		$limit = "`email-log-meta`.ID='$id'";			
+		$limit = "AND `email-log-meta`.ID='$id'";			
 		$meta = kmi_send::get_log_send($limit);
 		
 		$id_mail = $meta[0]['ID'];
