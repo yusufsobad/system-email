@@ -423,28 +423,31 @@ class send_mail extends _page{
 		return $q;
 	}
 
-	private static function send_set_log_meta($args=array(),$idx=0){
+	private static function send_set_log_meta($idx=0,$mail_to=0){
 		// set log meta
+		$user = get_id_user();
+
 		$email = kmi_mail::get_email($idx);
 		if($email[0]['type']==4){
-			$q2 = $q;
-			
+
 			// get data group
 			$email = kmi_mail::get_group($idx,array('id_mail'));
 			$email = explode(',',$email[0]['id_mail']);
 			
 			foreach($email as $key => $mail_to){
 				$metas = array(
-					'meta_id'		=> $q2,
+					'meta_id'		=> $idx,
 					'meta_mail'		=> $mail_to,
+					'user'			=> $user
 				);
 			
 				$q = sobad_db::_insert_table('email-log-meta',$metas);
 			}
 		}else{
 			$metas = array(
-				'meta_id'		=> $q,
-				'meta_mail'		=> $idx,
+				'meta_id'		=> $idx,
+				'meta_mail'		=> $mail_to,
+				'user'			=> $user
 			);
 			
 			$q = sobad_db::_insert_table('email-log-meta',$metas);
@@ -540,7 +543,7 @@ class send_mail extends _page{
 		return $limit / $total * $load;
 	}
 
-	public static function setMail_send($id){
+	public static function setMail_send($id=0){
 		$id = str_replace('send_','',$id);
 		intval($id);
 		
