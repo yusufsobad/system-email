@@ -2,16 +2,15 @@
 
 date_default_timezone_set('Asia/Jakarta');
 session_start();
-require '../function.php';
 
 if(!isset($_GET['send'])){
 	$err = _error::_alert_db("Sending not load");
 	die($err);
 }else{
 
-	$key = $_POST['object'];
+	$key = $_GET['object'];
 	$key = str_replace("sobad_","",$key);
-	$func = str_replace("sobad_","",$_POST['send']);
+	$func = str_replace("sobad_","",$_GET['send']);
 	
 	define('AUTHPATH',$_SERVER['SERVER_NAME']);
 	require 'config/hostname.php';

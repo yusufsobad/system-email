@@ -570,7 +570,7 @@ class send_mail extends _page{
 		// Send Mail ------
 		$msg = self::sendMail_send(0,1,0);
 		foreach($msg as $key => $val){
-			$req = sobad_send_mail($val['data']);
+			$req = self::sobad_send_mail($val['data']);
 			
 			if($req===0){
 				self::sendMail_send($val['index'],2,$val['meta_id']);
@@ -579,10 +579,8 @@ class send_mail extends _page{
 			}
 		}
 		
-		if($q!==0){
-			$title = self::table(1);
-			return table_admin($title);
-		}
+		$table = self::table(1);
+		return table_admin($table);
 	}
 
 	public static function setMail_sendMeta($id=''){
@@ -609,7 +607,7 @@ class send_mail extends _page{
 		}
 	}
 
-	public static function sendMail_send($id,$type,$meta=0){
+	public static function sendMail_send($id=0,$type=0,$meta=0){
 		// type
 		// if 1 == sending
 		// if 2 == gagal
