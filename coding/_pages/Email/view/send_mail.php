@@ -601,7 +601,7 @@ class send_mail extends _page{
 		
 		if($req===0){
 			self::sendMail_send($id_mail,2,$idx);
-			return _error::_alert_db('Send Failed');
+			die( _error::_alert_db('Send Failed') );
 		}else{
 			self::sendMail_send($id_mail,3,$idx);
 			return self::view_send($idx);
