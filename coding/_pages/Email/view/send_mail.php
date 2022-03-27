@@ -540,7 +540,8 @@ class send_mail extends _page{
 	// Function send Mail Option --------------------------------
 	// ----------------------------------------------------------
 	public static function _conv_limit_mail($load=0,$total=0,$limit=0){
-		return floor($limit / $total * $load);
+		$hasil = floor($limit / $total * $load);
+		return intval($hasil);
 	}
 
 	public static function setMail_send($id=0){
@@ -677,7 +678,7 @@ class send_mail extends _page{
 			            'status' => $type
 			        );
 			        
-				$q = sobad_db::_update_table($id,'email-log-meta',$args);
+				$q = sobad_db::_update_single($id,'email-log-meta',$args);
 
 				// get status belum terkirim
 				$q = kmi_send::get_log_meta($meta,"AND status='1'");
