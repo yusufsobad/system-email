@@ -59,8 +59,6 @@ if(!isset($_GET['send'])){
 
 class sobad_cronjob{
 	public static function _get($args=array()){
-		new _libs_(array('phpmailer'));
-
 		$check = array_filter($args);
 		if(empty($check)){
 			$ajax = array(

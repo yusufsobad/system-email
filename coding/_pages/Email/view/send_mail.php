@@ -857,6 +857,10 @@ class send_mail extends _page{
 				$port = 465;
 		}
 
+		if(!class_exists('PHPMailer')){
+			new _libs_(array('phpmailer'));
+		}
+
 		$mail = new PHPMailer;
 		$mail->IsSMTP();
 		$mail->SMTPSecure = $secure; // no/ssl/tls
