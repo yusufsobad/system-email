@@ -868,7 +868,7 @@ class send_mail extends _page{
 		$mail->SMTPDebug = 0; // Debug 0,1,2
 		$mail->Port = $port; // no = 110 , ssl = 465 , tls = 587
 		$mail->SMTPAuth = true;
-		$mail->Username = $args['from_mail']; //user email
+		$mail->Username = $args['mail_from']; //user email
 		$mail->Password = $args['pass']; //password email
 		$mail->SetFrom($args['mail_from'],$args['name_from']); //set email pengirim
 
