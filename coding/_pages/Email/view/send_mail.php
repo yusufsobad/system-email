@@ -654,7 +654,7 @@ class send_mail extends _page{
 
 						$id_mail = $vl['ID'];
 						$idx = $vl['meta_id'];
-						$log = kmi_send::get_log($idx);
+						$log = kmi_send::get_id($idx);
 			
 						$args = array(
 							'index'		=> $id_mail,
@@ -750,7 +750,7 @@ class send_mail extends _page{
 		}
 
 	// get option server email
-		$opts = kmi_mail::get_option($args['mail_from']);
+		$opts = kmi_mail::get_option($args['from_mail']);
 		
 		foreach($opts as $key => $val){
 			$args[$val['meta_key']] = $val['meta_value'];
@@ -761,8 +761,8 @@ class send_mail extends _page{
 		$pass = kmi_decrypt($pass);
 		
 	// get template HTML	
-		$url = self::template_url().$args['url_tmplate'];
-		$footer = self::template_url().$args['url_footer'];
+		$url = self::template_url().$args['lokasi_temp'];
+		$footer = self::template_url().$args['lokasi_foot'];
 		
 		ob_start();
 		include $url;
@@ -774,13 +774,13 @@ class send_mail extends _page{
 		$opt = array(
 			'secure'		=> $args['mail_secure'],
 			'host'			=> $args['mail_host'],
-			'mail_from'		=> $args['my_mail'],
+			'mail_from'		=> $args['email_from'],
 			'pass'			=> $pass,
-			'name_from'		=> $args['my_name'],
-			'subject'		=> $args['mail_subject'],
+			'name_from'		=> $args['name_from'],
+			'subject'		=> $args['subject_mail'],
 			'attachment'	=> $args['attachment'],
-			'mail_to'		=> $metas['email'],
-			'name_to'		=> $metas['name'],
+			'mail_to'		=> $metas['email_to_m'],
+			'name_to'		=> $metas['name_to_m'],
 			'html'			=> $html
 		);
 		
