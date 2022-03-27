@@ -2,7 +2,7 @@
 
 abstract class template_mail extends _page{
 
-	protected static $url = "../asset/template/";
+	public static $url = "../asset/template/";
 
 	protected static $template = '';
 
