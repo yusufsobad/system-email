@@ -89,7 +89,7 @@ class kmi_mail extends _class{
 		);
 		
 		$where = "WHERE meta_id='$id'";		
-		$data = self::_get_data($args,$where);
+		$data = self::_get_data($where,$args);
 
 		self::$table = 'email-list';
 		return $data;
@@ -107,7 +107,7 @@ class kmi_mail extends _class{
 			);
 		}
 		
-		$data = self::_get_data($args,$where);
+		$data = self::_get_data($where,$args);
 
 		self::$table = 'email-list';
 		return $data;
