@@ -86,7 +86,7 @@ define('development',1);
 
 // Default Theme
 
-define('theme','metronic');
+define('theme','sasi');
 
 // Default Theme
 

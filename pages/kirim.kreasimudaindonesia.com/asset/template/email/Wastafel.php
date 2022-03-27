@@ -1,1 +1,0 @@
-<p style="text-align:center"><a href="https://api.whatsapp.com/send?phone=6281310776156"><img alt="KONTEN-EMAIL-MARKETING-GABUNG" src="https://i.ibb.co/P1Q0MGd/KONTEN-EMAIL-MARKETING-GABUNG.jpg" /></a></p>

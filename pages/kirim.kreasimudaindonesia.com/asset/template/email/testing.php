@@ -1,1 +1,0 @@
-<p>Best Regard</p>

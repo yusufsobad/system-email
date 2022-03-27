@@ -32,7 +32,7 @@ foreach($data as $key => $val){
 	);
 	
 	$hapus = array(
-		'ID'	=> 'del_'.$id_meta,
+		'ID'	=> 'trash_'.$id_meta,
 		'func'	=> '_trash',
 		'color'	=> 'red',
 		'icon'	=> 'fa fa-trash',

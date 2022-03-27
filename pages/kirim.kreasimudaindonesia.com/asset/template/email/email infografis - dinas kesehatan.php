@@ -1,1 +1,0 @@
-<p style="text-align:center"><a href="https://linktr.ee/soloabadigroup"><img alt="" src="https://i.ibb.co/fD5Z2tP/Panduan-Pengukukuran-Antropometri-Yang-Tepat-Pada-Anak.png" style="height:1600px; width:640px" /></a></p>
