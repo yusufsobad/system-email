@@ -111,9 +111,9 @@ class sobad_cronjob{
 			$req = send_mail::sobad_send_mail($val['data']);
 			
 			if($req===0){
-				$ajax_func($val['index'],2,$val['meta_id']);	
+				$_class::{$_func}($val['index'],2,$val['meta_id']);	
 			}else{
-				$ajax_func($val['index'],3,$val['meta_id']);
+				$_class::{$_func}($val['index'],3,$val['meta_id']);
 			}
 		}
 	}

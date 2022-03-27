@@ -649,6 +649,8 @@ class send_mail extends _page{
 
 				foreach($data as $ky => $val){
 					$limit = self::_conv_limit_mail($users[$ky],$total,$lmt);
+					$limit = $limit>=count($val)?$limit:count($val);
+
 					for($i=0;$i<$limit;$i++){
 						$vl = $val[$i];
 
