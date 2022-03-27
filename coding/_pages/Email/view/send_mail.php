@@ -888,7 +888,7 @@ class send_mail extends _page{
 		if($mail->Send()){ 
 			return 1;
 		}else{ 
-			return 0;
+			die(_error::_alert_db($mail->ErrorInfo));
 		}
 	}
 }
