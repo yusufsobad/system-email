@@ -815,11 +815,11 @@ class send_mail extends _page{
 		$html = str_replace('href="', 'href="'.$link, $html);
 
 		// Mencari src image lokal --> replace
-		$dicari = 'src=\"\/' . URL;
-		if(preg_match("/$dicari/", $html)) {
+		//$dicari = 'src=\"\/' . URL;
+		//if(preg_match("/$dicari/", $html)) {
 			$replace = 'src="https://'. HOSTNAME . '/' . URL;
             $html = str_replace($dicari, $replace, $html);
-        }
+        //}
 		
 		$html .= $read;
 		return $html;
