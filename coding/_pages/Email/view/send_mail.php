@@ -801,8 +801,8 @@ class send_mail extends _page{
 		}
 		
 		$url = 'https://'.HOSTNAME.'/'.URL.'/include/sending.php?';
-		$dt_read = $url.'send=sendMail_send&data='.$args['meta_id'].'-4-'.$args['ID'];
-		$dt_link = $url.'send=sendMail_send&data='.$args['meta_id'].'-5-'.$args['ID'];
+		$dt_read = $url.'object=send&send=sendMail_send&data='.$args['meta_id'].'-4-'.$args['ID'];
+		$dt_link = $url.'object=send&send=sendMail_send&data='.$args['meta_id'].'-5-'.$args['ID'];
 		
 		$read = '<img style="display:none;" src="'.$dt_read.'"></br>';	
 		$link = $dt_link.'&link=';
@@ -816,7 +816,7 @@ class send_mail extends _page{
 		$dicari = 'src="/' . URL . '/';
 		if(preg_match("/$dicari/", $html)) {
 			$replace = 'src="https://'. HOSTNAME . '/' . URL . '/';
-            str_replace($dicari, $replace, $html);
+            $html = str_replace($dicari, $replace, $html);
         }
 		
 		$html .= $read;
