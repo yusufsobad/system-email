@@ -53,7 +53,7 @@ class send_mail extends _page{
 			$cari='';
 		}
 		
-		$limit = ' LIMIT '.intval(($start - 1) * $nLimit).','.$nLimit;
+		$limit = 'ORDER BY ID DESC LIMIT '.intval(($start - 1) * $nLimit).','.$nLimit;
 		$where .= $limit;
 
 		$object = self::$table;
