@@ -803,8 +803,8 @@ class send_mail extends _page{
 		}
 		
 		$url = 'https://'.HOSTNAME.'/'.URL.'/include/sending.php?';
-		$dt_read = $url.'object=send_mail&send=sendMail_send&data='.$args['meta_id'].'-4-'.$args['ID'];
-		$dt_link = $url.'object=send_mail&send=sendMail_send&data='.$args['meta_id'].'-5-'.$args['ID'];
+		$dt_read = $url.'page=mail&object=send&send=sendMail_send&data='.$args['meta_id'].'-4-'.$args['ID'];
+		$dt_link = $url.'page=mail&object=send&send=sendMail_send&data='.$args['meta_id'].'-5-'.$args['ID'];
 		
 		$read = '<img style="display:none;" src="'.$dt_read.'"></br>';	
 		$link = $dt_link.'&link=';

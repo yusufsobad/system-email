@@ -24,6 +24,10 @@ if(!isset($_GET['send'])){
 	new _component();
 
 	// load route
+	if(!isset($_SESSION[_prefix.'page'])){
+		$_SESSION[_prefix.'page'] = isset($_GET['page'])?$_GET['page']:'';
+	}
+
 	$asset = sobad_asset::_pages("../coding/_pages/");
 
 	// include pages
