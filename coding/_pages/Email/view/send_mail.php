@@ -810,7 +810,11 @@ class send_mail extends _page{
 		$link = $dt_link.'&link=';
 		
 		$html = str_replace('::full_name::',$args['name_meta'],$html); // ::full_name::
-		$html = str_replace('::place_name::',$args['place_meta'],$html); // ::full_name::
+		$html = str_replace('::place_name::',$args['place_meta'],$html); // ::place_name::
+
+		$html = str_replace('{{full_name}}',$args['name_meta'],$html); // {{full_name}}
+		$html = str_replace('{{place_name}}',$args['place_meta'],$html); // {{place_name}}
+
 		//$html = str_replace('::link::',$link,$html); // ::link::
 		$html = str_replace('href="', 'href="'.$link, $html);
 
