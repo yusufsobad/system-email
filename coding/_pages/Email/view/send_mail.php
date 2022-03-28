@@ -649,8 +649,10 @@ class send_mail extends _page{
 				$lmt = floor($max_mail / (60 / $cronjob) );
 
 				foreach($data as $ky => $val){
+					$qty = count($val);
+
 					$limit = self::_conv_limit_mail($users[$ky],$total,$lmt);
-					$limit = $limit>=count($val)?$limit:count($val);
+					$limit = $limit>=$qty?$qty:$limit;
 
 					for($i=0;$i<$limit;$i++){
 						$vl = $val[$i];
@@ -813,7 +815,7 @@ class send_mail extends _page{
 		$html = str_replace('href="', 'href="'.$link, $html);
 
 		// Mencari src image lokal --> replace
-		$dicari = 'src="/' . URL . '/';
+		$dicari = 'src="\/' . URL . '\/';
 		if(preg_match("/$dicari/", $html)) {
 			$replace = 'src="https://'. HOSTNAME . '/' . URL . '/';
             $html = str_replace($dicari, $replace, $html);
