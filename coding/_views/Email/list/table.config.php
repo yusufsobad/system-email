@@ -78,7 +78,7 @@ foreach($data as $key => $val){
 	
 	$confid['table'][$key]['tr'] = array();
 	$config['table'][$key]['td'] = array(
-		'nama'			=> array(
+		'name'			=> array(
 			'left',
 			'auto',
 			$val['name'],
@@ -92,8 +92,14 @@ foreach($data as $key => $val){
 		),
 		'email'			=> array(
 			'left',
-			'15%',
+			'12%',
 			$val['email'],
+			true
+		),
+		'place'		=> array(
+			'left',
+			'15%',
+			$val['place'],
 			true
 		),
 		'status'		=> array(
@@ -127,6 +133,10 @@ foreach($data as $key => $val){
 			false
 		)
 	);
+
+	if($type=='mail_1' || $type=='mail_4'){
+		unset($config['table'][$key]['td']['place']);
+	}
 	
 	if($type!='mail_4'){
 		unset($config['table'][$key]['td']['jumlah']);

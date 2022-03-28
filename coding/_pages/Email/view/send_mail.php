@@ -784,6 +784,7 @@ class send_mail extends _page{
 			'attachment'	=> $args['attachment'],
 			'mail_to'		=> $args['email_to_m'],
 			'name_to'		=> $args['name_to_m'],
+			'place_to'		=> $args['place_to_m'],
 			'html'			=> $html
 		);
 		
@@ -799,7 +800,7 @@ class send_mail extends _page{
 			return '';
 		}
 		
-		$url = 'https://kirim.kreasimudaindonesia.com/include/sending.php?';
+		$url = 'https://'.HOSTNAME.'/'.URL.'/include/sending.php?';
 		$dt_read = $url.'send=sendMail_send&data='.$args['meta_id'].'-4-'.$args['ID'];
 		$dt_link = $url.'send=sendMail_send&data='.$args['meta_id'].'-5-'.$args['ID'];
 		
@@ -807,8 +808,16 @@ class send_mail extends _page{
 		$link = $dt_link.'&link=';
 		
 		$html = str_replace('::full_name::',$args['name_meta'],$html); // ::full_name::
+		$html = str_replace('::place_name::',$args['place_meta'],$html); // ::full_name::
 		//$html = str_replace('::link::',$link,$html); // ::link::
 		$html = str_replace('href="', 'href="'.$link, $html);
+
+		// Mencari src image lokal --> replace
+		$dicari = 'src="/' . URL . '/';
+		if(preg_match("/$dicari/", $html)) {
+			$replace = 'src="https://'. HOSTNAME . '/' . URL . '/';
+            str_replace($dicari, $replace, $html);
+        }
 		
 		$html .= $read;
 		return $html;
@@ -880,7 +889,10 @@ class send_mail extends _page{
 		}
 		
 		foreach($mail_to as $ky => $val){
-		    $mail->Subject = str_replace('::full_name::',$args['name_to'],$args['subject']); //subyek email
+			$subject = str_replace('::full_name::',$args['name_to'],$args['subject']); 	//subyek email
+			$subject = str_replace('::place_name::',$args['place_to'],$subject); 		//subyek email
+
+		    $mail->Subject = $subject;
 			$mail->AddAddress($val,$args['name_to']); //tujuan email
 		}
 		

@@ -63,6 +63,7 @@
 			$list = array(
 				'name'	=> '',
 				'email'	=> '',
+				'place'	=> '',
 				'type'	=> 0,
 				'user'	=> 0,
 				'note'	=> '',	

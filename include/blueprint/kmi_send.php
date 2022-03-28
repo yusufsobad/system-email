@@ -12,12 +12,12 @@ class kmi_send extends _class{
 				'from_mail'	=> array(
 					'key'		=> 'ID',
 					'table'		=> 'email-list',
-					'column'	=> array('name','email','type')
+					'column'	=> array('name','email','place','type')
 				),
 				'to_mail'	=> array(
 					'key'		=> 'ID',
 					'table'		=> 'email-list',
-					'column'	=> array('name','email','type')
+					'column'	=> array('name','email','place','type')
 				),
 				'template'	=> array(
 					'key'		=> 'ID',

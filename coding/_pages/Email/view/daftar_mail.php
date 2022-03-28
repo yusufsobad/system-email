@@ -18,6 +18,7 @@ class daftar_mail extends _page{
 			'ID',
 			'name',
 			'email',
+			'place',
 			'note',
 			'type',
 			'meta_value',
@@ -34,6 +35,7 @@ class daftar_mail extends _page{
 			'ID',
 			'name',
 			'email',
+			'place',
 			'note'
 		);
 
@@ -224,7 +226,7 @@ class daftar_mail extends _page{
 		$type = str_replace('mail_', '', $_POST['type']);
 		intval($type);
 
-		$vals = array(0,'','','',$type,'',1,'','');
+		$vals = array(0,'','','','',$type,'',1,'','');
 		$vals = array_combine(self::_array(), $vals);
 
 		self::$post = self::_conv_type($_POST['type']);
@@ -286,7 +288,7 @@ class daftar_mail extends _page{
 
 	protected static function group_detail_table($id=0){
 		$data = array();
-		$args = array('ID','name','email');
+		$args = array('ID','name','email','place');
 
 		$type = self::$type;
 
@@ -349,8 +351,14 @@ class daftar_mail extends _page{
 				),
 				'email'	=> array(
 					'left',
-					'50%',
+					'25%',
 					$val['email'],
+					true
+				),
+				'place'	=> array(
+					'left',
+					'45%',
+					$val['place'],
 					true
 				)
 			);
@@ -468,6 +476,8 @@ class daftar_mail extends _page{
 	        	$email = preg_replace('/\s+/', '', $email);
 				$email = preg_replace('/[^(\x20-\x7F)\x0A\x0D]*/','', $email);
 
+				$place = isset($column[2])?_filter_string($column[2]):'';
+
 				$colm = explode(";",$email);
 	        	foreach ($colm as $key => $val) {
 					if (!filter_var($val, FILTER_VALIDATE_EMAIL)) {
@@ -484,6 +494,7 @@ class daftar_mail extends _page{
 					$args = array(
 						'name'	=> _filter_string($column[0]),
 						'email'	=> $email,
+						'place'	=> $place,
 						'type'	=> 2
 					);	
 					$q = sobad_db::_insert_table('email-list',$args);
@@ -533,6 +544,8 @@ class daftar_mail extends _page{
 						continue;
 					}
 				}
+
+				$place = isset($column[2])?_filter_string($column[2]):'';
 				
 				$id_user = get_id_user();
 				$whr = "user='$id_user' AND email='$email' AND type='2'";
@@ -543,6 +556,7 @@ class daftar_mail extends _page{
 					$args = array(
 						'name'	=> _filter_string($column[0]),
 						'email'	=> $email,
+						'place'	=> $place,
 						'type'	=> 2
 					);
 					$q = sobad_db::_insert_table('email-list',$args);

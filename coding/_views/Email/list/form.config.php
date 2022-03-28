@@ -34,6 +34,18 @@ $config = array(
 	)
 );
 
+if($type=='customer'){
+	$config[] = array(
+		'func'			=> 'opt_input',
+		'type'			=> 'text',
+		'key'			=> 'place',
+		'label'			=> 'Place / Institusi',
+		'class'			=> 'input-circle',
+		'value'			=> $data['place'],
+		'data'			=> 'placeholder="Tempat"'
+	);
+}
+
 if($type=='produsen'){
 	$secure = array(
 		1	=> 'ssl',
