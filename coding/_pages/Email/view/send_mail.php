@@ -461,7 +461,7 @@ class send_mail extends _page{
 		$id = str_replace('read_','',$id);
 		intval($id);
 
-		return self::view_send($id,"AND `email-log-meta`.status='4'");
+		return self::view_send($id,"AND `email-log-meta`.status IN ('4','5')");
 	}
 
 	public static function clickView_send($id=0){
@@ -649,7 +649,7 @@ class send_mail extends _page{
 				$lmt = floor($max_mail / (60 / $cronjob) );
 
 				foreach($data as $ky => $val){
-					$qty = count($val);
+					$qty = $users[$ky];
 
 					$limit = self::_conv_limit_mail($users[$ky],$total,$lmt);
 					$limit = $limit>=$qty?$qty:$limit;
@@ -664,7 +664,7 @@ class send_mail extends _page{
 						$args = array(
 							'index'		=> $id_mail,
 							'meta_id'	=> $idx,
-							'data'		=> self::setMail_option($log[0])
+							'data'		=> self::setMail_option($log[0],$vl)
 						);
 					
 						$mail_send[] = $args;
