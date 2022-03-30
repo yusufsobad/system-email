@@ -792,9 +792,9 @@ class send_mail extends _page{
 			'name_from'		=> $args['name_from'],
 			'subject'		=> $args['subject_mail'],
 			'attachment'	=> $args['attachment'],
-			'mail_to'		=> $args['email_to_m'],
-			'name_to'		=> $args['name_to_m'],
-			'place_to'		=> $args['place_to_m'],
+			'mail_to'		=> $metas['email_meta'],
+			'name_to'		=> $metas['name_meta'],
+			'place_to'		=> $metas['place_meta'],
 			'html'			=> $html
 		);
 		

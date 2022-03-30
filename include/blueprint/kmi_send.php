@@ -37,7 +37,7 @@ class kmi_send extends _class{
 				'meta_mail'	=> array(
 					'key'		=> 'ID',
 					'table'		=> 'email-list',
-					'column'	=> array('name','email','type')
+					'column'	=> array('name','email','place','type')
 				)
 			);
 		}
