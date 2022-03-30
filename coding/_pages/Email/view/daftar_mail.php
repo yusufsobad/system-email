@@ -396,7 +396,7 @@ class daftar_mail extends _page{
 				'value'			=> 'contact'
 			),
 			array(
-				'id'			=> 'file_import',
+				'id'			=> 'importForm',
 				'func'			=> 'opt_file',
 				'type'			=> 'file',
 				'key'			=> 'data',
@@ -454,7 +454,7 @@ class daftar_mail extends _page{
 				'value'			=> $id
 			),
 			array(
-				'id'			=> 'file_import',
+				'id'			=> 'importForm',
 				'func'			=> 'opt_file',
 				'type'			=> 'file',
 				'key'			=> 'data',
@@ -587,12 +587,25 @@ class daftar_mail extends _page{
 					array_push($clist,$idx);
 				}
 	        }
-		
-			$arg = array(
-				'meta_value'	=> implode(',',$clist)
-			);
-			
-			$q = sobad_db::_update_multiple($where,'email-group-meta',$arg);
+
+			// Check mail group
+	        $check = sobad_db::_select_table($where,'email-group-meta',array('ID'));
+	        $check = array_filter($check);
+			if(empty($check)){
+				$arg = array(
+					'meta_id'		=> $id_grp,
+					'meta_key'		=> 'mail_group',
+					'meta_value'	=> implode(',',$clist),
+					'user'			=> get_id_user()
+				);
+
+				$q = sobad_db::_insert_table('email-group-meta',$arg);
+			}else{
+				$arg = array(
+					'meta_value'	=> implode(',',$clist),
+				);
+				$q = sobad_db::_update_multiple($where,'email-group-meta',$arg);
+			}
 			
 			if($q!==0){
 				return self::group_detail_table($id_grp);
