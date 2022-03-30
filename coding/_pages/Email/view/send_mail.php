@@ -405,6 +405,7 @@ class send_mail extends _page{
 
 	public static function _callback($args=array()){
 		$args['user'] = get_id_user();
+		$args['type'] = 4;
 		return $args;
 	}
 
