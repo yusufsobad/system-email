@@ -857,7 +857,7 @@ class send_mail extends _page{
 		
 		array_filter($mail_to);
 		if(empty($mail_to)){
-			return 0;
+			die(_error::_alert_db("Email not Valid!!!"));
 		}
 
 		// File Attachment
