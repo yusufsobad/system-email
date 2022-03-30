@@ -517,7 +517,8 @@ class send_mail extends _page{
 
 		if($id>0){
 			// Hapus log meta
-			sobad_db::_delete_single($id,'email-log-meta');
+			$where = "meta_mail=" . $id . " AND meta_id=" . $idg;
+			sobad_db::_delete_multiple($where,'email-log-meta');
 		}
 
 		// Get group email
@@ -529,8 +530,11 @@ class send_mail extends _page{
 		$group = $mail[0]['meta_value'];
 
 		$group = explode(',', $group);
-		$key = array_search($id, $group);
-		unset($group[$key]);
+		foreach ($group as $key => $val) {
+			if($val==$id){
+				unset($group[$key]);
+			}
+		}
 
 		// ---> Update
 		$group = implode(',', $group);
