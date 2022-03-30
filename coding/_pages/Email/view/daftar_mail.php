@@ -437,7 +437,7 @@ class daftar_mail extends _page{
 				'value'			=> 'import_groupEmail'
 			),
 			array(
-				'ID'			=> 'importFile',
+				'id'			=> 'importFile',
 				'func'			=> 'opt_input',
 				'type'			=> 'text',
 				'key'			=> 'load',
