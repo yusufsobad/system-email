@@ -906,6 +906,9 @@ class send_mail extends _page{
 			$subject = str_replace('::full_name::',$args['name_to'],$args['subject']); 	//subyek email
 			$subject = str_replace('::place_name::',$args['place_to'],$subject); 		//subyek email
 
+			$subject = str_replace('{{full_name}}',$args['name_to'],$args['subject']); 	//subyek email
+			$subject = str_replace('{{place_name}}',$args['place_to'],$subject); 		//subyek email
+
 		    $mail->Subject = $subject;
 			$mail->AddAddress($val,$args['name_to']); //tujuan email
 		}
