@@ -199,9 +199,9 @@ class daftar_mail extends _page{
 		return $add;
 	}
 
-	protected static function group_action(){
+	protected static function group_action($id=0){
 		$import = array(
-			'ID'	=> 'import_0',
+			'ID'	=> 'import_'.$id,
 			'func'	=> '_import_group',
 			'color'	=> 'btn-default',
 			'icon'	=> 'fa fa-file-excel-o',
@@ -258,6 +258,9 @@ class daftar_mail extends _page{
 	}
 
 	public static function edit_form($id=0,$func='_update_db',$load='sobad_portlet',$type=0){
+		$id = str_replace('edit_', '', $id);
+		intval($id);
+		
 		self::$post = self::_conv_type($_POST['type']);
 		$vals = self::_edit($id,false);
 		
@@ -280,7 +283,7 @@ class daftar_mail extends _page{
 
 	    $data['ID'] = 'groupEmail_portlet';
 	    $data['label'] = 'Data Group Email';
-	    $data['action'] = self::group_action();
+	    $data['action'] = self::group_action($id);
 	    $data['table'] = self::group_detail_table($vals['ID']);
 
 	    return sobad_asset::_loadView('form_table',$data);
