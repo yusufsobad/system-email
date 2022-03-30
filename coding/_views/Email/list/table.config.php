@@ -42,7 +42,7 @@ foreach($data as $key => $val){
 		'type'	=> $type
 	);
 	
-	$jml_mail = 1;
+	$jml_mail = 0;
 	if($type=='mail_4' || $type=='mail_5'){
 		$mail_group = kmi_mail::get_id($val['ID'],array('ID','meta_value'),"",'group');
 		$mail_group = $mail_group[0];
