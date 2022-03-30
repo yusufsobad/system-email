@@ -382,10 +382,18 @@ class daftar_mail extends _page{
 				'value'			=> 'import_customerEmail'
 			),
 			array(
+				'ID'			=> 'importFile',
+				'func'			=> 'opt_input',
+				'type'			=> 'text',
+				'key'			=> 'load',
+				'value'			=> '',
+				'data'			=> 'data-load="groupEmail_portlet" style="display:none;"'
+			),
+			array(
 				'func'			=> 'opt_hidden',
 				'type'			=> 'hidden',
 				'key'			=> 'object',
-				'value'			=> 'email'
+				'value'			=> 'contact'
 			),
 			array(
 				'id'			=> 'file_import',
@@ -426,10 +434,18 @@ class daftar_mail extends _page{
 				'value'			=> 'import_groupEmail'
 			),
 			array(
+				'ID'			=> 'importFile',
+				'func'			=> 'opt_input',
+				'type'			=> 'text',
+				'key'			=> 'load',
+				'value'			=> '',
+				'data'			=> 'data-load="groupEmail_portlet" style="display:none;"'
+			),
+			array(
 				'func'			=> 'opt_hidden',
 				'type'			=> 'hidden',
 				'key'			=> 'object',
-				'value'			=> 'email'
+				'value'			=> 'contact'
 			),
 			array(
 				'func'			=> 'opt_hidden',
@@ -495,7 +511,8 @@ class daftar_mail extends _page{
 						'name'	=> _filter_string($column[0]),
 						'email'	=> $email,
 						'place'	=> $place,
-						'type'	=> 2
+						'type'	=> 2,
+						'user'	=> get_id_user()
 					);	
 					$q = sobad_db::_insert_table('email-list',$args);
 				}
@@ -557,7 +574,8 @@ class daftar_mail extends _page{
 						'name'	=> _filter_string($column[0]),
 						'email'	=> $email,
 						'place'	=> $place,
-						'type'	=> 2
+						'type'	=> 2,
+						'user'	=> get_id_user()
 					);
 					$q = sobad_db::_insert_table('email-list',$args);
 					$idx = $q;
@@ -577,7 +595,7 @@ class daftar_mail extends _page{
 			$q = sobad_db::_update_multiple($where,'email-group-meta',$arg);
 			
 			if($q!==0){
-				//return groupEdit_daftar($id_grp);
+				return self::group_detail_table($id_grp);
 			}
 	    }
 	}
