@@ -283,7 +283,7 @@ class daftar_mail extends _page{
 
 	    $data['ID'] = 'groupEmail_portlet';
 	    $data['label'] = 'Data Group Email';
-	    $data['action'] = self::group_action($id);
+	    $data['action'] = $_POST['type']=='mail_5'?'':self::group_action($id);
 	    $data['table'] = self::group_detail_table($vals['ID']);
 
 	    return sobad_asset::_loadView('form_table',$data);
