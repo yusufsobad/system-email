@@ -515,11 +515,13 @@ class send_mail extends _page{
 		$id = str_replace("del_", "", $id);
 		intval($id);
 
-		// Hapus log meta
-		sobad_db::_delete_single($id,'email-log-meta');
+		if($id>0){
+			// Hapus log meta
+			sobad_db::_delete_single($id,'email-log-meta');
+		}
 
 		// Hapus ID dari group email
-		$mail = kmi_mail::get_id($idg,array('id_join','meta_value'));
+		$mail = kmi_mail::get_group($idg,array('id_join','meta_value'));
 		$group = $mail[0]['meta_value'];
 
 		$group = explode(',', $group);
