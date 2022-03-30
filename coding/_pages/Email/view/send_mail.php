@@ -405,7 +405,6 @@ class send_mail extends _page{
 
 	public static function _callback($args=array()){
 		$args['user'] = get_id_user();
-		$args['type'] = 4;
 		return $args;
 	}
 
@@ -428,7 +427,7 @@ class send_mail extends _page{
 		// set log meta
 		$user = get_id_user();
 
-		$email = kmi_mail::get_email($idx);
+		$email = kmi_mail::get_email($mail_to);
 		if($email[0]['type']==4){
 
 			// get data group

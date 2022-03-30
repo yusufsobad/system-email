@@ -138,7 +138,7 @@ foreach($data as $key => $val){
 		unset($config['table'][$key]['td']['place']);
 	}
 	
-	if($type!='mail_4'){
+	if(in_array($type,array('mail_1','mail_2'))){
 		unset($config['table'][$key]['td']['jumlah']);
 		unset($config['table'][$key]['td']['description']);
 	}
