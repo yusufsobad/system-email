@@ -576,6 +576,10 @@ class daftar_mail extends _page{
 					}
 				}
 
+				if(empty($column[0]) && empty($column[1])){
+					continue;
+				}
+
 				$place = isset($column[2])?_filter_string($column[2]):'';
 				
 				$id_user = get_id_user();
@@ -600,6 +604,13 @@ class daftar_mail extends _page{
 				if(! in_array($idx,$list_group)){
 					array_push($clist,$idx);
 				}
+	        }
+
+	        // check empty mail
+	        foreach ($clist as $key => $val) {
+	        	if(empty($val)){
+	        		unset($clist[$key]);
+	        	}
 	        }
 
 			// Check mail group
