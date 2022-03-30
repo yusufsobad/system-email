@@ -515,11 +515,9 @@ class send_mail extends _page{
 		$id = str_replace("del_", "", $id);
 		intval($id);
 
-		if($id>0){
-			// Hapus log meta
-			$where = "meta_mail=" . $id . " AND meta_id=" . $idg;
-			sobad_db::_delete_multiple($where,'email-log-meta');
-		}
+		// Hapus log meta
+		$where = "meta_mail=" . $id . " AND meta_id=" . $idg;
+		sobad_db::_delete_multiple($where,'email-log-meta');
 
 		// Get group email
 		$mail_to = kmi_send::get_id($idg,array('to_mail'));
