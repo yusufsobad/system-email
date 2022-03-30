@@ -47,9 +47,11 @@ foreach($data as $key => $val){
 		$mail_group = kmi_mail::get_id($val['ID'],array('ID','meta_value'),"",'group');
 		$mail_group = $mail_group[0];
 
-		$jml_mail = $mail_group['meta_value'];
-		$jml_mail = explode(',',$jml_mail);
-		$jml_mail = count($jml_mail);
+		if(!empty($mail_group['meta_value'])){
+			$jml_mail = $mail_group['meta_value'];
+			$jml_mail = explode(',',$jml_mail);
+			$jml_mail = count($jml_mail);
+		}
 	}
 
 	$status = '';$view = '';
