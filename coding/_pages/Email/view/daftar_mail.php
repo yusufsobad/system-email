@@ -68,7 +68,7 @@ class daftar_mail extends _page{
 			$cari=$where;
 		}
 		
-		$limit = 'LIMIT '.intval(($start - 1) * $nLimit).','.$nLimit;
+		$limit = 'ORDER BY ID DESC LIMIT '.intval(($start - 1) * $nLimit).','.$nLimit;
 		$where .= $limit;
 
 		$object = self::$table;

@@ -82,7 +82,7 @@ if($type=='produsen'){
 
 if($type=='group'){
 	// unset input email
-	unset($config[2]);
+	unset($config[3]);
 	$email[0] = 'Tidak Ada';
 
 	// get list email customer

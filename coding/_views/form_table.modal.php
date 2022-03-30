@@ -14,7 +14,8 @@ $config = array(
 	'button'	=> '_btn_modal_save',
 	'status'	=> array(
 		'link'		=> $link,
-		'load'		=> isset($load)?$load:'sobad_portlet'
+		'load'		=> isset($load)?$load:'sobad_portlet',
+		'type'		=> isset($type) ? $type : '',
 	),
 	'func'		=> array('sobad_form','_portlet'),
 	'data'		=> array($data,$portlet)
