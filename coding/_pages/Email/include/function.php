@@ -17,6 +17,7 @@ function re_log_meta($id=0){
     foreach($log as $key => $val){
         unset($val['email_meta']);
         unset($val['name_meta']);
+        unset($val['place_meta']);
         unset($val['type_meta']);
         unset($val['ID']);
         
