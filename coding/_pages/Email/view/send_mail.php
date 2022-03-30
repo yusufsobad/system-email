@@ -520,8 +520,12 @@ class send_mail extends _page{
 			sobad_db::_delete_single($id,'email-log-meta');
 		}
 
+		// Get group email
+		$mail_to = kmi_send::get_id($idg,array('to_mail'));
+		$mail_to = $mail_to[0]['to_mail'];
+
 		// Hapus ID dari group email
-		$mail = kmi_mail::get_group($idg,array('id_join','meta_value'));
+		$mail = kmi_mail::get_group($mail_to,array('id_join','meta_value'));
 		$group = $mail[0]['meta_value'];
 
 		$group = explode(',', $group);
