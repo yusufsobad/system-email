@@ -543,6 +543,17 @@ class daftar_mail extends _page{
 			
 			$where = "meta_id='$id_grp' AND meta_key='mail_group'";
 			$lst_grp = sobad_db::_select_table("WHERE ".$where,'email-group-meta',array('meta_value'));
+
+			if(empty($lst_grp)){
+				$arg = array(
+					'meta_id'		=> $id_grp,
+					'meta_key'		=> 'mail_group',
+					'meta_value'	=> implode(',',$clist),
+					'user'			=> get_id_user()
+				);
+
+				$q = sobad_db::_insert_table('email-group-meta',$arg);
+			}
 			
 			$list_group = array();
 			if($lst_grp!==0){
@@ -589,23 +600,10 @@ class daftar_mail extends _page{
 	        }
 
 			// Check mail group
-	        $check = sobad_db::_select_table($where,'email-group-meta',array('ID'));
-	        $check = array_filter($check);
-			if(empty($check)){
-				$arg = array(
-					'meta_id'		=> $id_grp,
-					'meta_key'		=> 'mail_group',
-					'meta_value'	=> implode(',',$clist),
-					'user'			=> get_id_user()
-				);
-
-				$q = sobad_db::_insert_table('email-group-meta',$arg);
-			}else{
-				$arg = array(
-					'meta_value'	=> implode(',',$clist),
-				);
-				$q = sobad_db::_update_multiple($where,'email-group-meta',$arg);
-			}
+			$arg = array(
+				'meta_value'	=> implode(',',$clist),
+			);
+			$q = sobad_db::_update_multiple($where,'email-group-meta',$arg);
 			
 			if($q!==0){
 				return self::group_detail_table($id_grp);
