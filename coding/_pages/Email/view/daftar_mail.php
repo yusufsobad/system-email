@@ -243,7 +243,7 @@ class daftar_mail extends _page{
             'type'	=> $_POST['type']
         );
 
-        if($_POST['type']!='mail_4'){
+        if(in_array($_POST['type'],array('mail_1','mail_2'))){
 	        return sobad_asset::_loadView('form',$data);
 	    }
 
@@ -260,7 +260,7 @@ class daftar_mail extends _page{
 	public static function edit_form($id=0,$func='_update_db',$load='sobad_portlet',$type=0){
 		$id = str_replace('edit_', '', $id);
 		intval($id);
-		
+
 		self::$post = self::_conv_type($_POST['type']);
 		$vals = self::_edit($id,false);
 		
@@ -277,7 +277,7 @@ class daftar_mail extends _page{
             'type'	=> empty($type)?$_POST['type']:$type
         );
 
-        if($_POST['type']!='mail_4'){
+        if(in_array($_POST['type'],array('mail_1','mail_2'))){
 	        return sobad_asset::_loadView('form',$data);
 	    }
 

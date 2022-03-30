@@ -1,7 +1,7 @@
 <?php
 
 $my = kmi_mail::get_produsens(array('ID','name'));
-$cust = kmi_mail::get_customers(array('ID','name'),"LIMIT 20");
+//$cust = kmi_mail::get_customers(array('ID','name'),"LIMIT 20");
 $group = kmi_mail::get_groups(array('ID','name'),"LIMIT 20");
 $exgroup = kmi_mail::get_exgroups(array('ID','name'),"LIMIT 20");
 
@@ -16,7 +16,7 @@ $exgroup = convToOption($exgroup,'ID','name');
 $cont = convToOption($cont,'ID','name');
 $sign = convToOption($sign,'ID','name');
 
-$opt_grp = array('Email' => $cust,'Group' => $group,'ExGroup' => $exgroup);
+$opt_grp = array(/*'Email' => $cust,*/'Group' => $group,'ExGroup' => $exgroup);
 
 $status = '';
 if($data['status']==1){
@@ -50,7 +50,7 @@ $config = array(
 		'class'			=> 'input-circle',
 		'searching'		=> true,
 		'select'		=> $data['to_mail'],
-		'status'		=> 'multiple'.$status	
+		'status'		=> $status	
 	),
 	array(
 		'func'			=> 'opt_input',

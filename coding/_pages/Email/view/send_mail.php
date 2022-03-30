@@ -431,8 +431,8 @@ class send_mail extends _page{
 		if($email[0]['type']==4){
 
 			// get data group
-			$email = kmi_mail::get_group($idx,array('id_mail'));
-			$email = explode(',',$email[0]['id_mail']);
+			$email = kmi_mail::get_group($idx,array('meta_value'));
+			$email = explode(',',$email[0]['meta_value']);
 			
 			foreach($email as $key => $mail_to){
 				$metas = array(
