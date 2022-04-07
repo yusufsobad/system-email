@@ -3,16 +3,16 @@
 date_default_timezone_set('Asia/Jakarta');
 session_start();
 
-if(!isset($_GET['send'])){
+if(!isset($_REQUEST['send'])){
 	include 'err.php';
 
 	$err = _error::_alert_db("Sending not load");
 	die($err);
 }else{
 
-	$key = $_GET['object'];
+	$key = $_REQUEST['object'];
 	$key = str_replace("sobad_","",$key);
-	$func = str_replace("sobad_","",$_GET['send']);
+	$func = str_replace("sobad_","",$_REQUEST['send']);
 	
 	define('AUTHPATH',$_SERVER['SERVER_NAME']);
 	require 'config/hostname.php';
@@ -25,7 +25,7 @@ if(!isset($_GET['send'])){
 
 	// load route
 	if(!isset($_SESSION[_prefix.'page'])){
-		$_SESSION[_prefix.'page'] = isset($_GET['page'])?$_GET['page']:'';
+		$_SESSION[_prefix.'page'] = isset($_REQUEST['page'])?$_REQUEST['page']:'';
 	}
 
 	$asset = sobad_asset::_pages("../coding/_pages/");
@@ -40,7 +40,7 @@ if(!isset($_GET['send'])){
 		$key = get_home_func($key);
 	}
 
-	$value = isset($_GET['data']) ? $_GET['data'] : "";
+	$value = isset($_REQUEST['data']) ? $_REQUEST['data'] : "";
 
 	$data['class'] = $key;
 	$data['func'] = $func;
