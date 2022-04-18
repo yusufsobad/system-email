@@ -60,6 +60,14 @@ class dash_mail{
 		return dash_block::_modal($id,1);
 	}
 
+	public static function _block_pagination($idx){
+		return dash_block::_block_pagination($idx);
+	}
+
+	public static function _search_block($args=array()){
+		return dash_block::_search_block($args);
+	}
+
 	private static function _data(){
 		$args = array("ID");
 
