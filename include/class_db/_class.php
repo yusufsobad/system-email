@@ -8,7 +8,15 @@ abstract class _class{
 
 	private static $_where = '';
 
+	private static $_meta = false;
+
+	private static $_data_meta = array();
+
 	protected static $_type = '';
+
+	protected static $_temp = false;
+
+	protected static $_temp_table = '';
 
 	private static function schema($key=''){
 		$args = static::blueprint(self::$_type);
@@ -57,6 +65,8 @@ abstract class _class{
 	}
 
 	public static function count($limit='1=1 ',$args=array(),$type=''){
+		self::$_meta = false;
+		self::$_temp = false;
 		self::$_type = $type;
 
 		$inner = '';$meta = false;
@@ -64,6 +74,17 @@ abstract class _class{
 
 		$blueprint = self::schema();		
 		$table = $blueprint['table'];
+
+		// Check Temporary
+		if(isset($blueprint['temporary']) && self::$_temp){
+//			$temp = $blueprint['temporary'];
+//			$temp_table = "temp-" . $temp[$type]['temp'];
+//			self::$_temp_table = $temp_table;
+
+//			$inner .= "LEFT JOIN `" . $table . "` ON `" . $temp_table . "`.reff_temp = `" . $table . "`.ID ";
+		}
+
+		// Check Detail
 		if(isset($blueprint['detail'])){
 			$check = array_filter($blueprint['detail']);
 			if(!empty($check)){
@@ -95,16 +116,19 @@ abstract class _class{
 			}
 		}
 
+		$_args = array("COUNT('`$table`.ID') AS count");
 		$check = array_filter(self::list_meta($type));
 		if(!empty($check)){
-			$inner .= "LEFT JOIN `".static::$tbl_meta."` ON `".static::$table."`.ID = `".static::$tbl_meta."`.meta_id ";
-			$limit .= static::$group;
-			$meta = true;
+			$_args = array("`$table`.ID");
+
+			//$inner .= "LEFT JOIN `".static::$tbl_meta."` ON `".static::$table."`.ID = `".static::$tbl_meta."`.meta_id ";
+			//$limit .= static::$group;
+			self::$_meta = true;
 		}
 
-		$count = self::_get_data($inner." WHERE ".$limit,array("COUNT('`$table`.ID') AS count"));
+		$count = self::_get_data($inner." WHERE ".$limit,$_args);
 		
-		if($meta){
+		if(self::$_meta){
 			return count($count);
 		}
 
@@ -112,18 +136,35 @@ abstract class _class{
 	}
 	
 	public static function get_id($id,$args=array(),$limit='',$type=''){
+		self::$_meta = false;
+		self::$_temp = false;
+
+		// check ID
+		if(! array_search('ID', $args)){
+			$args[] = 'ID';
+		}
+
 		$where = "WHERE `".static::$table."`.ID='$id' $limit";
 		return self::_check_join($where,$args,$type);
 	}
 
 	public static function get_all($args=array(),$limit='',$type=''){
+		self::$_meta = false;
+		self::$_temp = true;
+
 		$check = substr($limit,0,4);
 		$check = trim($check);
+
+		// check ID
+		if(! array_search('ID', $args)){
+			$args[] = 'ID';
+		}
 
 		$limit = strtoupper($check)=="AND"?substr($limit, 4):$limit;
 
 		$limit = empty($limit)?'1=1':$limit;
 		$where = "WHERE $limit";
+
 		return self::_check_join($where,$args,$type);
 	}
 
@@ -155,6 +196,19 @@ abstract class _class{
 			$metas = self::list_meta($type);
 
 			$args = array_merge($user,$joins,$metas);
+		}
+
+		// Check Temporary
+		if(isset($blueprint['temporary']) && self::$_temp){
+			$temp = $blueprint['temporary'];
+			if(isset($temp[$type])){
+				$temp_table = "temp-" . $temp[$type]['temp'];
+				self::$_temp_table = $temp_table;
+
+				self::$_inner .= "LEFT JOIN `" . $table . "` ON `" . $temp_table . "`.reff_temp = `" . $table . "`.ID ";
+			}else{
+				self::$_temp = false;
+			}
 		}
 	
 		if(isset($blueprint['detail'])){
@@ -254,31 +308,47 @@ abstract class _class{
 
 	}
 
+	// private static function _meta($args=array(),$type=''){
+	// 	$where = self::$_where;
+	// 	$inner = '';$group = $where;
+	// 	$meta = self::list_meta($type);
+	// 	//$select = "SUM(IF(`".static::$tbl_meta."`.meta_key = '{{key}}',`".static::$tbl_meta."`.meta_value,'')) AS {{key}}";
+	// 	$select = "max(case when `".static::$tbl_meta."`.meta_key = '{{key}}' then `".static::$tbl_meta."`.meta_value end) '{{key}}'";
+
+	// 	foreach ($args as $key => $val) {
+	// 		if(in_array($val, $meta)){
+	// 			self::$_join[] = str_replace('{{key}}', $val, $select);
+	// 			$inner = "LEFT JOIN `".static::$tbl_meta."` ON `".static::$table."`.ID = `".static::$tbl_meta."`.meta_id ";
+
+	// 			$group_by = static::$group;
+	// 			if(strpos($group, "ORDER BY") !== false){
+	// 				$group = str_replace("ORDER BY",$group_by." ORDER BY",$where);
+	// 			}else if(strpos($group, "LIMIT") !== false){
+	// 				$group = str_replace("LIMIT",$group_by." LIMIT",$where);
+	// 			}else{
+	// 				$group = $where.$group_by;
+	// 			}
+	// 		}
+	// 	}
+
+	// 	self::$_where = $group;
+	// 	self::$_inner .= $inner;
+
+	// 	return $args;
+	// }
+
 	private static function _meta($args=array(),$type=''){
-		$where = self::$_where;
-		$inner = '';$group = $where;
+		$data = array();
 		$meta = self::list_meta($type);
-		//$select = "SUM(IF(`".static::$tbl_meta."`.meta_key = '{{key}}',`".static::$tbl_meta."`.meta_value,'')) AS {{key}}";
-		$select = "max(case when `".static::$tbl_meta."`.meta_key = '{{key}}' then `".static::$tbl_meta."`.meta_value end) '{{key}}'";
 
 		foreach ($args as $key => $val) {
 			if(in_array($val, $meta)){
-				self::$_join[] = str_replace('{{key}}', $val, $select);
-				$inner = "LEFT JOIN `".static::$tbl_meta."` ON `".static::$table."`.ID = `".static::$tbl_meta."`.meta_id ";
-
-				$group_by = static::$group;
-				if(strpos($group, "ORDER BY") !== false){
-					$group = str_replace("ORDER BY",$group_by." ORDER BY",$where);
-				}else if(strpos($group, "LIMIT") !== false){
-					$group = str_replace("LIMIT",$group_by." LIMIT",$where);
-				}else{
-					$group = $where.$group_by;
-				}
+				self::$_meta = true;
+				$data[] = $val;
 			}
 		}
 
-		self::$_where = $group;
-		self::$_inner .= $inner;
+		self::$_data_meta = $data;
 
 		return $args;
 	}
@@ -286,13 +356,15 @@ abstract class _class{
 	protected static function _get_data($where='',$args=array()){
 		global $DB_NAME;
 		$data = array();
+		$ids = array();
 
 		$_database = $DB_NAME;
 		if(property_exists(new static,'database')){
 			$DB_NAME = static::$database;
 		}
 
-		$q = sobad_db::_select_table($where,static::$table,$args);
+		$table = !empty(self::$_temp_table) && self::$_temp ?self::$_temp_table : static::$table;
+		$q = sobad_db::_select_table($where,$table,$args);
 		if($q!==0){
 			while($r=$q->fetch_assoc()){
 				//$item = array();
@@ -300,11 +372,81 @@ abstract class _class{
 				//	$item[$key] = $val;
 				//}
 				
+				if(isset($r['ID'])){
+					$ids[] = $r['ID'];
+				}
+
 				$data[] = $r;//$item;
+			}
+
+			$check = array_filter($ids);
+			$check2 = array_filter(self::$_data_meta);
+
+			if(self::$_meta && !empty($check) && !empty($check2)){
+				$meta = self::_get_meta_join($ids);
+				$data = self::_combine_data($data,$meta);
+			}
+		}
+
+		self::$_temp_table = '';
+		$DB_NAME = $_database;
+		return $data;
+	}
+
+	protected static function _get_meta_join($ids=array()){
+		global $DB_NAME;
+		$data = array();
+		$args = array('ID');
+
+		$_database = $DB_NAME;
+		if(property_exists(new static,'database')){
+			$DB_NAME = static::$database;
+		}
+
+		$meta = array();
+		$default = array();
+		foreach (self::$_data_meta as $key => $val) {
+			$default[$val] = '';
+			$meta[] = "'" . $val . "'";
+		}
+
+		// Default meta
+		foreach ($ids as $key) {
+			$data[$key] = $default;
+		}
+
+		// Get data meta;
+		$ids = implode(',', $ids);
+		$meta = implode(',', $meta);
+
+		$whr = isset($search_meta_global) && !empty($search_meta_global) ? 'AND (' . $search_meta_global . ')' : "AND meta_key IN ($meta)";
+		$where = "WHERE meta_id IN ($ids) " . $whr;
+		$r = sobad_db::_select_table($where,static::$tbl_meta,array(
+			'meta_id','meta_key','meta_value'
+		));
+
+		if($r!==0){
+			while($s=$r->fetch_assoc()){
+				$idm = $s['meta_id'];
+
+				$key = $s['meta_key'];
+				$data[$idm][$key] = $s['meta_value'];
 			}
 		}
 
 		$DB_NAME = $_database;
 		return $data;
+	}
+
+	protected static function _combine_data($data=array(),$meta=array()){
+		$filter = array();
+		foreach ($data as $key => $val) {
+			$idx = $val['ID'];
+			if(isset($meta[$idx])){
+				$filter[] = array_merge($val,$meta[$idx]);
+			}
+		}
+
+		return $filter;
 	}
 }

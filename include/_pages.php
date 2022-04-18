@@ -50,6 +50,7 @@ abstract class _page{
 		$cari = self::$data;
 		$search = isset($cari['search'])?$cari['search']:'';
 		$src = array();
+		$src_meta = array();
 
 		$meta = array();$tbl_meta='';
 		if(property_exists(new static, 'table')){
@@ -86,7 +87,7 @@ abstract class _page{
 				
 				foreach($args as $key => $val){
 					if(in_array($val, $meta)){
-						$src[] = "(`$tbl_meta`.meta_key='$val' AND `$tbl_meta`.meta_value LIKE '%$kata%') ".$whr;
+						$src_meta[] = "(`$tbl_meta`.meta_key='$val' AND `$tbl_meta`.meta_value LIKE '%$kata%') ";
 					}else{
 						$_src = "$val LIKE '%$kata%'";
 
@@ -99,13 +100,17 @@ abstract class _page{
 					}
 				}
 				
+				$src_meta = implode(" OR ",$src_meta);
+				$GLOBALS['search_meta_global'] = $src_meta;
+
 				$src = implode(" OR ",$src);
 				$where = "AND (".$src.") ";
 			}else{
 				$search = $args[$search];
 				$kata = $cari['words'];
 				if(in_array($search, $meta)){
-					$where = "AND (`$tbl_meta`.meta_key='$search' AND `$tbl_meta`.meta_value LIKE '%$kata%') ".$whr;
+					$where = 'AND ' . $whr;
+					$GLOBALS['search_meta_global'] = "`$tbl_meta`.meta_key='$search' AND `$tbl_meta`.meta_value LIKE '%$kata%' ";
 				}else{
 					$_src = "$search LIKE '%$kata%'";
 
@@ -142,18 +147,24 @@ abstract class _page{
 	// Function Form Select wilayah -----------------------------
 	// ----------------------------------------------------------
 
-		// -------------- get value select opt ----------------------
+	// -------------- get value select opt ----------------------
+	public static function get_provinces($id=1){
+		$prov = array();
+		if($id!=0){
+			$prov = sobad_region::get_province_by($id);
+			$prov = convToOption($prov,'ID','province');
+		}
+		
+		return $prov;
+	}
+
 	public static function get_cities($id=0){
 		$kota = array();
 		if($id!=0){
-			$cities = sobad_wilayah::get_cities($id);
+			$cities = sobad_region::get_city_by($id);
 			foreach($cities as $key => $kab){
-				$tipe = $kab['tipe'];
-				if($tipe=='Kabupaten'){
-					$tipe = 'Kab.';
-				}
-				
-				$kota[$kab['id_kab']] = $tipe.' '.$kab['kabupaten'];
+				$tipe = sobad_region::_conv_type_city($kab['type']);
+				$kota[$kab['ID']] = $tipe.' '.$kab['city'];
 			}
 		}
 		
@@ -163,24 +174,39 @@ abstract class _page{
 	public static function get_subdistricts($id=0){
 		$kec = array();
 		if($id!=0){
-			$kec = sobad_wilayah::get_subdistricts($id);
-			$kec = convToOption($kec,'id_kec','kecamatan');
+			$kec = sobad_region::get_subdistrict_by($id);
+			$kec = convToOption($kec,'ID','subdistrict');
 		}
 		
 		return $kec;
 	}
 
-	public static function get_postcodes($prov=0,$kota=0,$kec=0){
+	public static function get_villages($id=0){
 		$pos = array();
 		if($kec!=0){
-			$pos = sobad_wilayah::get_postcode($prov,$kota,$kec);
-			$pos = convToOption($pos,'kodepos','kodepos');
+			$pos = sobad_region::get_village_by($kec);
+			$pos = convToOption($pos,'ID','village');
+		}
+		
+		return $pos;
+	}
+
+	public static function get_postcodes($id=0){
+		$pos = array();
+		if($id!=0){
+			$pos = sobad_region::get_postcodes($id);
+			$pos = convToOption($pos,'postal_code','postal_code');
 		}
 		
 		return $pos;
 	}
 
 	// -------------- option select onchange --------------------
+
+	public static function option_province($id=1){
+		$data = self::get_provinces($id);
+		return self::_conv_option($data);
+	}
 
 	public static function option_city($id=0){
 		$data = self::get_cities($id);
@@ -192,14 +218,13 @@ abstract class _page{
 		return self::_conv_option($data);
 	}
 
-	public static function option_postcode($id=0){
-		$ids = sobad_wilayah::get_id_by_subdistrict($id);
+	public static function option_village($id=0){
+		$data = self::get_villages($id);	
+		return self::_conv_option($data);	
+	}
 
-		$prov = $ids[0]['id_prov'];
-		$kab = $ids[0]['id_kab'];
-		$kec = $ids[0]['id_kec'];
-		
-		$data = self::get_postcodes($prov,$kab,$kec);	
+	public static function option_postcode($id=0){
+		$data = self::get_postcodes($id);	
 		return self::_conv_option($data);	
 	}
 
@@ -494,6 +519,20 @@ abstract class _page{
 			
 			$idx = sobad_db::_insert_table($schema['table'],$data);
 			$q = self::_add_meta_db($idx,$args,$schema);
+
+			// Check temporary
+			if(isset($schema['temporary'])){
+				$temp = $schema['temporary'];
+				if(isset($temp[$post])){
+					$conn = sobad_db::connect();
+
+					// insert index in temporary table
+					$temp_table = "temp-" . $temp[$post]['temp'];
+
+					$query = "INSERT INTO `$temp_table`(reff_temp) VALUES('$idx')";
+					$conn->query($query) or die('Gagal insert data temporary!!!');
+				}
+			}
 
 			$id = $idx;
 		}else{
