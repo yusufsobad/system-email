@@ -13,7 +13,7 @@ class dash_chart{
 	// --------------- Create Data Chart
 		$data = array();
 
-		$args = array("COUNT(ID) AS mail");
+		$args = array("ID");
 
 		$email = array('Sending','Failed','Reading','Click Link','Not read');
 		$color = array(0,2,4,5,6);
@@ -27,11 +27,11 @@ class dash_chart{
 			$read = kmi_send::get_log_metas($args,"AND status IN ('4','5') ".$whr);
 			$link = kmi_send::get_log_metas($args,"AND status IN ('5') ".$whr);
 
-			$data[0]['data'][$i] = $send[0]['mail'];
-			$data[1]['data'][$i] = $fail[0]['mail'];
-			$data[2]['data'][$i] = $read[0]['mail'];
-			$data[3]['data'][$i] = $link[0]['mail'];
-			$data[4]['data'][$i] = $send[0]['mail'] - $read[0]['mail'];
+			$data[0]['data'][$i] = count($send);
+			$data[1]['data'][$i] = count($fail);
+			$data[2]['data'][$i] = count($read);
+			$data[3]['data'][$i] = count($link);
+			$data[4]['data'][$i] = count($send) - count($read);
 		}
 
 		$data[0]['type'] = 'line';
@@ -60,7 +60,7 @@ class dash_chart{
 	protected static function _data(){
 		$year = date('Y');
 		$whr = "AND YEAR(meta_date)='$year'";
-		$args = array("COUNT(ID) AS mail");
+		$args = array("ID");
 
 		$total = kmi_send::get_log_metas($args,$whr);
 		$pend = kmi_send::get_log_metas($args,"AND status IN ('0')".$whr);
@@ -71,11 +71,11 @@ class dash_chart{
 
 		$omset = '<div>
 					<div> Yearly Email : '.$year.'</div>
-					<div style="font-size:30px;padding:7px;"> '.$total[0]['mail'].' </div>
-					<div style="font-size:14px;text-align:left;"> Pending <i style="margin-left:10px;"></i>: '.$pend[0]['mail'].'</div>
-					<div style="font-size:14px;text-align:left;"> Failed <i style="margin-left:23px;"></i>: '.$fail[0]['mail'].'</div>
-					<div style="font-size:14px;text-align:left;"> Read <i style="margin-left:28px;"></i>: '.$read[0]['mail'].'</div>
-					<div style="font-size:14px;text-align:left;"> Click <i style="margin-left:31px;"></i>: '.$link[0]['mail'].'</div>
+					<div style="font-size:30px;padding:7px;"> '.count($total).' </div>
+					<div style="font-size:14px;text-align:left;"> Pending <i style="margin-left:10px;"></i>: '.count($pend).'</div>
+					<div style="font-size:14px;text-align:left;"> Failed <i style="margin-left:23px;"></i>: '.count($fail).'</div>
+					<div style="font-size:14px;text-align:left;"> Read <i style="margin-left:28px;"></i>: '.count($read).'</div>
+					<div style="font-size:14px;text-align:left;"> Click <i style="margin-left:31px;"></i>: '.count($link).'</div>
 				</div>';
 
 		$chart[] = array(

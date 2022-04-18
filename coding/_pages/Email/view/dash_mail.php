@@ -61,7 +61,7 @@ class dash_mail{
 	}
 
 	private static function _data(){
-		$args = array("COUNT(ID) AS mail");
+		$args = array("ID");
 
 		$pend = kmi_send::get_log_metas($args,"AND status IN ('0')");
 		$fail = kmi_send::get_log_metas($args,"AND status IN ('2')");
@@ -74,7 +74,7 @@ class dash_mail{
 			'data'	=> array(
 				'icon'		=> '',
 				'color'		=> 'grey-intense',
-				'qty'		=> $pend[0]['mail'],
+				'qty'		=> count($pend),
 				'desc'		=> 'Wait For Send',
 				'button'	=> self::button_toggle_block(array('ID' => 'mail_0','func' => 'view_dash_block'))
 			)
@@ -85,7 +85,7 @@ class dash_mail{
 			'data'	=> array(
 				'icon'		=> '',
 				'color'		=> 'red-intense',
-				'qty'		=> $fail[0]['mail'],
+				'qty'		=> count($fail),
 				'desc'		=> 'Gagal terkirim',
 				'button'	=> self::button_toggle_block(array('ID' => 'mail_2','func' => 'view_dash_block'))
 			)
@@ -96,7 +96,7 @@ class dash_mail{
 			'data'	=> array(
 				'icon'		=> '',
 				'color'		=> 'green-haze',
-				'qty'		=> $send[0]['mail'],
+				'qty'		=> count($send),
 				'desc'		=> 'email terkirim',
 				'button'	=> self::button_toggle_block(array('ID' => 'mail_3','func' => 'view_dash_block'))
 			)
@@ -107,7 +107,7 @@ class dash_mail{
 			'data'	=> array(
 				'icon'		=> '',
 				'color'		=> 'blue-madison',
-				'qty'		=> $read[0]['mail'],
+				'qty'		=> count($read),
 				'desc'		=> 'Email Terbaca',
 				'button'	=> self::button_toggle_block(array('ID' => 'mail_4','func' => 'view_dash_block'))
 			)
@@ -118,7 +118,7 @@ class dash_mail{
 			'data'	=> array(
 				'icon'		=> '',
 				'color'		=> 'purple-plum',
-				'qty'		=> $link[0]['mail'],
+				'qty'		=> count($link),
 				'desc'		=> 'Click Link Email',
 				'button'	=> self::button_toggle_block(array('ID' => 'mail_5','func' => 'view_dash_block'))
 			)
