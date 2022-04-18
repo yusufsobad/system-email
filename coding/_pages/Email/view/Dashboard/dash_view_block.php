@@ -103,7 +103,7 @@ class dash_block extends _page{
 				'Tanggal'		=> array(
 					'left',
 					'15%',
-					format_date_id(date('Y-m-d',$date)),
+					format_date_id(date($date)),
 					true
 				),
 				'Waktu'		=> array(
