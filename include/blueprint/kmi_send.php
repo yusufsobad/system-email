@@ -71,7 +71,9 @@ class kmi_send extends _class{
 		self::$table = 'email-log-meta';
 		$id_user = get_id_user();
 
-		$where = "`email-log-meta`.user='$id_user' AND `email-log-meta`.log='0' $limit";
+		$user = !empty($id_user)?"`email-log-meta`.user='$id_user' AND":"";
+
+		$where = $user . " `email-log-meta`.log='0' $limit";
 		$data = self::get_all($args,$where,'logmeta');
 
 		self::$table = 'email-log';
