@@ -427,11 +427,11 @@ class send_mail extends _page{
 		// set log meta
 		$user = get_id_user();
 
-		$email = kmi_mail::get_email($mail_to);
+		$email = kmi_mail::get_email($mail_to,array('type','meta_value'));
 		if($email[0]['type']==4){
 
 			// get data group
-			$email = kmi_mail::get_group($mail_to,array('meta_value'));
+			//$email = kmi_mail::get_group($mail_to,array('meta_value'));
 			$email = explode(',',$email[0]['meta_value']);
 			
 			foreach($email as $key => $mail_to){
