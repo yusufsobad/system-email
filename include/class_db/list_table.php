@@ -33,6 +33,7 @@
 		
 		$table = array(
 				'email-group-meta'		=> self::email_group_meta(),
+				'email-link'		=> self::email_link(),
 				'email-list'		=> self::email_list(),
 				'email-log'		=> self::email_log(),
 				'email-log-meta'		=> self::email_log_meta(),
@@ -54,6 +55,17 @@
 				'meta_key'	=> '',
 				'meta_value'	=> '',
 				'user'	=> 0,	
+			);
+			
+			return $list;
+		}
+
+		private static function email_link(){
+			$list = array(
+				'link_meta'	=> 0,
+				'href'	=> '',
+				'status'	=> 0,
+				'link_date'	=> date('Y-m-d H:i:s'),	
 			);
 			
 			return $list;

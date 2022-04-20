@@ -744,6 +744,17 @@ class send_mail extends _page{
 					$q = sobad_db::_update_single($meta,'email-log-meta',$args);
 				}
 
+				// Conversi Link
+				if(!empty($link)){
+					$_link = kmi_link::get_id($link,array('href'));
+					$link = $_link[0]['href'];
+
+					sobad_db::_update_single($link,'email-link',array(
+						'status'	=> 1,
+						'link_date'	=> date('Y-m-d H:i:s')
+					));
+				}
+
 				header('Location : '.$link);
 				break;
 			default:
@@ -824,7 +835,23 @@ class send_mail extends _page{
 		$html = str_replace('{{place_name}}',$args['place_meta'],$html); // {{place_name}}
 
 		//$html = str_replace('::link::',$link,$html); // ::link::
-		$html = str_replace('href="', 'href="'.$link, $html);
+		//$html = str_replace('href="', 'href="'.$link, $html);
+
+		// Get link
+		// Conversi link href
+		preg_match_all("/href=\"(.*?)\"/", $html, $href);
+		$check = array_filter($href[0]);
+		if(!empty($check)){
+			foreach ($href[1] as $key => $val) {
+				$idl = sobad_db::_insert_table('email-link',array(
+					'link_meta'		=> $args['ID'],
+					'href'			=> $val,
+					'link_date'		=> '0000-00-00 00:00:00'
+				));
+
+				$html = str_replace('href="' . $val, 'href="' . $link . $idl, $html);
+			}
+		}
 
 		// Mencari src image lokal --> replace
 		$dicari = 'src=\"\/' . URL;

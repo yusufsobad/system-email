@@ -9,7 +9,7 @@ $cont = kmi_template::get_contents(array('ID','name'));
 $sign = kmi_template::get_signatures(array('ID','name'));
 
 $my = convToOption($my,'ID','name');
-$cust = convToOption($cust,'ID','name');
+//$cust = convToOption($cust,'ID','name');
 $group = convToOption($group,'ID','name');
 $exgroup = convToOption($exgroup,'ID','name');
 
