@@ -750,7 +750,7 @@ class send_mail extends _page{
 
 					$check = array_filter($_link);
 					if(!empty($check)){
-						$link = $_link[0]['href'];
+						$link = str_replace('&amp;', '&', $_link[0]['href']);
 
 						sobad_db::_update_single($link,'email-link',array(
 							'status'	=> 1,
