@@ -747,12 +747,16 @@ class send_mail extends _page{
 				// Conversi Link
 				if(!empty($link)){
 					$_link = kmi_link::get_id($link,array('href'));
-					$link = $_link[0]['href'];
 
-					sobad_db::_update_single($link,'email-link',array(
-						'status'	=> 1,
-						'link_date'	=> date('Y-m-d H:i:s')
-					));
+					$check = array_filter($_link);
+					if(!empty($check)){
+						$link = $_link[0]['href'];
+
+						sobad_db::_update_single($link,'email-link',array(
+							'status'	=> 1,
+							'link_date'	=> date('Y-m-d H:i:s')
+						));
+					}
 				}
 
 				header('Location : '.$link);
