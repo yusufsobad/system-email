@@ -11,11 +11,15 @@ function sobad_convToPdf($args = array()){
 
 	date_default_timezone_set('UTC');
 
-	if(convToPDF=="createpdf"){
+	$format = isset($args['type_pdf']) ? $args['type_pdf'] : convToPDF;
+
+	if ($format == "createpdf") {
+		new _libs_(array('createpdf'));
 		return conv_htmlToPDF($args);
-	}else if(convToPDF=="mpdf"){
+	} else if ($format == "mpdf") {
+		new _libs_(array('mpdf'));
 		return conv_mPDF($args);
-	}else{
+	} else {
 		if(is_callable("conv_toPDF")){
 			conv_toPDF($args);
 		}
@@ -99,20 +103,39 @@ function conv_htmlToPDF($args=array()){
 
 function conv_mPDF($args=array()){
 	$data = array();
-	$html = array();
-	$css = array();
 
-	$footer = '';
-	if(isset($args['footer'])){
-		$func = $args['footer'];
-
-		if(is_callable($func)){
-			ob_start();
-				$func();
-			$footer = ob_get_clean();
+	// Setting Config Header Report MPDF
+	$args['header'] = isset($args['header']) ? $args['header'] : '';
+	$args['data_header'] = isset($args['data_header']) ? $args['data_header'] : '';
+	$header = array();
+	$type = gettype($args['header']);
+	if($type=='array'){
+		foreach ($args['header'] as $key => $val) {
+			$object = isset($val[$key]['object'])?$val[$key]['object']:'';
+			$header[] = conv_htmlToVar($val[$key]['header'],$val[$key]['data_header'],$object);
 		}
+	}else{
+		$object = isset($args['object'])?$args['object']:'';
+		$header[] = conv_htmlToVar($args['header'],$args['data_header'],$object);
+	}
+	
+	// Setting Config Footer Report MPDF
+	$args['footer'] = isset($args['footer']) ? $args['footer'] : '';
+	$args['data_footer'] = isset($args['data_footer']) ? $args['data_footer'] : '';
+	$footer = array();
+	$type = gettype($args['footer']);
+	if($type=='array'){
+		foreach ($args['footer'] as $key => $val) {
+			$object = isset($val[$key]['object'])?$val[$key]['object']:'';
+			$footer[] = conv_htmlToVar($val[$key]['footer'],$val[$key]['data_footer'],$object);
+		}
+	}else{
+		$object = isset($args['object'])?$args['object']:'';
+		$footer[] = conv_htmlToVar($args['footer'],$args['data_footer'],$object);
 	}
 
+	// Setting Config CSS Report MPDF
+	$css = array();
 	if(isset($args['style'])){
 		foreach($args['style'] as $key => $val){
 			if(is_callable($val)){
@@ -123,6 +146,8 @@ function conv_mPDF($args=array()){
 		}
 	}
 
+	// Setting Config HTML Report MPDF
+	$html = array();
 	$type = gettype($args['html']);
 	if($type=='array'){
 		foreach ($args['html'] as $key => $val) {
@@ -160,21 +185,50 @@ function conv_mPDF($args=array()){
 	$margin['bottom'] = $args['margin_bottom'];
 	$margin['left'] = $args['margin_left'];
 	$margin['right'] = $args['margin_right'];
+
+	$margin['auto_margin_top'] = $args['auto_margin_top'];
+
+	// // Margin Top
+	// $margin['auto_margin_top'] = isset($args['auto_margin_top']) ? $args['auto_margin_top'] : '';
+	// if (isset($margin['auto_margin_top']) || $margin['auto_margin_top'] !== '') {
+	// 	$config_margin_top = array(
+	// 		'setAutoTopMargin' => isset($args['auto_margin_top']) ? $args['auto_margin_top'] : ''
+	// 	);
+	// }
+
+	// // Margin Bottom
+	// $margin['auto_margin_bottom'] = isset($args['auto_margin_bottom']) ? $args['auto_margin_bottom'] : '';
+	// if (isset($margin['auto_margin_bottom']) || $margin['auto_margin_bottom'] !== '') {
+	// 	$config_margin_bottom = array(
+	// 		'setAutoBottomMargin' => isset($args['auto_margin_bottom']) ? $args['auto_margin_bottom'] : ''
+	// 	);
+	// }
 	
 	try{
 		$mpdf = new \Mpdf\Mpdf([
-		    'format'          => $lay, // Default Potrait (Landscape : 'A4-L')
-		    'orientation'	  => $pos,
-		    'mode'            => 'UTF-8', // Unicode
-		    'lang'            => 'en', // Language
-		    'margin_top'      => isset($margin['top'])?$margin['top']:10,
-		    'margin_bottom'   => isset($margin['bottom'])?$margin['bottom']:10,
-		    'margin_left'     => isset($margin['left'])?$margin['left']:10,
-		    'margin_right'    => isset($margin['right'])?$margin['right']:10,
+		    'format'          		=> $lay, // Default Potrait (Landscape : 'A4-L')
+		    'orientation'	  		=> $pos,
+		    'mode'            		=> 'UTF-8', // Unicode
+		    'lang'            		=> 'en', // Language
+		    'margin_top'      		=> isset($margin['top'])?$margin['top']:10,
+		    'margin_bottom'   		=> isset($margin['bottom'])?$margin['bottom']:10,
+		    'margin_left'     		=> isset($margin['left'])?$margin['left']:10,
+		    'margin_right'    		=> isset($margin['right'])?$margin['right']:10,
+			'setAutoTopMargin'		=> isset($margin['auto_margin_top']) ? $margin['auto_margin_top'] : false
+			// $config_margin_top,
+			// $config_margin_bottom
 		]);
 
-		$mpdf->SetFooter($footer);  
+		// $mpdf->SetFooter($footer);  
 		$mpdf->SetDisplayMode('fullwidth');
+
+		foreach ($header as $key => $val) {
+			$mpdf->SetHTMLHeader($val);
+		}
+
+		foreach ($footer as $key => $val) {
+			$mpdf->SetFooter($val);
+		}
 
 		foreach ($css as $key => $val) {
 			$mpdf->WriteHTML($val,1);
