@@ -305,7 +305,7 @@ class send_mail extends _page{
 		$attach = '';
 		$att = explode(',',$log['attachment']);
 		foreach ($att as $key => $val) {
-			$attach .= '<a href="../asset/uploads/attachment/'.$val.'" target="_blank"> '.$val.'</a> ; ';
+			$attach .= '<a href="asset/uploads/attachment/'.$val.'" target="_blank"> '.$val.'</a> ; ';
 		}
 
 		?>
