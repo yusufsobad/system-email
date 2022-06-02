@@ -926,8 +926,8 @@ class send_mail extends _page{
 		$mail->Password = $args['pass']; //password email
 		$mail->SetFrom($args['mail_from'],$args['name_from']); //set email pengirim
 
-		if(!empty($args['attachment'])){
-			$attach = explode(',',$args['attachment']);
+		if(!empty($args['attachment'])){ 
+			$attach = explode(',',$args['attachment']); 
 			foreach ($attach as $ky => $val) {
 				$mail->addAttachment($folder.$val,$val);
 			}
