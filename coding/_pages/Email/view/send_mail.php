@@ -249,6 +249,22 @@ class send_mail extends _page{
 		return $des;
 	}
 
+	public static function sendMail_fileUpload($args=array()){
+		$fileName = $_FILES["file"];
+		$jumlah = count($fileName['name']);
+
+		$data = array();
+		for($i=0;$i<$jumlah;$i++){
+			$file = $fileName['tmp_name'][$i];
+			$folder = 'attachment/'.$fileName['name'][$i];
+			kmi_upload_file($file,$folder);
+
+			$data[] = $fileName['name'][$i];
+		}
+
+		return implode(',',$data);
+	}
+
 	// ----------------------------------------------------------
 	// preview send mail ----------------------------------------
 	// ----------------------------------------------------------	
