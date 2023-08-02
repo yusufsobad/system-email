@@ -107,7 +107,7 @@ abstract class _class{
 			}
 		}
 
-		$_args = array("SUM('`$table`.$column') AS sum");
+		$_args = array("SUM(`$table`.$column) AS sum");
 		$check = array_filter(self::list_meta($type));
 		if(!empty($check)){
 			$_args = array("`$table`.ID");
