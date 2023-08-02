@@ -64,6 +64,69 @@ abstract class _class{
 		return $args;
 	}
 
+	public static function sum($column='',$limit='1=1 ',$args=array(),$type=''){
+		self::$_meta = false;
+		self::$_temp = false;
+		self::$_type = $type;
+
+		$inner = '';$meta = false;
+		$limit = empty($limit)?"1=1 ":$limit;
+
+		$blueprint = self::schema();		
+		$table = $blueprint['table'];
+
+		// Check Detail
+		if(isset($blueprint['detail'])){
+			$check = array_filter($blueprint['detail']);
+			if(!empty($check)){
+				self::_detail($args,$table,$blueprint['detail']);
+				$inner .= self::$_inner;
+				self::$_inner = '';
+			}
+		}
+
+		// Check Join
+		if(isset($blueprint['joined'])){
+			$check = array_filter($blueprint['joined']);
+			if(!empty($check)){
+				$list_join = self::list_join();
+
+				$check = false;
+				foreach ($args as $key => $val) {
+					if(in_array($val,$list_join)){
+						$check = true;
+						break;
+					}
+				}
+
+				if($check){
+					self::_joined($args,$table,$blueprint['joined']);
+					$inner .= self::$_inner;
+					self::$_inner = '';
+				}
+			}
+		}
+
+		$_args = array("SUM('`$table`.$column') AS sum");
+		$check = array_filter(self::list_meta($type));
+		if(!empty($check)){
+			$_args = array("`$table`.ID");
+
+			$inner .= "LEFT JOIN `".static::$tbl_meta."` ON `".static::$table."`.ID = `".static::$tbl_meta."`.meta_id ";
+			$limit .= static::$group;
+			self::$_meta = true;
+		}
+
+		$count = self::_get_data($inner." WHERE ".$limit,$_args);
+		
+		if(self::$_meta){
+			return count($count);
+		}
+
+		self::$_meta = false;
+		return $count[0]['sum'];
+	}	
+
 	public static function count($limit='1=1 ',$args=array(),$type=''){
 		self::$_meta = false;
 		self::$_temp = false;
