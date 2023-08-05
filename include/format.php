@@ -72,7 +72,7 @@ function format_number_currency($current,$nominal){
 }
 
 function format_date_id($date){
-	if(empty($date) || $date == '0000-00-00'){
+	if(empty($date) || $date == '0000-00-00' || $date == '1970-01-01'){
 		return '-';
 	}
 
