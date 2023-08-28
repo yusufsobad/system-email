@@ -140,6 +140,22 @@ function conv_month_id($int=''){
 	return $args;
 }
 
+function day_week_range($date='',$sday = 'sunday', $fday='saturday') {
+		$date = empty($date) ? date('Y-m-d') : $date;
+		$ts = strtotime($date);
+
+		$wdate = mktime(0, 0, 0, date('m',$ts), date('d',$ts),date('Y',$ts));
+		$week = (int)date('W', $wdate);
+
+	    $start = (date('w', $ts) == 0) ? $ts : strtotime('last ' . $sday, $ts);
+
+	    return array(
+	    	'week'		=> $week,
+	    	'start'		=> date('Y-m-d', $start),
+	        'finish'	=> date('Y-m-d', strtotime('next ' . $fday, $start))
+	    );
+	}
+
 function format_terbilang($x=0) {
   $angka = ["", "satu", "dua", "tiga", "empat", "lima", "enam", "tujuh", "delapan", "sembilan", "sepuluh", "sebelas"];
 
