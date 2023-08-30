@@ -5,6 +5,8 @@ class conn extends _error{
 	public static function connect(){
 		global $DB_NAME;
 
+		$DB_NAME .= development == 0 ? '' : '_demo';
+
 		$server = SERVER;
 		$user = USERNAME;
 		$pass = PASSWORD;

@@ -33,7 +33,7 @@ abstract class _smart_page extends _page{
 		return array_keys($array);
 	}
 
-	protected static function smart_table(){
+	protected static function smart_table($where=''){
 		$data = array();
 		$args = self::_array();
 		$type = self::$type;
@@ -42,7 +42,6 @@ abstract class _smart_page extends _page{
 		$tp = intval($tp);
 		
 		$kata = $_search = '';
-		$where = "AND type_testing='$tp'";
 		if(parent::$search){
 			$src = parent::like_search($args,$where);	
 			$cari = $src[0];
@@ -159,7 +158,7 @@ abstract class _smart_page extends _page{
 	// ----------------------------------------------------------
 	// Form data category ---------------------------------------
 	// ----------------------------------------------------------
-	protected static function add_form(){
+	public static function add_form(){
 		$type = isset($_POST['type']) ? $_POST['type'] : '';
 		$data = self::_array_default();
 
