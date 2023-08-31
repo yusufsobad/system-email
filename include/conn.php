@@ -4,6 +4,7 @@
 class conn extends _error{
 	public static function connect(){
 		global $DB_NAME;
+		$database = $DB_NAME;
 
 		$DB_NAME .= development == 0 ? '' : '_demo';
 
@@ -16,6 +17,7 @@ class conn extends _error{
 		mysqli_connect($server,$user,$pass) or parent::_connect();
 		$conn->select_db($database) or parent::_database();
 		
+		$DB_NAME = $database;
 		return $conn;
 	}
 }
