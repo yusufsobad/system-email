@@ -79,7 +79,7 @@ function conv_htmlToPDF($args=array()){
 	
 	$content = ob_get_clean();
 
-	if(development==1){
+	if(development==1 || development==3){
 		return $content;
 	}
 
@@ -161,7 +161,7 @@ function conv_mPDF($args=array()){
 		$html[] = conv_htmlToVar($args['html'],$args['data'],$object);
 	}
 
-	if(development==1){
+	if(development==1 || development==3){
 		$content = '';
 
 		foreach ($css as $key => $val) {
