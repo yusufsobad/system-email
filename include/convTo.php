@@ -50,7 +50,7 @@ function conv_htmlToVar($html='',$data='',$object=''){
 function conv_htmlToPDF($args=array()){
 	ob_start();
 
-	if(development==1){
+	if(development==1 || development==3){
 		echo '<style type="text/css">';
 		foreach($args['style'] as $key => $val){
 			if(is_callable($val)){

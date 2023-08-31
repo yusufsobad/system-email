@@ -5,7 +5,7 @@ class conn extends _error{
 	public static function connect(){
 		global $DB_NAME;
 		$database = $DB_NAME;
-		$database .= development == 3 ? '_demo' : '';
+		$database .= development == 3 || development==4 ? '_demo' : '';
 
 		$server = SERVER;
 		$user = USERNAME;
