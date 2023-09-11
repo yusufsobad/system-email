@@ -299,7 +299,10 @@ class sobad_db extends conn{
 
 		$data = array();
 		foreach ($schema as $key => $val) {
-			$data[$val['db']] = self::_get_table_name($val['db'],$val['where']);
+			$database = $val['db'];
+			$database .= development == 3 || development==4 ? '_demo' : '';
+			
+			$data[$val['db']] = self::_get_table_name($database,$val['where']);
 		}
 
 		self::_list_table_schema($class,$data);
