@@ -186,7 +186,7 @@ var index_toggle = '';
 		var idx = $('#importFile').attr('data-load');
 
 		$.ajax({
-			url: url_ajax, // Url to which the request is send
+			url: server+'/'+url_ajax, // Url to which the request is send
 			type: "POST",             // Type of request to be send, called as method
 			data: new FormData(val), // Data sent to server, a set of key/value pairs (i.e. form fields and values)
 			contentType: false,       // The content type used when sending data to the server.
