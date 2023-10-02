@@ -2,7 +2,7 @@
 
 abstract class _new_product extends form_product{
 
-	protected static $table = 'sobad_post';
+	protected static $table_product = 'sobad_post';
 
 	// ----------------------------------------------------------
 	// Form new product -----------------------------------------
@@ -24,7 +24,7 @@ abstract class _new_product extends form_product{
 		$limit = 'LIMIT '.intval(($start - 1) * 18).',18';
 		$where .= $limit;
 		
-		$object = self::$table;
+		$object = static::$table_product;
 		$args = $object::get_images($args,$where);
 		$sum_data = $object::get_images(array('ID'),$cari);
 

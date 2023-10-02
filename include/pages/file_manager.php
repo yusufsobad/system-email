@@ -2,7 +2,7 @@
 
 abstract class _file_manager extends _page{
 
-	protected static $table = 'sobad_post';
+	protected static $table_manager = 'sobad_post';
 
 	// ----------------------------------------------------------
 	// Form new product -----------------------------------------
@@ -27,7 +27,7 @@ abstract class _file_manager extends _page{
 		$limit = 'ORDER BY inserted DESC LIMIT '.intval(($start - 1) * 18).',18';
 		$where .= $limit;
 		
-		$object = self::$table;
+		$object = static::$table_manager;
 		$func = static::$file_type;
 		$func = 'get_'.$func.'s';
 
@@ -137,7 +137,7 @@ abstract class _file_manager extends _page{
 		}
 
 		// Hapus database
-		$object = self::$table;
+		$object = static::$table_manager;
 		$table = $object::$table;
 		sobad_db::_delete_single($idx,$table);
 
@@ -221,7 +221,7 @@ abstract class _file_manager extends _page{
 			'var'			=> static::$file_type,
 		);
 
-		$object = self::$table;
+		$object = static::$table_manager;
 		$table = $object::$table;
 		sobad_db::_insert_table($table,$args);
 
