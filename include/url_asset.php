@@ -28,21 +28,23 @@ class sobad_asset{
 	}
 
 	public function _js_file(){
+		$loc = SITE .'://' . HOSTNAME . '/' . URL . '/';
 		$dir = "asset/js/";
 		$list = self::_name_file($dir);
 		if(count($list)>0){
 			for($i=0;$i<count($list);$i++){
-				echo '<script src="'.$dir.$list[$i].'"></script>';
+				echo '<script src="'.$loc.$dir.$list[$i].'"></script>';
 			}
 		}
 	}
 
 	public function _css_file(){
+		$loc = SITE .'://' . HOSTNAME . '/' . URL . '/';
 		$dir = "asset/css/";
 		$list = self::_name_file($dir);
 		if(count($list)>0){
 			for($i=0;$i<count($list);$i++){
-				echo '<link rel="stylesheet" type="text/css" href="'.$dir.$list[$i].'">';
+				echo '<link rel="stylesheet" type="text/css" href="'.$loc.$dir.$list[$i].'">';
 			}
 		}
 	}
@@ -336,8 +338,10 @@ class sobad_asset{
 		if(isset($_SESSION[_prefix.'require_form'])){
 			$_filter = $_SESSION[_prefix.'require_form'];
 			
-			if($_filter[$key]['status']==true && empty($value)){
-				die(_error::_alert_db("This field ".$_filter[$key]['name']." is Required !!!"));
+			if(isset($_filter[$key])){
+				if($_filter[$key]['status']==true && empty($value)){
+					die(_error::_alert_db("This field ".$_filter[$key]['name']." is Required !!!"));
+				}
 			}
 		}
 	}

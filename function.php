@@ -23,6 +23,7 @@ if(!class_exists('_component')){
 
 			// get class page
 			require_once 'include/_pages.php';
+			require_once 'include/_smart_pages.php';
 
 			// get script
 			require_once 'scripts.php';

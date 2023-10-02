@@ -28,8 +28,27 @@ abstract class _page{
 		return sobad_asset::_loadView($loc,$data);
 	}
 
-	public static function _sidemenu(){
-		return static::layout();
+	public static function _sidemenu($data=''){
+		$func = 'layout';
+
+		// Check url menu
+		$uri = explode('/',$data);
+		$count = count($uri);
+		if($count > 0){
+			if(property_exists(new static, 'uri_menu')){
+				$menu = static::$uri_menu;
+
+				for($i=0;$i<$count;$i++){
+					$key = $uri[$i];
+					if(isset($menu[$key])){
+						$func = $menu[$key]['func'];
+						$menu = $menu[$key]['child'];
+					}
+				}
+			}
+		}
+
+		return static::$func();
 	}
 
 	public static function _tabs($type){
@@ -45,7 +64,7 @@ abstract class _page{
 		return ob_get_clean();
 	}
 
-	protected static function like_search($args=array(),$whr=''){
+	protected static function like_search($args=array(),$whr='',$table=''){
 		$kata = '';$where = '';
 		$cari = self::$data;
 		$search = isset($cari['search'])?$cari['search']:'';
@@ -59,7 +78,7 @@ abstract class _page{
 				$post = static::$post;
 			}
 
-			$object = static::$table;
+			$object = empty($table) ? static::$table : $table;
 
 			if(property_exists(new $object, 'tbl_meta')){
 				$tbl_meta = $object::$tbl_meta;
@@ -87,7 +106,7 @@ abstract class _page{
 				
 				foreach($args as $key => $val){
 					if(in_array($val, $meta)){
-						$src_meta[] = "(`$tbl_meta`.meta_key='$val' AND `$tbl_meta`.meta_value LIKE '%$kata%') ";
+						$_src = "(`$tbl_meta`.meta_key='$val' AND `$tbl_meta`.meta_value LIKE '%$kata%') ";
 					}else{
 						$_src = "$val LIKE '%$kata%'";
 
@@ -99,9 +118,6 @@ abstract class _page{
 						$src[] = $_src." ".$whr;
 					}
 				}
-				
-				$src_meta = implode(" OR ",$src_meta);
-				$GLOBALS['search_meta_global'] = $src_meta;
 
 				$src = implode(" OR ",$src);
 				$where = "AND (".$src.") ";
@@ -109,8 +125,7 @@ abstract class _page{
 				$search = $args[$search];
 				$kata = $cari['words'];
 				if(in_array($search, $meta)){
-					$where = 'AND ' . $whr;
-					$GLOBALS['search_meta_global'] = "`$tbl_meta`.meta_key='$search' AND `$tbl_meta`.meta_value LIKE '%$kata%' ";
+					$_src = "(`$tbl_meta`.meta_key='$search' AND `$tbl_meta`.meta_value LIKE '%$kata%')";
 				}else{
 					$_src = "$search LIKE '%$kata%'";
 
@@ -118,9 +133,9 @@ abstract class _page{
 						$_xsrc = static::_filter_search($search,$kata);
 						$_src = empty($_xsrc)?$_src:$_xsrc;
 					}
-
-					$where = "AND ".$_src." ".$whr;
 				}
+
+				$where = "AND ".$_src." ".$whr;
 			}
 		}else{
 			$where = $whr;
@@ -229,12 +244,7 @@ abstract class _page{
 	}
 
 	protected function _conv_option($args=array()){
-		$check = array_filter($args);
-		if(empty($check)){
-			return '';
-		}
-		
-		$opt = '';
+		$opt = '<option value="0">Tidak Ada</option>';
 		foreach($args as $key => $val){
 			$opt .= '<option value="'.$key.'">'.$val.'</option>';
 		}
@@ -410,10 +420,26 @@ abstract class _page{
 		        	}
 
 		        	if($check['status']){
-		        		$q = self::_schema(json_encode($data),false); //Update data
+		        		$args = self::_schema(json_encode($data),false); //Update data
+
+		        		$q = $args['data'];
+						$src = $args['search'];
+						$callback = isset($check['callback']) ? $check['callback'] : '_not_update';
+
+						if(is_callable(array(new static(), $callback))){
+							static::{$callback}($args,$data);
+						}
 		        	}else{
 		        		if($check['insert']){
-		        			$q = self::_schema(json_encode($data),true); // Add data
+		        			$args = self::_schema(json_encode($data),true); // Add data
+
+		        			$q = $args['data'];
+							$src = $args['search'];
+							$callback = isset($check['callback']) ? $check['callback'] : '_not_insert';
+
+							if(is_callable(array(new static(), $callback))){
+								static::{$callback}($args,$data);
+							}
 		        		}
 		        	}
 		        }
@@ -474,7 +500,12 @@ abstract class _page{
 		global $DB_NAME;
 
 		$args = sobad_asset::ajax_conv_json($_args);
-		if(is_callable(array(new static(), '_callback'))){
+		if(property_exists(new static, '_callback')){
+			$_callback = static::$_callback;
+			if(is_callable(array(new static(), $_callback))){
+				$args = static::{$_callback}($args,$_args);
+			}
+		}else if(is_callable(array(new static(), '_callback'))){
 			$args = static::_callback($args,$_args);
 		}
 	
@@ -550,8 +581,12 @@ abstract class _page{
 		$q = $args['data'];
 		$src = $args['search'];
 
-		$obj = empty($obj)?static::$object:$obj;
-		if(is_callable(array(new static(), '_updateDetail'))){
+		if(property_exists(new static, '_updateDetail')){
+			$_update = !empty(static::$_updateDetail) ? static::$_updateDetail : '_updateDetail';
+			if(is_callable(array(new static(), $_update))){
+				$args = static::{$_update}($args,$_args);
+			}
+		}else if(is_callable(array(new static(), '_updateDetail'))){
 			static::_updateDetail($args,$_args);
 		}
 
@@ -560,6 +595,7 @@ abstract class _page{
 				$pg = isset($_POST['page'])?$_POST['page']:1;
 				return self::_get_table($pg,$src);
 			}else{
+				$obj = empty($obj) ? static::$object : $obj;
 				if(is_callable(array($obj,$menu))){
 					return $obj::{$menu}($args);
 				}else{
@@ -612,8 +648,12 @@ abstract class _page{
 		$q = $args['data'];
 		$src = $args['search'];
 
-		$obj = empty($obj)?static::$object:$obj;
-		if(is_callable(array(new static(), '_addDetail'))){
+		if(property_exists(new static, '_addDetail')){
+			$_add = !empty(static::$_addDetail) ? static::$_addDetail : '_addDetail';
+			if(is_callable(array(new static(), $_add))){
+				$args = static::{$_add}($args,$_args);
+			}
+		}else if(is_callable(array(new static(), '_addDetail'))){
 			static::_addDetail($args,$_args);
 		}
 		
@@ -622,6 +662,7 @@ abstract class _page{
 				$pg = isset($_POST['page'])?$_POST['page']:1;
 				return self::_get_table($pg,$src);
 			}else{
+				$obj = empty($obj) ? static::$object : $obj;
 				if(is_callable(array($obj,$menu))){
 					return $obj::{$menu}($args);
 				}else{

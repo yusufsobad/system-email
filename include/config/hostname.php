@@ -15,11 +15,21 @@ function get_uri(){
 	}
 
 	$uri = explode('/', $uri);
+	define('uri',$uri);
+	
 	return $uri[0];
 }
 
 function get_home(){
 	return HOSTNAME.'/'.URL;
+}
+
+function get_local(){
+	return SITE.'://'.HOSTNAME;
+}
+
+function get_system_url(){
+	return get_local() . '/' . URL;
 }
 
 function get_page_url(){
@@ -77,7 +87,7 @@ function get_side_active($args=array(),$func=''){
 				break;
 			}
 		}else{	
-			if($key==$func){
+			if($key==$func || $val['func']==$func){
 				return $val;
 				break;
 			}

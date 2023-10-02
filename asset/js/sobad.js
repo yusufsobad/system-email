@@ -6,6 +6,7 @@ var url_preview = "include/preview.php";
 var url_sending = "include/sending.php";
 var filter = '';
 var uploads = '';
+var repeater = '';
 
 var modal_toggle = false;
 var index_toggle = '';
@@ -75,12 +76,34 @@ var index_toggle = '';
 		}
 	}
 
+	// function sidemenu
+	function sobad_newpage(val){
+		var ajx = $(val).attr("id");
+		if(ajx!='sobad_#' && ajx!='sobad_'){
+			sobad_load('here_content');
+			
+			var uri = $(val).attr("data-uri");
+			//setcookie("sidemenu",ajx);
+			window.history.pushState(sobad_history_page(val), ajx, '/'+system+'/'+object+'/'+uri);
+		}
+	}
+
 	// function history sidemenu
 	function sobad_history(obj){
 		obj = obj.replace("sobad_",'');
 		object = obj;
 
 		data = "ajax=_sidemenu&object="+obj+"&data=";
+		sobad_ajax('#here_content',data,'html',false);
+	}
+
+	// function history newpage
+	function sobad_history_page(val){
+		var ajx = $(val).attr("data-sobad");
+		var uri = $(val).attr("data-uri");
+		var tp = $(val).attr('data-type');
+
+		data = "ajax="+ajx+"&object="+object+"&data="+uri+"&type="+tp;
 		sobad_ajax('#here_content',data,'html',false);
 	}
 	
@@ -103,9 +126,33 @@ var index_toggle = '';
 		}
 	}
 
+	function sobad_live_search(val){
+		var tag = $(val).parent().parent().parent().parent().children('select');
+	    var dt = tag.attr('data-change');
+	    if(dt){
+	    	sobad_loading('.bs-select ul.selectpicker');
+			
+			data = "ajax=" + dt + "&object=" + object + "&data=" + $(val).val();
+			sobad_ajax(tag, data, sobad_select_liveSearch, false);
+	    }
+	}
+
+	function sobad_select_liveSearch(data,id){
+		$(id).html(data);
+		$(id).selectpicker('refresh');
+
+		$('div.bs-select:nth-child(2) ul.selectpicker .blockUI').remove();
+	}
+
 	function sobad_option_search(data,id){
 		$(id).html(data);
 		$(id + '.bs-select').selectpicker('refresh');
+	}
+
+	function sobad_selectOption_search(data, id) {
+		sobad_option_search(data,id);
+
+		$('div.bs-select:nth-child(2) ul.selectpicker .blockUI').remove();
 	}
 	
 	// function button
@@ -139,7 +186,7 @@ var index_toggle = '';
 		var idx = $('#importFile').attr('data-load');
 
 		$.ajax({
-			url: url_ajax, // Url to which the request is send
+			url: server+'/'+url_ajax, // Url to which the request is send
 			type: "POST",             // Type of request to be send, called as method
 			data: new FormData(val), // Data sent to server, a set of key/value pairs (i.e. form fields and values)
 			contentType: false,       // The content type used when sending data to the server.
@@ -187,6 +234,12 @@ var index_toggle = '';
 		var tp = $(val).attr('data-type');
 		var index = $(val).attr('data-index');
 		var mdl = $(val).attr('data-modal');
+		var node = $(val).attr('data-socket');
+
+		var callback = 'sobad_option_search';
+		if(node){
+			callback = node;
+		}
 
 		var srcData = $("form.sobad_form").serializeArray();
 		var data = $("form"+index).serializeArray();
@@ -226,8 +279,8 @@ var index_toggle = '';
 		var pg = $('#'+id+' #dash_pagination li.disabled a').attr('data-qty');
 		data = conv_array_submit(data);
 		
-		data = "ajax="+ajx+"&object="+object+"&data="+data+"&type="+tp+"&page="+pg+"&filter="+filter;
-		sobad_ajax('#'+id,data,sobad_option_search,true,val,html);
+		data = "ajax="+ajx+"&object="+object+"&data="+data+"&type="+tp+"&page="+pg+"&filter="+filter+"&repeater="+repeater;
+		sobad_ajax('#'+id,data,callback,true,val,html);
 	}
 	
 	// get data summernote
@@ -406,7 +459,7 @@ function sobad_preview(url,data,spec){
 	}
 	
 //	data = $.rot13(data);
-	url = url_preview+"?"+data;
+	url = server+"/"+url_preview+"?"+data;
 	window.open(url,'scrollwindow',spec);
 }
 
@@ -467,6 +520,11 @@ function number_format(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 }
 
+function remove_format(x){
+	x = x.replace(/\./g,'');
+	return parseInt(x,10);
+}
+
 function prefix_format(num, digits) {
   var si = [
     { value: 1, symbol: "" },
@@ -489,7 +547,7 @@ function prefix_format(num, digits) {
 
 function sobad_upload(data){
 	$.ajax({
-		url:url_ajax,
+		url:server+'/'+url_ajax,
 		type:"POST",
 		data:data,
 		async: false,
@@ -504,7 +562,7 @@ function sobad_upload(data){
 
 function sobad_ajax(id,data,func,msg,val,html){
 	$.ajax({
-		url:url_ajax,
+		url:server+'/'+url_ajax,
 		type:"POST",
 		data:data,
 		success:function(response){

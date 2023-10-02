@@ -50,6 +50,28 @@ function convToGroup($args=array(),$data=array()){
 	return $group;
 }
 
+function switch_toggle($val=array()){
+	$id = isset($val['id']) ? $val['id'] : '';
+	$label = isset($val['label']) ? $val['label'] : '';
+
+	$btn = '
+		<div class="form-check '.$val['class'].'">
+            <label>
+              <input id="'.$id.'" type="checkbox" name="'.$val['key'].'" value="'.$val['value'].'"><span>'.$label.'</span>
+            </label>
+        </div>
+	';
+
+	return $btn;
+}
+
+function newpage_button($val){
+	$val['func'] = isset($val['func']) ? $val['func'] : '_sidemenu';
+	$val['load'] = 'here_content';
+	$val['script'] = 'sobad_newpage(this)';
+	return _click_button($val,'');
+}
+
 function hapus_button($val){
 	return _click_button($val);
 }
@@ -181,6 +203,11 @@ function buat_button($val=array()){
 	if(isset($val['spin'])){
 		$spin = $val['spin']?1:0;
 	}
+
+	$uri = '';
+	if(isset($val['uri'])){
+		$uri = $val['uri'];
+	}
 	
 	$onclick = 'sobad_button(this,'.$spin.')';
 	if(isset($val['script'])){
@@ -188,11 +215,27 @@ function buat_button($val=array()){
 	}
 	
 	$btn = '
-	<a id="'.$val['ID'].'" data-toggle="'.$val['toggle'].'" data-sobad="'.$val['func'].'" data-load="'.$val['load'].'" data-type="'.$type.'" data-alert="'.$alert.'" href="'.$val['href'].'" class="btn '.$class.' '.$val['color'].' btn_data_malika" onclick="'.$onclick.'" '.$status.'>
+	<a id="'.$val['ID'].'" data-toggle="'.$val['toggle'].'" data-sobad="'.$val['func'].'" data-load="'.$val['load'].'" data-type="'.$type.'" data-alert="'.$alert.'" href="'.$val['href'].'" class="btn '.$class.' '.$val['color'].' btn_data_malika" data-uri="'.$uri.'" onclick="'.$onclick.'" '.$status.'>
 		<i class="'.$val['icon'].'"></i> '.$val['label'].'
 	</a>';
 	
 	return $btn;
+}
+
+function dropdown_action($args=array()){
+	$args['label'] = isset($args['label']) ? $args['label'] : '<img src="theme/sasi/asset/img/dot-dropdown.png" alt="">';
+	$args['angle'] = '';
+
+	return dropdown_button($args);
+}
+
+function dropdown_icon($args = array())
+{
+	$icon = isset($args['icon']) ? '<i class="' . $args['icon'] . '" aria-hidden="true"></i>' : '';
+	$label = isset($args['label']) ? $args['label'] : '';
+
+	$args['label'] = $icon . $label;
+	return dropdown_button($args);
 }
 
 function dropdown_button($args=array()){
@@ -210,10 +253,13 @@ function dropdown_button($args=array()){
 		}
 	}
 
+	$angle = isset($args['angle']) ? $args['angle'] : 'fa-angle-down';
+	$angle = '<i class="fa '.$angle.'"></i>';
+
 	$drop = '
 		<div class="btn-group btn-group-solid">
 			<button type="button" class="btn '.$args['color'].' dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="1000" data-close-others="true">
-				'.$args['label'].' <i class="fa fa-angle-down"></i>
+				'.$args['label'].' '.$angle.'
 			</button>
 			<ul class="dropdown-menu" role="menu">
 				'.$btn.'
@@ -222,6 +268,52 @@ function dropdown_button($args=array()){
 	';
 
 	return $drop;
+}
+
+function button_toggle_block($val=array()){
+	$check = array_filter($val);
+	if(empty($check)){
+		return '';
+	}
+	
+	$val['toggle'] = 'modal';
+	$val['load'] = 'here_modal';
+	$val['href'] = '#myModal';
+	
+	return button_dash_block($val);
+}
+
+function button_direct_block($val=array()){
+	$check = array_filter($val);
+	if(empty($check)){
+		return '';
+	}
+	
+	$val['toggle'] = '';
+	$val['load'] = 'sobad_portlet';
+	$val['href'] = 'javascript:;';
+	$val['script'] = 'sobad_sidemenu(this)';
+	
+	return button_dash_block($val);
+}
+
+function button_dash_block($val=array()){
+	$status = '';
+	if(isset($val['status'])){
+		$status = $val['status'];
+	}
+
+	$onclick = 'sobad_button(this,false)';
+	if(isset($val['script'])){
+		$onclick = $val['script'];
+	}
+
+	$button = '
+		<a id="'.$val['ID'].'" class="more" data-toggle="'.$val['toggle'].'" data-sobad="'.$val['func'].'" data-load="'.$val['load'].'" href="'.$val['href'].'" onclick="'.$onclick.'" '.$status.'>
+			View more <i class="m-icon-swapright m-icon-white"></i>
+		</a>';
+
+	return $button;	
 }
 
 function _detectDelimiter($csvFile){
@@ -240,6 +332,19 @@ function _detectDelimiter($csvFile){
     }
 
     return array_search(max($delimiters), $delimiters);
+}
+
+function _conv_date($awal='', $akhir=''){
+	$awal = empty($awal) ? date('Y-m-d') : $awal;
+	$akhir = empty($akhir) ? date('Y-m-d') : $akhir;
+
+	$tgl1 = strtotime($awal); 
+	$tgl2 = strtotime($akhir); 
+
+	$jarak = $tgl2 - $tgl1;
+	$hari = $jarak / 60 / 60 / 24;
+
+	return $hari;
 }
 
 function _conv_time($awal='00:00:00', $akhir='00:00:00', $conv=1){
@@ -312,4 +417,17 @@ function script_chart(){
 		});
 	</script>
 	<?php
+}
+
+function _importPage($page='',$class=''){
+	$loc = dirname(__FILE__) . "/../../coding/_pages/";
+
+	if(!class_exists($class)){
+		$dir = $loc . $page . '/view';
+		if(is_dir($dir)){
+			require $dir . '/' . $class . '.php';
+		}else{
+			die($class.'::Class not found!!!');
+		}
+	}
 }

@@ -88,6 +88,13 @@ function sobad_curl($args=array()){
 	for($i=0;$i<5;$i++){
 		$dt[$i] = isset($_data[$i])?$_data[$i]:'';
 	}
+
+	if(isset($args['database'])){
+		if(!empty($args['database'])){
+			global $DB_NAME;
+			$DB_NAME = $args['database'];
+		}
+	}
 	
 	$msg = $object::{$ajax_func}($dt[0],$dt[1],$dt[2],$dt[3],$dt[4]);
 	

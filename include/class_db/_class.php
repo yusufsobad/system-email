@@ -64,6 +64,69 @@ abstract class _class{
 		return $args;
 	}
 
+	public static function sum($column='',$limit='1=1 ',$args=array(),$type=''){
+		self::$_meta = false;
+		self::$_temp = false;
+		self::$_type = $type;
+
+		$inner = '';$meta = false;
+		$limit = empty($limit)?"1=1 ":$limit;
+
+		$blueprint = self::schema();		
+		$table = $blueprint['table'];
+
+		// Check Detail
+		if(isset($blueprint['detail'])){
+			$check = array_filter($blueprint['detail']);
+			if(!empty($check)){
+				self::_detail($args,$table,$blueprint['detail']);
+				$inner .= self::$_inner;
+				self::$_inner = '';
+			}
+		}
+
+		// Check Join
+		if(isset($blueprint['joined'])){
+			$check = array_filter($blueprint['joined']);
+			if(!empty($check)){
+				$list_join = self::list_join();
+
+				$check = false;
+				foreach ($args as $key => $val) {
+					if(in_array($val,$list_join)){
+						$check = true;
+						break;
+					}
+				}
+
+				if($check){
+					self::_joined($args,$table,$blueprint['joined']);
+					$inner .= self::$_inner;
+					self::$_inner = '';
+				}
+			}
+		}
+
+		$_args = array("SUM(`$table`.$column) AS sum");
+		$check = array_filter(self::list_meta($type));
+		if(!empty($check)){
+			$_args = array("`$table`.ID");
+
+			$inner .= "LEFT JOIN `".static::$tbl_meta."` ON `".static::$table."`.ID = `".static::$tbl_meta."`.meta_id ";
+			$limit .= static::$group;
+			self::$_meta = true;
+		}
+
+		$count = self::_get_data($inner." WHERE ".$limit,$_args);
+		
+		if(self::$_meta){
+			return count($count);
+		}
+
+		self::$_meta = false;
+		return $count[0]['sum'];
+	}	
+
 	public static function count($limit='1=1 ',$args=array(),$type=''){
 		self::$_meta = false;
 		self::$_temp = false;
@@ -77,11 +140,11 @@ abstract class _class{
 
 		// Check Temporary
 		if(isset($blueprint['temporary']) && self::$_temp){
-//			$temp = $blueprint['temporary'];
-//			$temp_table = "temp-" . $temp[$type]['temp'];
-//			self::$_temp_table = $temp_table;
+			$temp = $blueprint['temporary'];
+			$temp_table = "temp-" . $temp[$type]['temp'];
+			self::$_temp_table = $temp_table;
 
-//			$inner .= "LEFT JOIN `" . $table . "` ON `" . $temp_table . "`.reff_temp = `" . $table . "`.ID ";
+			$inner .= "LEFT JOIN `" . $table . "` ON `" . $temp_table . "`.reff_temp = `" . $table . "`.ID ";
 		}
 
 		// Check Detail
@@ -121,8 +184,8 @@ abstract class _class{
 		if(!empty($check)){
 			$_args = array("`$table`.ID");
 
-			//$inner .= "LEFT JOIN `".static::$tbl_meta."` ON `".static::$table."`.ID = `".static::$tbl_meta."`.meta_id ";
-			//$limit .= static::$group;
+			$inner .= "LEFT JOIN `".static::$tbl_meta."` ON `".static::$table."`.ID = `".static::$tbl_meta."`.meta_id ";
+			$limit .= static::$group;
 			self::$_meta = true;
 		}
 
@@ -132,17 +195,13 @@ abstract class _class{
 			return count($count);
 		}
 
+		self::$_meta = false;
 		return $count[0]['count'];
 	}
 	
 	public static function get_id($id,$args=array(),$limit='',$type=''){
 		self::$_meta = false;
 		self::$_temp = false;
-
-		// check ID
-		if(! in_array('ID', $args)){
-			$args[] = 'ID';
-		}
 
 		$where = "WHERE `".static::$table."`.ID='$id' $limit";
 		return self::_check_join($where,$args,$type);
@@ -154,11 +213,6 @@ abstract class _class{
 
 		$check = substr($limit,0,4);
 		$check = trim($check);
-
-		// check ID
-		if(! in_array('ID', $args)){
-			$args[] = 'ID';
-		}
 
 		$limit = strtoupper($check)=="AND"?substr($limit, 4):$limit;
 
@@ -246,14 +300,18 @@ abstract class _class{
 
 		$where = self::$_inner.self::$_where;
 		self::$_inner = '';self::$_where = '';
-		return self::_get_data($where,$args);
+		$data_join = self::_get_data($where,$args);
+
+		self::$_meta = false;
+		return $data_join;
 	}
 
 	private static function _detail($args=array(),$table='',$detail=''){
 
 		foreach($detail as $_key => $val){
 			if($args==='*' || in_array($_key,$args)){
-				$key = "_".$_key;
+				$alias = isset($val['alias']) ? $val['alias'] : '';
+				$key = !empty($alias) ? "_" . $alias : "_" . $_key;
 				
 				foreach($val['column'] as $ky => $vl){
 					self::$_join[] = "$key.$vl AS ".$vl."_".substr($key,1,4);
@@ -308,53 +366,38 @@ abstract class _class{
 
 	}
 
-	// private static function _meta($args=array(),$type=''){
-	// 	$where = self::$_where;
-	// 	$inner = '';$group = $where;
-	// 	$meta = self::list_meta($type);
-	// 	//$select = "SUM(IF(`".static::$tbl_meta."`.meta_key = '{{key}}',`".static::$tbl_meta."`.meta_value,'')) AS {{key}}";
-	// 	$select = "max(case when `".static::$tbl_meta."`.meta_key = '{{key}}' then `".static::$tbl_meta."`.meta_value end) '{{key}}'";
-
-	// 	foreach ($args as $key => $val) {
-	// 		if(in_array($val, $meta)){
-	// 			self::$_join[] = str_replace('{{key}}', $val, $select);
-	// 			$inner = "LEFT JOIN `".static::$tbl_meta."` ON `".static::$table."`.ID = `".static::$tbl_meta."`.meta_id ";
-
-	// 			$group_by = static::$group;
-	// 			if(strpos($group, "ORDER BY") !== false){
-	// 				$group = str_replace("ORDER BY",$group_by." ORDER BY",$where);
-	// 			}else if(strpos($group, "LIMIT") !== false){
-	// 				$group = str_replace("LIMIT",$group_by." LIMIT",$where);
-	// 			}else{
-	// 				$group = $where.$group_by;
-	// 			}
-	// 		}
-	// 	}
-
-	// 	self::$_where = $group;
-	// 	self::$_inner .= $inner;
-
-	// 	return $args;
-	// }
-
 	private static function _meta($args=array(),$type=''){
-		$data = array();
+		$where = self::$_where;
+		$inner = '';$group = $where;
 		$meta = self::list_meta($type);
+		//$select = "SUM(IF(`".static::$tbl_meta."`.meta_key = '{{key}}',`".static::$tbl_meta."`.meta_value,'')) AS {{key}}";
+		$select = "max(case when `".static::$tbl_meta."`.meta_key = '{{key}}' then `".static::$tbl_meta."`.meta_value end) '{{key}}'";
 
 		foreach ($args as $key => $val) {
 			if(in_array($val, $meta)){
-				self::$_meta = true;
-				$data[] = $val;
+				self::$_join[] = str_replace('{{key}}', $val, $select);
+				$inner = "LEFT JOIN `".static::$tbl_meta."` ON `".static::$table."`.ID = `".static::$tbl_meta."`.meta_id ";
+
+				$group_by = static::$group;
+				if(strpos($group, "ORDER BY") !== false){
+					$group = str_replace("ORDER BY",$group_by." ORDER BY",$where);
+				}else if(strpos($group, "LIMIT") !== false){
+					$group = str_replace("LIMIT",$group_by." LIMIT",$where);
+				}else{
+					$group = $where.$group_by;
+				}
 			}
 		}
 
-		self::$_data_meta = $data;
+		self::$_where = $group;
+		self::$_inner .= $inner;
 
 		return $args;
 	}
 
 	protected static function _get_data($where='',$args=array()){
 		global $DB_NAME;
+
 		$data = array();
 		$ids = array();
 
@@ -367,86 +410,13 @@ abstract class _class{
 		$q = sobad_db::_select_table($where,$table,$args);
 		if($q!==0){
 			while($r=$q->fetch_assoc()){
-				//$item = array();
-				//foreach($r as $key => $val){
-				//	$item[$key] = $val;
-				//}
-				
-				if(isset($r['ID'])){
-					$ids[] = $r['ID'];
-				}
 
 				$data[] = $r;//$item;
-			}
-
-			$check = array_filter($ids);
-			$check2 = array_filter(self::$_data_meta);
-
-			if(self::$_meta && !empty($check) && !empty($check2)){
-				$meta = self::_get_meta_join($ids);
-				$data = self::_combine_data($data,$meta);
 			}
 		}
 
 		self::$_temp_table = '';
 		$DB_NAME = $_database;
 		return $data;
-	}
-
-	protected static function _get_meta_join($ids=array()){
-		global $DB_NAME;
-		$data = array();
-		$args = array('ID');
-
-		$_database = $DB_NAME;
-		if(property_exists(new static,'database')){
-			$DB_NAME = static::$database;
-		}
-
-		$meta = array();
-		$default = array();
-		foreach (self::$_data_meta as $key => $val) {
-			$default[$val] = '';
-			$meta[] = "'" . $val . "'";
-		}
-
-		// Default meta
-		foreach ($ids as $key) {
-			$data[$key] = $default;
-		}
-
-		// Get data meta;
-		$ids = implode(',', $ids);
-		$meta = implode(',', $meta);
-
-		$whr = isset($search_meta_global) && !empty($search_meta_global) ? 'AND (' . $search_meta_global . ')' : "AND meta_key IN ($meta)";
-		$where = "WHERE meta_id IN ($ids) " . $whr;
-		$r = sobad_db::_select_table($where,static::$tbl_meta,array(
-			'meta_id','meta_key','meta_value'
-		));
-
-		if($r!==0){
-			while($s=$r->fetch_assoc()){
-				$idm = $s['meta_id'];
-
-				$key = $s['meta_key'];
-				$data[$idm][$key] = $s['meta_value'];
-			}
-		}
-
-		$DB_NAME = $_database;
-		return $data;
-	}
-
-	protected static function _combine_data($data=array(),$meta=array()){
-		$filter = array();
-		foreach ($data as $key => $val) {
-			$idx = $val['ID'];
-			if(isset($meta[$idx])){
-				$filter[] = array_merge($val,$meta[$idx]);
-			}
-		}
-
-		return $filter;
 	}
 }

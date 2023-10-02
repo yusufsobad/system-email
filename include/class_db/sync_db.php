@@ -73,7 +73,8 @@ class sobad_db extends conn{
 		$args = implode(",",$args);
 		$query = sprintf("SELECT %s FROM `%s` %s",$args,$table,$where);
 		
-		$alert = development==1?$query:$alert;
+		$alert = development==1 || development==3?$query:$alert;
+		$alert = development==2?parent::_alert_db($query):$alert;
 
 		$q = $conn->query($query)or die($alert);	
 		if($q->num_rows<1){
@@ -104,7 +105,8 @@ class sobad_db extends conn{
 	
 		$query = sprintf("INSERT INTO `%s`(%s) VALUES(%s)",$table,$tbl,$data);
 		
-		$alert = development==1?$query:$alert;
+		$alert = development==1 || development==3?$query:$alert;
+		$alert = development==2?parent::_alert_db($query):$alert;
 
 		$conn->query($query)or die($alert);
 		$conn->close();
@@ -213,7 +215,8 @@ class sobad_db extends conn{
 		
 		$query = sprintf("DELETE FROM `%s` %s",$table,$query);
 
-		$alert = development==1?$query:$alert;
+		$alert = development==1 || development==3?$query:$alert;
+		$alert = development==2?parent::_alert_db($query):$alert;
 		$conn->query($query)or die($alert);
 		
 		$conn->close();
@@ -237,7 +240,8 @@ class sobad_db extends conn{
 		$data = implode(",",$data);
 		$query = sprintf("UPDATE `%s` SET %s WHERE %s",$table,$data,$where);	
 
-		$alert = development==1?$query:$alert;
+		$alert = development==1 || development==3?$query:$alert;
+		$alert = development==2?parent::_alert_db($query):$alert;
 		$conn->query($query)or die($alert);
 		
 		$conn->close();
@@ -295,7 +299,10 @@ class sobad_db extends conn{
 
 		$data = array();
 		foreach ($schema as $key => $val) {
-			$data[$val['db']] = self::_get_table_name($val['db'],$val['where']);
+			$database = $val['db'];
+			$database .= development == 3 || development==4 ? '_demo' : '';
+			
+			$data[$val['db']] = self::_get_table_name($database,$val['where']);
 		}
 
 		self::_list_table_schema($class,$data);
