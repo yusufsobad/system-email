@@ -123,7 +123,8 @@ abstract class _file_manager extends _page{
 	public static function _remove_file_list($idx=0){
 		$asset = static::$url;
 
-		$post = sobad_post::get_id($idx,array('notes'));
+		$object = static::$table_manager;
+		$post = $object::get_id($idx,array('notes'));
 
 	// Hapus File
 		$check = array_filter($post);

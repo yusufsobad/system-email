@@ -107,7 +107,8 @@ abstract class _new_product extends form_product{
 	public static function _remove_file_list($idx=0){
 		$asset = '../asset/img/upload/';
 
-		$post = sobad_post::get_id($idx,array('notes'));
+		$object = static::$table_manager;
+		$post = $object::get_id($idx,array('notes'));
 
 	// Hapus database
 		sobad_db::_delete_single($idx,'sdn-post');
