@@ -87,7 +87,7 @@ function get_side_active($args=array(),$func=''){
 				break;
 			}
 		}else{	
-			if($key==$func){
+			if($key==$func || $val['func']==$func){
 				return $val;
 				break;
 			}
