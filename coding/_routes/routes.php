@@ -10,6 +10,11 @@ $args['login'] = array(
 	'page'	=> 'login_system'
 );
 
+$args['administrator'] = array(
+	'page'		=> 'admin_kmi',
+	'home'		=> false
+);
+
 $args['mail'] = array(
 	'page'		=> 'blast_email',
 	'home'		=> false,

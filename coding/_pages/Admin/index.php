@@ -1,13 +1,6 @@
 <?php
 require dirname(__FILE__).'/function.php';
 
-$args = array();
-$args['administrator'] = array(
-	'page'		=> 'admin_kmi',
-	'home'		=> false
-);
-reg_hook('reg_page',$args);
-
 class admin_kmi{
 	public static function _reg(){
 		$GLOBALS['body'] = 'page-header-fixed';

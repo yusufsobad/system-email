@@ -10,7 +10,7 @@ function sidemenu_admin(){
 		'func'		=> 'module_admin',
 		'child'		=> null
 	);
-	
+
 	$args['about'] = array(
 		'status'	=> '',
 		'icon'		=> 'fa fa-dashboard',
