@@ -232,6 +232,23 @@ if(!class_exists('vendor_script')){
 			
 			return $js;
 		}
+
+		private function _js_datatable($idx=array()){
+			$loc = $this->lokasi();
+			$js = array(
+				'datatable-jquesry'		=> $loc.'datatables/media/js/jquery.dataTables.min.js',
+				'datatable-bootstrap'	=> $loc.'datatables/plugins/bootstrap/dataTables.bootstrap.js'
+			);
+			
+			$check = array_filter($idx);
+			if(!empty($check)){
+				foreach($idx as $key){
+					$js[$key];
+				}
+			}
+			
+			return $js;
+		}
 		
 		private function _js_page_modal($idx=array()){
 			$loc = $this->lokasi();
