@@ -316,6 +316,13 @@ function button_dash_block($val=array()){
 	return $button;	
 }
 
+function sort_version_compare($a,$b){
+    list($al, $an) = explode(' ', $a);
+    list($bl, $bn) = explode(' ', $b);
+    if ( $al == $bl ) return version_compare($an, $bn);
+    return strcmp($al, $bl);
+}
+
 function _detectDelimiter($csvFile){
     $delimiters = array(
         ';' => 0,
