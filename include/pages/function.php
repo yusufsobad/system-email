@@ -429,7 +429,10 @@ function script_chart(){
 function _importPage($page='',$class=''){
 	$loc = dirname(__FILE__) . "/../../coding/_pages/";
 
-	if(!class_exists($class)){
+	$check = explode('/', $class);
+	$count = count($check);
+
+	if(!class_exists($check[$count - 1])){
 		$dir = $loc . $page . '/view';
 		if(is_dir($dir)){
 			require $dir . '/' . $class . '.php';
