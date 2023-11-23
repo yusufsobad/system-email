@@ -241,7 +241,9 @@ class sobad_asset{
 					return ob_get_clean();
 				}
 
+				ob_start();
 				require_once $dir."/".$file;
+				ob_get_clean();
 
 				if($lvtype=='config'){
 					return $config;
