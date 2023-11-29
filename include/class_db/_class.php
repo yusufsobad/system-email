@@ -481,7 +481,7 @@ abstract class _class{
 			self::$_inner = '';self::$_where = '';
 
 			$select = [
-				'table'		=> {$blueprint}::$table,
+				'table'		=> $blueprint::$table,
 				'column'	=> $column,
 				'where'		=> $where
 			];
