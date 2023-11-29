@@ -461,7 +461,7 @@ abstract class _class{
 
 		$select = [];
 		foreach ($data as $key => $val) {
-			$blueprint = isset($val['blueprint']) ? $val['blueprint'] :: static::class;
+			$blueprint = isset($val['blueprint']) ? $val['blueprint'] : static::class;
 			$column = isset($val['column']) ? $val['column'] : [];
 
 			$limit = isset($val['where']) ? $val['where'] : '';
