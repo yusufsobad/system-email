@@ -294,6 +294,14 @@ abstract class _class{
 			$args = self::$_join;
 		}
 
+		$where = self::$_inner.self::$_where;
+		self::$_inner = '';self::$_where = '';
+
+		return [
+			'where'		=> $where,
+			'column'	=> $args
+		];
+
 		// $where = self::$_inner.self::$_where;
 		// self::$_inner = '';self::$_where = '';
 		// $data_join = self::_get_data($where,$args);
@@ -303,11 +311,8 @@ abstract class _class{
 	}
 
 	protected static function _check_join($where='',$args=array(),$type=''){
-		self::_filter_by_blueprint($where,$args,$type);
-
-		$where = self::$_inner.self::$_where;
-		self::$_inner = '';self::$_where = '';
-		$data_join = self::_get_data($where,$args);
+		$filter = self::_filter_by_blueprint($where,$args,$type);
+		$data_join = self::_get_data($filter['where'],$filter['column']);
 
 		self::$_meta = false;
 		return $data_join;
@@ -475,15 +480,12 @@ abstract class _class{
 			$limit = empty($limit)?'1=1':$limit;
 			$where = "WHERE $limit";
 
-			self::_filter_by_blueprint($where,$column,$type);
-
-			$where = self::$_inner.self::$_where;
-			self::$_inner = '';self::$_where = '';
+			$filter = self::_filter_by_blueprint($where,$column,$type);
 
 			$select = [
 				'table'		=> $blueprint::$table,
-				'column'	=> $column,
-				'where'		=> $where
+				'column'	=> $filter['column'],
+				'where'		=> $filter['where']
 			];
 		}
 
