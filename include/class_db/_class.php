@@ -432,7 +432,7 @@ abstract class _class{
 		return $data;
 	}
 
-	protected static function _get_union($data=array(),$type_union=false){
+	public static function _get_union($data=array(),$type_union=false){
 		global $DB_NAME;
 
 		$union = [];
