@@ -80,7 +80,7 @@ class sobad_db extends conn{
 			$query[] = sprintf("SELECT %s FROM `%s` %s",$column,$table,$where);
 		}
 		
-		$union = $type ? 'UNION' : 'UNION ALL';
+		$union = $type ? 'UNION ALL' : 'UNION';
 		$query = implode(" $union ", $query);
 		
 		$alert = development==1 || development==3?$query:$alert;
