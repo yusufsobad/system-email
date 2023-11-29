@@ -482,7 +482,7 @@ abstract class _class{
 
 			$filter = self::_filter_by_blueprint($where,$column,$type);
 
-			$select = [
+			$select[] = [
 				'table'		=> $blueprint::$table,
 				'column'	=> $filter['column'],
 				'where'		=> $filter['where']
