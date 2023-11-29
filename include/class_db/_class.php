@@ -65,6 +65,14 @@ abstract class _class{
 	}
 
 	public static function sum($column='',$limit='1=1 ',$args=array(),$type=''){
+		return self::condition_sql('sum',$column,$limit,$args,$type);
+	}
+
+	public static function avg($column='',$limit='1=1 ',$args=array(),$type=''){
+		return self::condition_sql('avg',$column,$limit,$args,$type);
+	}
+
+	public static function condition_sql($condition,$column='',$limit='1=1 ',$args=array(),$type=''){
 		self::$_meta = false;
 		self::$_temp = false;
 		self::$_type = $type;
@@ -107,24 +115,12 @@ abstract class _class{
 			}
 		}
 
-		$_args = array("SUM(`$table`.$column) AS sum");
-		$check = array_filter(self::list_meta($type));
-		if(!empty($check)){
-			$_args = array("`$table`.ID");
-
-			$inner .= "LEFT JOIN `".static::$tbl_meta."` ON `".static::$table."`.ID = `".static::$tbl_meta."`.meta_id ";
-			$limit .= static::$group;
-			self::$_meta = true;
-		}
-
+		$c_sql = strtoupper($condition);$c_alias = strtolower($condition);
+		$_args = array("$c_sql(`$table`.$column) AS $c_alias");
 		$count = self::_get_data($inner." WHERE ".$limit,$_args);
-		
-		if(self::$_meta){
-			return count($count);
-		}
 
 		self::$_meta = false;
-		return $count[0]['sum'];
+		return $count[0][$c_alias];
 	}	
 
 	public static function count($limit='1=1 ',$args=array(),$type=''){
@@ -233,7 +229,7 @@ abstract class _class{
 	// --- Function Check Join -----------------------------------------
 	// -----------------------------------------------------------------	
 
-	protected static function _check_join($where='',$args=array(),$type=''){
+	protected static function _filter_by_blueprint($where='',$args=array(),$type=''){
 		$user = self::_list();
 		
 		self::$_type = $type;
@@ -297,6 +293,17 @@ abstract class _class{
 		if(!empty($check)){
 			$args = self::$_join;
 		}
+
+		// $where = self::$_inner.self::$_where;
+		// self::$_inner = '';self::$_where = '';
+		// $data_join = self::_get_data($where,$args);
+
+		// self::$_meta = false;
+		// return $data_join;
+	}
+
+	protected static function _check_join($where='',$args=array(),$type=''){
+		self::_filter_by_blueprint($where,$args,$type);
 
 		$where = self::$_inner.self::$_where;
 		self::$_inner = '';self::$_where = '';
@@ -418,5 +425,77 @@ abstract class _class{
 		self::$_temp_table = '';
 		$DB_NAME = $_database;
 		return $data;
+	}
+
+	protected static function _get_union($data=array(),$type_union=false){
+		global $DB_NAME;
+
+		$union = [];
+
+		$_database = $DB_NAME;
+		if(property_exists(new static,'database')){
+			$DB_NAME = static::$database;
+		}
+
+		/*
+			untuk configurasi $data sama dengan get all
+			example : 
+				$data = [
+					[
+						blueprint 	=> static::class  // optional
+						column  	=> [], // default
+						where 		=> '', // optional
+						type 		=> ''  // optional
+					],
+					[
+						blueprint 	=> static::class  // optional
+						column  	=> [], // default
+						where 		=> '', // optional
+						type 		=> ''  // optional
+					],
+					...
+				]
+
+			untuk $type_union, false => UNION dan true => UNION ALL
+		*/
+
+		$select = [];
+		foreach ($data as $key => $val) {
+			$blueprint = isset($val['blueprint']) ? $val['blueprint'] :: static::class;
+			$column = isset($val['column']) ? $val['column'] : [];
+
+			$limit = isset($val['where']) ? $val['where'] : '';
+			$type = isset($val['type']) ? $val['type'] : '';
+
+			$check = substr($limit,0,4);
+			$check = trim($check);
+
+			$limit = strtoupper($check)=="AND"?substr($limit, 4):$limit;
+
+			$limit = empty($limit)?'1=1':$limit;
+			$where = "WHERE $limit";
+
+			self::_filter_by_blueprint($where,$column,$type);
+
+			$where = self::$_inner.self::$_where;
+			self::$_inner = '';self::$_where = '';
+
+			$select = [
+				'table'		=> {$blueprint}::$table,
+				'column'	=> $column,
+				'where'		=> $where
+			];
+		}
+
+		$q = sobad_db::_union_table($select,$type_union);
+		if($q!==0){
+			while($r=$q->fetch_assoc()){
+
+				$union[] = $r;//$item;
+			}
+		}
+
+		$DB_NAME = $_database;
+		return $union;
 	}
 }
