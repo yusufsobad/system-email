@@ -36,7 +36,7 @@ abstract class _smart_page extends _page{
 	protected static function smart_table($where='',$pagination=false){
 		$data = array();
 		$args = self::_array();
-		$type = self::$type;
+		$type = static::$type;
 
 		$start = intval(parent::$page);
 		$nLimit = intval(parent::$limit);
@@ -60,10 +60,10 @@ abstract class _smart_page extends _page{
 			$limit = ' LIMIT '.intval(($start - 1) * $nLimit).','.$nLimit;
 			$where .= $limit;
 
-			$sum_data = self::_count_db('1=1 ' . $cari,$args);
+			$sum_data = static::_count_db('1=1 ' . $cari,$args);
 		}
 
-		$args = self::_gets_db($args,$where);
+		$args = static::_gets_db($args,$where);
 		
 		$data = array(
             'kata' 		=> $kata,
@@ -75,7 +75,7 @@ abstract class _smart_page extends _page{
             'limit' 	=> $nLimit,
         );
 
-		return self::_loadView('table',$data);
+		return static::_loadView('table',$data);
 	}
 
 	private static function head_title(){
@@ -176,7 +176,7 @@ abstract class _smart_page extends _page{
 		$type = isset($_POST['type']) ? $_POST['type'] : '';
 		$data = static::_array_default();
 
-		$config = self::_loadView('form',array('data' => $data));
+		$config = static::_loadView('form',array('data' => $data));
 		$data = array(
 			'title'		=> 'Add Data',
 			'link'		=> '_add_db',
@@ -190,7 +190,7 @@ abstract class _smart_page extends _page{
 	protected static function edit_form($data=array()){
 		$type = isset($_POST['type']) ? $_POST['type'] : '';
 
-		$config = self::_loadView('form',array('data' => $data));
+		$config = static::_loadView('form',array('data' => $data));
 		$data = array(
 			'title'		=> 'Edit Data',
 			'link'		=> '_update_db',
