@@ -60,7 +60,7 @@ abstract class _smart_page extends _page{
 			$limit = ' LIMIT '.intval(($start - 1) * $nLimit).','.$nLimit;
 			$where .= $limit;
 
-			$sum_data = self::_count_db($cari,$args);
+			$sum_data = self::_count_db('1=1 ' . $cari,$args);
 		}
 
 		$args = self::_gets_db($args,$where);
