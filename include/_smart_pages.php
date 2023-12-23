@@ -33,10 +33,13 @@ abstract class _smart_page extends _page{
 		return array_keys($array);
 	}
 
-	protected static function smart_table($where=''){
+	protected static function smart_table($where='',$pagination=false){
 		$data = array();
 		$args = self::_array();
 		$type = self::$type;
+
+		$start = intval(parent::$page);
+		$nLimit = intval(parent::$limit);
 
 		$tp = str_replace('tab_', '', $type);
 		$tp = intval($tp);
@@ -52,13 +55,24 @@ abstract class _smart_page extends _page{
 			$cari=$where;
 		}
 
-		$args = self::_gets_db($args, $where);
+		$sum_data = 0;
+		if($pagination){
+			$limit = ' LIMIT '.intval(($start - 1) * $nLimit).','.$nLimit;
+			$where .= $limit;
 
+			$sum_data = self::_count_db($cari,$args);
+		}
+
+		$args = self::_gets_db($args,$where);
+		
 		$data = array(
-            'kata'      => $kata,
-            'search'    => $_search,
-            'data'      => $args,
-            'type'		=> $type
+            'kata' 		=> $kata,
+            'search' 	=> $_search,
+            'type' 		=> $type,
+            'data' 		=> $args,
+            'start' 	=> $start,
+            'sum_data' 	=> $sum_data,
+            'limit' 	=> $nLimit,
         );
 
 		return self::_loadView('table',$data);
@@ -164,7 +178,7 @@ abstract class _smart_page extends _page{
 
 		$config =self::_loadView('form',array('data' => $data));
 		$data = array(
-			'title'		=> 'Tambah data module',
+			'title'		=> 'Add Data',
 			'link'		=> '_add_db',
 			'data'		=> $config,
 			'type'		=> $type
@@ -178,7 +192,7 @@ abstract class _smart_page extends _page{
 
 		$config =self::_loadView('form',array('data' => $data));
 		$data = array(
-			'title'		=> 'Edit data module',
+			'title'		=> 'Edit Data',
 			'link'		=> '_update_db',
 			'data'		=> $config,
 			'type'		=> $type
