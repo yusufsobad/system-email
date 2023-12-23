@@ -174,9 +174,9 @@ abstract class _smart_page extends _page{
 	// ----------------------------------------------------------
 	public static function add_form(){
 		$type = isset($_POST['type']) ? $_POST['type'] : '';
-		$data = self::_array_default();
+		$data = static::_array_default();
 
-		$config =self::_loadView('form',array('data' => $data));
+		$config = self::_loadView('form',array('data' => $data));
 		$data = array(
 			'title'		=> 'Add Data',
 			'link'		=> '_add_db',
@@ -190,7 +190,7 @@ abstract class _smart_page extends _page{
 	protected static function edit_form($data=array()){
 		$type = isset($_POST['type']) ? $_POST['type'] : '';
 
-		$config =self::_loadView('form',array('data' => $data));
+		$config = self::_loadView('form',array('data' => $data));
 		$data = array(
 			'title'		=> 'Edit Data',
 			'link'		=> '_update_db',
