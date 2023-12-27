@@ -66,11 +66,14 @@ function switch_toggle($val=array()){
 }
 
 function loadpage_button($val){
+	$parameter = isset($val['href']) && !empty($val['href']) ? $val['href'] : '';
+	$href = get_system_url() . $parameter;
+
 	$val['func'] = '';
 	$val['load'] = '';
 	$val['script'] = '';
 	$val['toggle'] = '';
-	$val['href'] = isset($val['href']) && !empty($val['href']) ? $val['href'] : get_system_url();
+	$val['href'] = $href;
 	return buat_button($val);
 }
 
