@@ -67,8 +67,9 @@ function switch_toggle($val=array()){
 
 function loadpage_button($val,$url=true){
 	$uri = uri;
-	$uri_param = unset($uri[0]);
-	$uri_param = implode('/', $uri_param);
+	unset($uri[0]);
+	
+	$uri_param = implode('/', $uri);
 
 	$url = $url ? $uri_param : $uri[1];
 
