@@ -65,9 +65,15 @@ function switch_toggle($val=array()){
 	return $btn;
 }
 
-function loadpage_button($val){
+function loadpage_button($val,$url=true){
+	$uri = uri;
+	$uri_param = unset($uri[0]);
+	$uri_param = implode('/', $uri_param);
+
+	$url = $url ? $uri_param : $uri[1];
+
 	$parameter = isset($val['href']) && !empty($val['href']) ? $val['href'] : '';
-	$href = get_system_url() . $parameter;
+	$href = get_system_url() . '/' . $url . $parameter;
 
 	$val['func'] = '';
 	$val['load'] = '';
