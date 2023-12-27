@@ -65,11 +65,20 @@ function switch_toggle($val=array()){
 	return $btn;
 }
 
+function loadpage_button($val){
+	$val['func'] = '';
+	$val['load'] = '';
+	$val['script'] = '';
+	$val['toggle'] = '';
+	$val['href'] = isset($val['href']) && !empty($val['href']) ? $val['href'] : get_system_url();
+	return buat_button($val);
+}
+
 function newpage_button($val){
 	$val['func'] = isset($val['func']) ? $val['func'] : '_sidemenu';
 	$val['load'] = 'here_content';
 	$val['script'] = 'sobad_newpage(this)';
-	return _click_button($val,'');
+	return _click_button($val);
 }
 
 function hapus_button($val){
