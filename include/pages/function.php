@@ -69,7 +69,7 @@ function loadpage_button($val,$url=false){
 	$uri = uri;
 	$uri_param = implode('/', $uri);
 
-	$url = $url ? $uri_param : $uri[0];
+	$url = $url ? $uri_param : '';
 
 	$parameter = isset($val['href']) && !empty($val['href']) ? $val['href'] : '';
 	$href = get_system_url() . '/' . $url . $parameter;
