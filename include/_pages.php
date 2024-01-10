@@ -393,7 +393,11 @@ abstract class _page{
 		return static::edit_form($q[0]);
 	}
 
-	public static function _import($return=true){
+	public static function _import(){
+		return self::_filter_import_files(true);
+	}
+
+	public static function _filter_import_files($return=true){
 		$fileName = $_FILES["data"]["tmp_name"];
 		
 		if ($_FILES["data"]["size"] > 0) {
