@@ -393,7 +393,7 @@ abstract class _page{
 		return static::edit_form($q[0]);
 	}
 
-	public static function _import(){
+	public static function _import($return=true){
 		$fileName = $_FILES["data"]["tmp_name"];
 		
 		if ($_FILES["data"]["size"] > 0) {
@@ -447,8 +447,10 @@ abstract class _page{
 		        $status = false;
 	        }
 			
-			$pg = isset($_POST['page'])?$_POST['page']:1;
-			return self::_get_table($pg);
+			if($return){
+				$pg = isset($_POST['page'])?$_POST['page']:1;
+				return self::_get_table($pg);
+			}
 	    }
 	}
 
