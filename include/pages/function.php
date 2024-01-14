@@ -206,6 +206,11 @@ function buat_button($val=array()){
 		$type = $val['type'];
 	}
 
+	$notify = '';
+	if(isset($val['notify'])){
+		$notify = $val['notify'];
+	}
+
 	$alert = false;
 	if(isset($val['alert'])){
 		$alert = $val['alert'];
@@ -232,7 +237,7 @@ function buat_button($val=array()){
 	}
 	
 	$btn = '
-	<a id="'.$val['ID'].'" data-toggle="'.$val['toggle'].'" data-sobad="'.$val['func'].'" data-load="'.$val['load'].'" data-type="'.$type.'" data-alert="'.$alert.'" href="'.$val['href'].'" class="btn '.$class.' '.$val['color'].' btn_data_malika" data-uri="'.$uri.'" onclick="'.$onclick.'" '.$status.'>
+	<a id="'.$val['ID'].'" data-toggle="'.$val['toggle'].'" data-sobad="'.$val['func'].'" data-load="'.$val['load'].'" data-type="'.$type.'" data-notify="'.$notif.'" data-alert="'.$alert.'" href="'.$val['href'].'" class="btn '.$class.' '.$val['color'].' btn_data_malika" data-uri="'.$uri.'" onclick="'.$onclick.'" '.$status.'>
 		<i class="'.$val['icon'].'"></i> '.$val['label'].'
 	</a>';
 	

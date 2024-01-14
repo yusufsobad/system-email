@@ -4,6 +4,7 @@ var server = hosting + system;
 var url_ajax = "include/ajax.php";
 var url_preview = "include/preview.php";
 var url_sending = "include/sending.php";
+var url_notif = "include/notify.php";
 var filter = "";
 var uploads = "";
 var repeater = "";
@@ -60,6 +61,32 @@ $(window).on("popstate", function () {
   sobad_history(object);
 });
 
+var notify = new FireNotif();
+var audio = new Audio('notif.mp3');
+
+notify.setKey('q1rcKg8zxPUySGntLfnIYNMFufq2')
+    .setUrl('https://fire-notif.firebaseio.com/')
+    .setPath('notify');
+
+notify.subscribe(function(data){
+	$.ajax({
+		url: server + "/" + url_notif,
+		type: "POST",
+		data: "data=" + data.message,
+		success: function (response) {
+		  	if(response['notify']){
+				audio.play();
+				toastr.info(response['msg'], 'Notification', {timeOut: 15000})
+			}
+		},
+		error: function (jqXHR) {
+		  if (jqXHR.status == 0) {
+		    alert(" fail to connect, please check your connection settings");
+		  }
+		},
+	});
+});
+
 function setcookie(key, data) {
   document.cookie = key + "=" + data + ";expires=" + expire + ";path=/";
 }
@@ -79,17 +106,15 @@ function sobad_sidemenu(val) {
 // function sidemenu
 function sobad_newpage(val) {
   var ajx = $(val).attr("id");
-  if (ajx != "sobad_#" && ajx != "sobad_") {
-    sobad_load("here_content");
+  sobad_load("here_content");
 
-    var uri = $(val).attr("data-uri");
-    //setcookie("sidemenu",ajx);
-    window.history.pushState(
-      sobad_history_page(val),
+  var uri = $(val).attr("data-uri");
+  //setcookie("sidemenu",ajx);
+  window.history.pushState(
+    sobad_history_page(val),
       ajx,
       "/" + system + "/" + object + "/" + uri
     );
-  }
 }
 
 // function history sidemenu
@@ -167,6 +192,7 @@ function sobad_button(val, spin) {
   var lbl = $(val).attr("id");
   var msg = $(val).attr("data-alert");
   var tp = $(val).attr("data-type");
+  var notif = $(val).attr("data-notify");
   var _object = $(val).attr("object");
 
   // Object Tambahan
@@ -199,7 +225,9 @@ function sobad_button(val, spin) {
     "&page=" +
     pg +
     "&filter=" +
-    filter;
+    filter +
+    "&notify=" +
+    notif;
   sobad_ajax("#" + id, data, "html", msg, val, html);
 }
 
@@ -269,6 +297,7 @@ function sobad_load_submit(val, spin) {
   var mdl = $(val).attr("data-modal");
   var node = $(val).attr("data-socket");
   var _object = $(val).attr("object");
+  var notif = $(val).attr("data-notify");
 
   // Object tambahan
   var object_func = _object || object;
@@ -330,7 +359,9 @@ function sobad_load_submit(val, spin) {
     "&filter=" +
     filter +
     "&repeater=" +
-    repeater;
+    repeater +
+    "&notify=" +
+    notif;
   sobad_ajax("#" + id, data, callback, true, val, html);
 }
 
@@ -562,6 +593,12 @@ function sobad_clockpicker() {
   }
 }
 
+function sobad_notify(msg){
+	notify.pushNotify({
+		message : msg
+	});
+}
+
 function conv_array_submit(arr) {
   for (var ky in arr) {
     arr[ky]["value"] = ascii_to_hexa(arr[ky]["value"].replace(/\+/g, "-plus-"));
@@ -705,6 +742,10 @@ function sobad_callback(id, response, func, msg) {
     case "success":
       if (msg) {
         toastr.success(result["msg"]);
+      }
+
+      if (result['notify']) {
+        sobad_notify(result['id_notify']);
       }
 
       if (modal_toggle) {
