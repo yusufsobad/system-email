@@ -206,9 +206,9 @@ function buat_button($val=array()){
 		$type = $val['type'];
 	}
 
-	$notify = '';
+	$notif = '';
 	if(isset($val['notify'])){
-		$notify = $val['notify'];
+		$notif = $val['notify'];
 	}
 
 	$alert = false;
