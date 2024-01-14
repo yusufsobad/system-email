@@ -22,9 +22,9 @@ $id_user = get_id_user();
 
 $status = false;$msg = '';$break = false;
 if(!empty($id_notif)){
-	foreach ($notify as $ky => $value) {
+	foreach ($notify as $key => $value) {
 		if($key == $id_notif){
-			foreach ($value as $key => $val) {
+			foreach ($value as $ky => $val) {
 				if($role == $val['role']){
 					if(!isset($val['user'][0])){
 						$status = true;
