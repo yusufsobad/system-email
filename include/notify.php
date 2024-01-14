@@ -5,6 +5,8 @@
 
 session_start();
 
+define('AUTHPATH',$_SERVER['SERVER_NAME']);
+
 require 'config/hostname.php';
 require 'config/notification.php';
 
