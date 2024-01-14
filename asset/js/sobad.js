@@ -62,7 +62,7 @@ $(window).on("popstate", function () {
 });
 
 var notify = new FireNotif();
-var audio = new Audio('../audio/notif.mp3');
+var audio = new Audio(server + '/asset/audio/notif.mp3');
 
 notify.setKey('q1rcKg8zxPUySGntLfnIYNMFufq2')
     .setUrl('https://fire-notif.firebaseio.com/')
