@@ -41,6 +41,11 @@ global $body;
 	<?php sobad_meta_html() ;?>
     <title><?php print(constant('title')) ;?></title>
 	<link rel="icon" type="image/ico" href="favicon.ico" /> 
+
+	<!-- Firebase notif -->	
+	<script src="https://cdn.firebase.com/js/client/2.2.3/firebase.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/3.6.1/firebase.js"></script>
+	
 	<?php
 		$asset->_vendor_css();
 		$asset->_css_file();
