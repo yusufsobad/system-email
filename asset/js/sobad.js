@@ -62,7 +62,7 @@ $(window).on("popstate", function () {
 });
 
 var notify = new FireNotif();
-var audio = new Audio('notif.mp3');
+var audio = new Audio('../audio/notif.mp3');
 
 notify.setKey('q1rcKg8zxPUySGntLfnIYNMFufq2')
     .setUrl('https://fire-notif.firebaseio.com/')
@@ -74,9 +74,13 @@ notify.subscribe(function(data){
 		type: "POST",
 		data: "data=" + data.message,
 		success: function (response) {
-		  	if(response['notify']){
+			result = JSON.parse(response);
+
+		  	if(result['notify']){
 				audio.play();
-				toastr.info(response['msg'], 'Notification', {timeOut: 15000})
+				toastr.options.progressBar = true;
+	            toastr.options.closeButton = true;
+				toastr.info(result['msg'], 'Notification', {timeOut: 15000})
 			}
 		},
 		error: function (jqXHR) {
