@@ -109,7 +109,7 @@ function sobad_notification(data){
 		$('#bell-notify').addClass('hide');
 	}
 
-	if(bell_notify['qty'] <= 0){
+	if(bell_notify['qty'] < 1){
 		$('#tabs-notify').addClass('hide');
 	}else{
 		$('#tabs-notify').removeClass('hide');
@@ -129,7 +129,7 @@ function sobad_menu_notif(obj){
 			sobad_menu_notif(value['child']);
 		}
 
-		if(value['notify'] <= 0){
+		if(value['notify'] < 1){
 			$('#' + value['id']).addClass('hide');
 		}else{
 			$('#' + value['id']).removeClass('hide');
