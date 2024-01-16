@@ -110,9 +110,9 @@ function sobad_notification(data){
 	}
 
 	if(bell_notify['qty'] > 0){
-		$('#bell-notify').addClass('hide');
+		$('#tabs-notify').addClass('hide');
 	}else{
-		$('#bell-notify').removeClass('hide');
+		$('#tabs-notify').removeClass('hide');
 	}
 
 	$('#tabs-notify').html('<small>' + bell_notify['qty'] + '</small>');
@@ -125,6 +125,12 @@ function sobad_notification(data){
 function sobad_menu_notif(value,index,array){
 	if(value['child'].isArray()){
 		data['menu_notify'].forEach(value['child']);
+	}
+
+	if(value['notify'] > 0){
+		$('#' + value['id']).addClass('hide');
+	}else{
+		$('#' + value['id']).removeClass('hide');
 	}
 
 	$('#' + value['id']).html('<small>' + value['notify'] + '</small>');
