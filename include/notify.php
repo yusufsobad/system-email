@@ -86,7 +86,9 @@ if(!empty($id_notif)){
 $bell = sobad_notification::_notification();
 $child = sobad_notification::_get();
 
-$msg = theme_layout('_content_notification',$msg);
+ob_start();
+theme_layout('_conv_content_notification',$msg);
+$msg = ob_get_clean();
 
 $ajax = array(
 	'icon'			=> $icon,

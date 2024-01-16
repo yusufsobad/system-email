@@ -119,21 +119,24 @@ function sobad_notification(data){
 	$('#list-notify').html(bell_notify['data']);
 
 	// Menu Notification
-	data['menu_notify'].forEach(sobad_menu_notif);
+	sasi_dataMenu = data['menu_notify'];
+	sobad_menu_notif(sasi_dataMenu);
 }
 
-function sobad_menu_notif(value,index,array){
-	if(value['child'].isArray()){
-		data['menu_notify'].forEach(value['child']);
-	}
+function sobad_menu_notif(obj){
+	for (const [key, value] of Object.entries(obj)) {
+		if(value['child'].isArray() || typeof value['child'] === 'object'){
+			sobad_menu_notif(value['child']);
+		}
 
-	if(value['notify'] <= 0){
-		$('#' + value['id']).addClass('hide');
-	}else{
-		$('#' + value['id']).removeClass('hide');
-	}
+		if(value['notify'] <= 0){
+			$('#' + value['id']).addClass('hide');
+		}else{
+			$('#' + value['id']).removeClass('hide');
+		}
 
-	$('#' + value['id']).html('<small>' + value['notify'] + '</small>');
+		$('#' + value['id']).html('<small>' + value['notify'] + '</small>');
+	}
 }
 
 function setcookie(key, data) {
