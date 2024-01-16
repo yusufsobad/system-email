@@ -104,9 +104,9 @@ function sobad_notification(data){
 	var bell_notify = data['bell_notify'];
 
 	if(bell_notify['status']){
-		$('#bell-notify').addClass('hide');
-	}else{
 		$('#bell-notify').removeClass('hide');
+	}else{
+		$('#bell-notify').addClass('hide');
 	}
 
 	if(bell_notify['qty'] <= 0){
