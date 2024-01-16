@@ -31,7 +31,7 @@ $id_notif = isset($_POST['data']) ? $_POST['data'] : '';
 $id_user = get_id_user();
 
 $status = $break = false;
-$msg = $title = $link = '';
+$msg = $title = $link = $content = '';
 $type = 0;
 $icon = 'toast toast-info ';
 
@@ -47,7 +47,7 @@ if(!empty($id_notif)){
 					}
 
 					$icon .= isset($val['icon']) && !empty($val['icon']) ? $val['icon'] : '';
-					$msg = $val['message'] ?? '';
+					$msg = $content = $val['message'] ?? '';
 					$title = $val['title'] ?? '';
 					$type = $val['type'] ?? 0;
 
@@ -72,7 +72,7 @@ if(!empty($id_notif)){
 
 	if($status){
 		sobad_db::_insert_table(base . 'notify',[
-			'content'	=> $msg,
+			'content'	=> $content,
 			'status'	=> 1,
 			'type'		=> $type,
 			'link'		=> $link,
