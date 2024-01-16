@@ -75,8 +75,8 @@ if(!empty($id_notif)){
 }
 
 // Check notif in menu
-$bell = sobad_notify::_notification();
-$child = sobad_notify::_get();
+$bell = sobad_notification::_notification();
+$child = sobad_notification::_get();
 
 $ajax = array(
 	'icon'			=> $icon,
@@ -90,7 +90,7 @@ $ajax = array(
 $ajax = json_encode($ajax);		
 print_r($ajax);
 
-class sobad_notify{
+class sobad_notification{
 	public static function _notification(){
 		$role = $_SESSION[_prefix.'page'];
 		$id_user = get_id_user();
