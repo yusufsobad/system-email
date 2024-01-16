@@ -108,7 +108,7 @@ class sobad_notification{
 		return [
 			'status'	=> isset($notif[0]) ? true : false,
 			'qty'		=> count($notif),
-			'data'		=> $notif
+			'data'		=> $notif_html
 		];
 	}
 
