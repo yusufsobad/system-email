@@ -125,7 +125,7 @@ function sobad_notification(data){
 
 function sobad_menu_notif(obj){
 	for (const [key, value] of Object.entries(obj)) {
-		if(typeof value['child'] == 'object'){
+		if(value['child'] != null){
 			sobad_menu_notif(value['child']);
 		}
 
