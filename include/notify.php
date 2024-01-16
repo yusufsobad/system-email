@@ -16,14 +16,7 @@ new hostname();
 // get file component
 new _component();
 
-// include theme
-sobad_themes();
-
-// Check Notification
-
-$id_notif = isset($_POST['data']) ? $_POST['data'] : '';
 $role = $_SESSION[_prefix.'page'];
-$id_user = get_id_user();
 
 // include pages
 $asset = new sobad_asset();
@@ -31,6 +24,11 @@ $asset->_pages("../coding/_pages/");
 
 $pages = new sobad_page($role);
 $pages->_get();
+
+// Check Notification
+
+$id_notif = isset($_POST['data']) ? $_POST['data'] : '';
+$id_user = get_id_user();
 
 $status = $break = false;
 $msg = $title = $link = '';
