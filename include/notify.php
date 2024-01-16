@@ -33,7 +33,7 @@ $id_user = get_id_user();
 $status = $break = false;
 $msg = $title = $link = '';
 $type = 0;
-$icon = 'toast toast-info';
+$icon = 'toast toast-info ';
 
 if(!empty($id_notif)){
 	foreach ($notify as $key => $value) {
@@ -46,7 +46,7 @@ if(!empty($id_notif)){
 						$status = in_array($id_user, $val['user']) ? true : false;
 					}
 
-					$icon = isset($val['icon']) && !empty($val['icon']) ? $val['icon'] : $icon;
+					$icon .= isset($val['icon']) && !empty($val['icon']) ? $val['icon'] : '';
 					$msg = $val['message'] ?? '';
 					$title = $val['title'] ?? '';
 					$type = $val['type'] ?? 0;
