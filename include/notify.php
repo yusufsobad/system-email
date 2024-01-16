@@ -25,6 +25,9 @@ $id_notif = isset($_POST['data']) ? $_POST['data'] : '';
 $role = $_SESSION[_prefix.'page'];
 $id_user = get_id_user();
 
+$pages = new sobad_page($role);
+$pages->_get();
+
 $status = $break = false;
 $msg = $title = $link = '';
 $type = 0;
@@ -81,9 +84,7 @@ if(!empty($id_notif)){
 $bell = sobad_notification::_notification();
 $child = sobad_notification::_get();
 
-ob_start();
-theme_layout('_notification',$msg);
-$msg = ob_get_clean();
+$msg = theme_layout('_content_notification',$msg);
 
 $ajax = array(
 	'icon'			=> $icon,
