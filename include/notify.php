@@ -101,7 +101,9 @@ class sobad_notification{
 		$where = "AND status='1' ORDER BY post_date DESC";
 		$notif = sobad_notify::get_all([],$where);
 
-		$notif = theme_layout('_notification',$notif);
+		ob_start();
+		theme_layout('_notification',$notif);
+		$notif_html = ob_get_clean();
 
 		return [
 			'status'	=> isset($notif[0]) ? true : false,
