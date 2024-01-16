@@ -79,8 +79,8 @@ notify.subscribe(function(data){
 		  	if(result['notify']){
 				audio.play();
 				toastr.options = {
-				    progressBar = true,
-				    closeButton = true,
+				    progressBar: true,
+				    closeButton: true,
 				    iconClasses: {
 				        info: result['icon'],
 				    }

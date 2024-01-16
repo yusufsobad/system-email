@@ -22,7 +22,11 @@ $id_notif = isset($_POST['data']) ? $_POST['data'] : '';
 $role = $_SESSION[_prefix.'page'];
 $id_user = get_id_user();
 
-$status = false;$msg = $title = $link = '';$icon = 'toast toast-info';$break = false;
+$status = $break = false;
+$msg = $title = $link = '';
+$type = 0;
+$icon = 'toast toast-info';
+
 if(!empty($id_notif)){
 	foreach ($notify as $key => $value) {
 		if($key == $id_notif){
@@ -37,6 +41,7 @@ if(!empty($id_notif)){
 					$icon = isset($val['icon']) && !empty($val['icon']) ? $val['icon'] : $icon;
 					$msg = $val['message'] ?? '';
 					$title = $val['title'] ?? '';
+					$type = $val['type'] ?? 0;
 
 					if(isset($val['link']) && !empty($val['link'])){
 						$link = $val['link'];
@@ -61,7 +66,7 @@ if(!empty($id_notif)){
 		sobad_db::_insert_table(base . 'notify',[
 			'content'	=> $msg,
 			'status'	=> 1,
-			'type'		=> 1,
+			'type'		=> $type,
 			'link'		=> $link,
 			'user'		=> $id_user,
 			'department'=> $role
