@@ -48,7 +48,7 @@ if(!empty($id_notif)){
 						$newtab = isset($val['newtab']) && !empty($val['newtab']) ? $val['newtab'] : false;
 
 						$newtab = $newtab ? 'target="_blank"' : '';
-						$msg = '<a href="'.$val['link'].'" '.$newtab.'> '.$msg.' </a>'
+						$msg = '<a href="'.$val['link'].'" '.$newtab.'> '.$msg.' </a>';
 					}
 
 					$break = true;
