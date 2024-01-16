@@ -16,6 +16,9 @@ new hostname();
 // get file component
 new _component();
 
+// include theme
+sobad_themes();
+
 // Check Notification
 
 $id_notif = isset($_POST['data']) ? $_POST['data'] : '';
