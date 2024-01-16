@@ -107,7 +107,7 @@ class sobad_notification{
 		$role = $_SESSION[_prefix.'page'];
 		$id_user = get_id_user();
 
-		$where = "AND status='1' ORDER BY post_date DESC";
+		$where = "AND status='1' ORDER BY inserted DESC";
 		$notif = sobad_notify::get_all([],$where);
 
 		ob_start();
