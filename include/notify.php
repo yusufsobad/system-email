@@ -27,7 +27,7 @@ $id_user = get_id_user();
 
 // include pages
 $asset = new sobad_asset();
-$asset->_pages();
+$asset->_pages("../coding/_pages/");
 
 $pages = new sobad_page($role);
 $pages->_get();
