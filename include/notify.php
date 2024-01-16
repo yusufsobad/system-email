@@ -16,11 +16,13 @@ new hostname();
 // get file component
 new _component();
 
+// Check Notification
+
 $id_notif = isset($_POST['data']) ? $_POST['data'] : '';
 $role = $_SESSION[_prefix.'page'];
 $id_user = get_id_user();
 
-$status = false;$msg = '';$break = false;
+$status = false;$msg = $title = $link = '';$icon = 'toast toast-info';$break = false;
 if(!empty($id_notif)){
 	foreach ($notify as $key => $value) {
 		if($key == $id_notif){
@@ -32,7 +34,18 @@ if(!empty($id_notif)){
 						$status = in_array($id_user, $val['user']) ? true : false;
 					}
 
-					$msg = $val['message'];
+					$icon = isset($val['icon']) && !empty($val['icon']) ? $val['icon'] : $icon;
+					$msg = $val['message'] ?? '';
+					$title = $val['title'] ?? '';
+
+					if(isset($val['link']) && !empty($val['link'])){
+						$link = $val['link'];
+						$newtab = isset($val['newtab']) && !empty($val['newtab']) ? $val['newtab'] : false;
+
+						$newtab = $newtab ? 'target="_blank"' : '' 
+						$msg = '<a href="'.$val['link'].'" '.$newtab.'> '.$msg.' </a>'
+					}
+
 					$break = true;
 					break;
 				}
@@ -43,12 +56,91 @@ if(!empty($id_notif)){
 			break;
 		}
 	}
+
+	if($status){
+		sobad_db::_insert_table(base . 'notify',[
+			'content'	=> $msg,
+			'status'	=> 1,
+			'type'		=> 1,
+			'link'		=> $link,
+			'user'		=> $id_user,
+			'department'=> $role
+		]);
+	}
 }
 
+// Check notif in menu
+$bell = sobad_notify::_notification();
+$child = sobad_notify::_get();
+
 $ajax = array(
-	'notify' 	=> $status,
-	'msg'    	=> $msg,
+	'icon'			=> $icon,
+	'notify' 		=> $status,
+	'msg'    		=> $msg,
+	'title'			=> $title,
+	'bell_notify'	=> $bell,
+	'menu_notify'	=> $child
 );
 
 $ajax = json_encode($ajax);		
 print_r($ajax);
+
+class sobad_notify{
+	public static function _notification(){
+		$role = $_SESSION[_prefix.'page'];
+		$id_user = get_id_user();
+
+		$where = "AND status='1' ORDER BY post_date DESC";
+		$notif = sobad_notify::get_all([],$where);
+
+		$notif = theme_layout('_notification',$notif);
+
+		return [
+			'status'	=> isset($notif[0]) ? true : false,
+			'qty'		=> count($notif),
+			'data'		=> $notif
+		];
+	}
+
+	public static function _get(){
+		global $reg_sidebar;
+
+		return self::_child($reg_sidebar);
+	}
+
+	public static function _child($args=[]){
+		$data = [];
+
+		foreach ($args as $key => $val) {
+			$val['id'] = $child['id'] ?? 'mn_' . $key;
+			$val['notify'] = $child['notify'] ?? 0;
+
+			if($val['child']!=null){
+				$child = self::_child($val['child']);
+				$val['child'] = $child;
+
+				foreach ($child as $ky => $vl) {
+					$val['notify'] += $vl['notify'];
+				}
+
+			}else{
+				$func = $val['func'];
+
+				if(isset($val['loc'])){
+					$loc = empty($val['loc'])?$func:$val['loc'].'.'.$func;
+					sobad_asset::_loadFile($loc);
+				}
+		
+				if(class_exists($func)){
+					if(is_callable(array($func,'_notify'))){	
+						$val['notify'] = $func::_notify($data);
+					}
+				}
+			}
+
+			$data[$key] = $val;
+		}
+
+		return $data;
+	}
+}

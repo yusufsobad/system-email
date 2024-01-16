@@ -78,10 +78,18 @@ notify.subscribe(function(data){
 
 		  	if(result['notify']){
 				audio.play();
-				toastr.options.progressBar = true;
-	            toastr.options.closeButton = true;
-				toastr.info(result['msg'], 'Notification', {timeOut: 15000})
+				toastr.options = {
+				    progressBar = true,
+				    closeButton = true,
+				    iconClasses: {
+				        info: result['icon'],
+				    }
+				};
+
+				toastr.info(result['msg'], result['title'], {timeOut: 15000})
 			}
+
+			sobad_notification(result);
 		},
 		error: function (jqXHR) {
 		  if (jqXHR.status == 0) {
@@ -90,6 +98,37 @@ notify.subscribe(function(data){
 		},
 	});
 });
+
+function sobad_notification(data){
+	// Bell Notification
+	var bell_notify = data['bell_notify'];
+
+	if(bell_notify['status']){
+		$('#bell-notify').addClass('hide');
+	}else{
+		$('#bell-notify').removeClass('hide');
+	}
+
+	if(bell_notify['qty'] > 0){
+		$('#bell-notify').addClass('hide');
+	}else{
+		$('#bell-notify').removeClass('hide');
+	}
+
+	$('#tabs-notify').html('<small>' + bell_notify['qty'] + '</small>');
+	$('#list-notify').html(bell_notify['data']);
+
+	// Menu Notification
+	data['menu_notify'].forEach(sobad_menu_notif);
+}
+
+function sobad_menu_notif(value,index,array){
+	if(value['child'].isArray()){
+		data['menu_notify'].forEach(value['child']);
+	}
+
+	$('#' + value['id']).html('<small>' + value['notify'] + '</small>');
+}
 
 function setcookie(key, data) {
   document.cookie = key + "=" + data + ";expires=" + expire + ";path=/";
