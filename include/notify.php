@@ -25,6 +25,10 @@ $id_notif = isset($_POST['data']) ? $_POST['data'] : '';
 $role = $_SESSION[_prefix.'page'];
 $id_user = get_id_user();
 
+// include pages
+$asset = new sobad_asset();
+$asset->_pages();
+
 $pages = new sobad_page($role);
 $pages->_get();
 
