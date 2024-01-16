@@ -824,3 +824,5 @@ function sobad_callback(id, response, func, msg) {
       break;
   }
 }
+
+sobad_notify('#');
