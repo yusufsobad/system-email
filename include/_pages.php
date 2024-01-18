@@ -15,6 +15,8 @@ abstract class _page{
 
 	protected static $list_meta = '';
 
+	protected static $where_notify = "";
+
 	// ----------------------------------------------------------
 	// Layout Pages  --------------------------------------------
 	// ----------------------------------------------------------
@@ -26,6 +28,20 @@ abstract class _page{
 		}
 
 		return sobad_asset::_loadView($loc,$data);
+	}
+
+	public static function _notify(){
+		if(property_exists(new static, 'post')){
+			if(!empty(static::$where_notify)){
+				$post = static::$post;
+				$where = static::$where_notify;
+
+				$notif = sobad_notify::get_all(['ID','post_id'],"AND $where AND status='1' GROUP BY post_id");
+				return count($notif);
+			}
+		}
+
+		return 0;
 	}
 
 	public static function _sidemenu($data=''){

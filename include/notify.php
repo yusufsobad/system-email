@@ -50,6 +50,7 @@ if(!empty($id_notif)){
 					$msg = $content = $val['message'] ?? '';
 					$title = $val['title'] ?? '';
 					$type = $val['type'] ?? 0;
+					$notify_id = $ky;
 
 					if(isset($val['link']) && !empty($val['link'])){
 						$link = $val['link'];
@@ -77,7 +78,9 @@ if(!empty($id_notif)){
 			'type'		=> $type,
 			'link'		=> $link,
 			'user'		=> $id_user,
-			'department'=> $role
+			'department'=> $role,
+			'icon'		=> $icon,
+			'notify_id'	=> $notify_id
 		]);
 	}
 }
