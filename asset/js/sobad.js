@@ -9,6 +9,8 @@ var filter = "";
 var uploads = "";
 var repeater = "";
 
+const socket = io(websocket);
+
 var modal_toggle = false;
 var index_toggle = "";
 
@@ -61,42 +63,39 @@ $(window).on("popstate", function () {
   sobad_history(object);
 });
 
-var notify = new FireNotif();
 var audio = new Audio(server + '/asset/audio/notif.mp3');
 
-notify.setKey('q1rcKg8zxPUySGntLfnIYNMFufq2')
-    .setUrl('https://fire-notif.firebaseio.com/')
-    .setPath('notify');
+socketIO.on("notification", function (data) {
+	if (data) {
+		$.ajax({
+			url: server + "/" + url_notif,
+			type: "POST",
+			data: "data=" + data,
+			success: function (response) {
+				result = JSON.parse(response);
 
-notify.subscribe(function(data){
-	$.ajax({
-		url: server + "/" + url_notif,
-		type: "POST",
-		data: "data=" + data.message,
-		success: function (response) {
-			result = JSON.parse(response);
+			  	if(result['notify']){
+					audio.play();
+					toastr.options = {
+					    progressBar: true,
+					    closeButton: true,
+					    iconClasses: {
+					        info: result['icon'],
+					    }
+					};
 
-		  	if(result['notify']){
-				audio.play();
-				toastr.options = {
-				    progressBar: true,
-				    closeButton: true,
-				    iconClasses: {
-				        info: result['icon'],
-				    }
-				};
+					toastr.info(result['msg'], result['title'], {timeOut: 15000})
+				}
 
-				toastr.info(result['msg'], result['title'], {timeOut: 15000})
-			}
-
-			sobad_notification(result);
-		},
-		error: function (jqXHR) {
-		  if (jqXHR.status == 0) {
-		    alert(" fail to connect, please check your connection settings");
-		  }
-		},
-	});
+				sobad_notification(result);
+			},
+			error: function (jqXHR) {
+			  if (jqXHR.status == 0) {
+			    alert(" fail to connect, please check your connection settings");
+			  }
+			},
+		});
+	}
 });
 
 function sobad_notification(data){
@@ -646,9 +645,7 @@ function sobad_clockpicker() {
 }
 
 function sobad_notify(msg){
-	notify.pushNotify({
-		message : msg
-	});
+	socket.emit("notification", msg);
 }
 
 function conv_array_submit(arr) {
