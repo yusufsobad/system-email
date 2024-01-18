@@ -62,7 +62,7 @@ global $body;
     	var object = "<?= $menu ;?>";
     	var system = "<?= URL ;?>";
     	var hosting = "<?= SITE.'://'.HOSTNAME ;?>/";
-    	var websocket = "<?= SITE.'://'.HOSTNAME ;?>:3000";
+    	var websocket = "<?= WEBSOCKET ;?>";
     </script>
 
 </head>

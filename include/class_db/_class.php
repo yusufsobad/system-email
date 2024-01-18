@@ -268,6 +268,13 @@ abstract class _class{
 			}
 		}
 
+		if(isset($blueprint['other'])){
+			$check = array_filter($blueprint['other']);
+			if(!empty($check)){
+				self::_other($args,$table,$blueprint['other']);
+			}
+		}
+
 		if(isset($blueprint['joined'])){
 			$check = array_filter($blueprint['joined']);
 			if(!empty($check)){
@@ -346,6 +353,36 @@ abstract class _class{
 					$_args = $_joined['column'];
 					self::_joined($_args,$key,$_joined);
 				}
+			}
+		}
+	}
+
+	private static function _other($args=array(),$table='',$other=''){
+
+		foreach($other as $_key => $val){
+			$alias = isset($val['alias']) ? $val['alias'] : '';
+			$key = !empty($alias) ? "_" . $alias : "_" . $val['key'];
+			
+			foreach($val['column'] as $ky => $vl){
+				self::$_join[] = "$key.$vl AS ".$vl."_".substr($key,1,4);
+			}
+			
+			$database = isset($val['database'])?$val['database']:'';
+			$tbl = $val['table'];
+			$col = $val['key'];
+
+			$tbl = !empty($database)?$database.'.`'.$tbl.'`':'`'.$tbl.'`';
+			self::$_inner .= "LEFT JOIN $tbl AS $key ON `$table`.ID = $key.$col ";
+			
+			if(isset($val['detail'])){
+				$_detail = $val['detail'];
+				self::_detail($val['column'],$key,$_detail);
+			}
+			
+			if(isset($val['joined'])){
+				$_joined = $val['joined'];
+				$_args = $_joined['column'];
+				self::_joined($_args,$key,$_joined);
 			}
 		}
 	}

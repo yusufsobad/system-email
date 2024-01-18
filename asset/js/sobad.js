@@ -65,7 +65,7 @@ $(window).on("popstate", function () {
 
 var audio = new Audio(server + '/asset/audio/notif.mp3');
 
-socketIO.on("notification", function (data) {
+socket.on("notification", function (data) {
 	if (data) {
 		$.ajax({
 			url: server + "/" + url_notif,
