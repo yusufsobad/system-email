@@ -9,8 +9,6 @@ var filter = "";
 var uploads = "";
 var repeater = "";
 
-const socket = io(websocket);
-
 var modal_toggle = false;
 var index_toggle = "";
 
@@ -63,39 +61,42 @@ $(window).on("popstate", function () {
   sobad_history(object);
 });
 
+var notify = new FireNotif();
 var audio = new Audio(server + '/asset/audio/notif.mp3');
 
-socket.on("notification", function (data) {
-	if (data) {
-		$.ajax({
-			url: server + "/" + url_notif,
-			type: "POST",
-			data: "data=" + data,
-			success: function (response) {
-				result = JSON.parse(response);
+notify.setKey('q1rcKg8zxPUySGntLfnIYNMFufq2')
+    .setUrl('https://fire-notif.firebaseio.com/')
+    .setPath('notify');
 
-			  	if(result['notify']){
-					audio.play();
-					toastr.options = {
-					    progressBar: true,
-					    closeButton: true,
-					    iconClasses: {
-					        info: result['icon'],
-					    }
-					};
+notify.subscribe(function(data){
+	$.ajax({
+		url: server + "/" + url_notif,
+		type: "POST",
+		data: "data=" + data.message,
+		success: function (response) {
+			result = JSON.parse(response);
 
-					toastr.info(result['msg'], result['title'], {timeOut: 15000})
-				}
+		  	if(result['notify']){
+				audio.play();
+				toastr.options = {
+				    progressBar: true,
+				    closeButton: true,
+				    iconClasses: {
+				        info: result['icon'],
+				    }
+				};
 
-				sobad_notification(result);
-			},
-			error: function (jqXHR) {
-			  if (jqXHR.status == 0) {
-			    alert(" fail to connect, please check your connection settings");
-			  }
-			},
-		});
-	}
+				toastr.info(result['msg'], result['title'], {timeOut: 15000})
+			}
+
+			sobad_notification(result);
+		},
+		error: function (jqXHR) {
+		  if (jqXHR.status == 0) {
+		    alert(" fail to connect, please check your connection settings");
+		  }
+		},
+	});
 });
 
 function sobad_notification(data){
@@ -645,7 +646,9 @@ function sobad_clockpicker() {
 }
 
 function sobad_notify(msg){
-	socket.emit("notification", msg);
+	notify.pushNotify({
+		message : msg
+	});
 }
 
 function conv_array_submit(arr) {
