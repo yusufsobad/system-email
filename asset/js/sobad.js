@@ -130,9 +130,9 @@ function sobad_menu_notif(obj){
 		}
 
 		if(value['notify'] < 1){
-			$('#' + value['id']).addClass('hide');
+			$('span[id=' + value['id'] + ']').addClass('hide');
 		}else{
-			$('#' + value['id']).removeClass('hide');
+			$('span[id=' + value['id'] + ']').removeClass('hide');
 		}
 
 		$('#' + value['id']).html('<small>' + value['notify'] + '</small>');
