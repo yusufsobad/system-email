@@ -1,7 +1,7 @@
 // support jQuery Core
 const server = hosting + system;
 
-const url_ajax = "include/ajax.php";
+var url_ajax = "include/ajax.php";
 const url_preview = "include/preview.php";
 const url_sending = "include/sending.php";
 const url_notif = "include/notify.php";
