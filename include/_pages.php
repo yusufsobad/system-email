@@ -518,6 +518,32 @@ abstract class _page{
 	// Function Update to database ------------------------------
 	// ----------------------------------------------------------
 
+	protected static function _check_notify($idx=0){
+		if(isset($_POST['notify']) && !empty($_POST['notify'])){
+			$notify = $_POST['notify'];
+			$_POST['notify'] .= '#' . $idx;
+
+			$user_id = get_id_user();
+			$depart = $_SESSION[_prefix . 'page'];
+
+			$where = "AND notify_id='$notify' AND post_id='$idx' user='$user_id' AND department='$depart'";
+
+			$check = sobad_notify::get_all(['ID'],$where);
+			if(!isset($check[0])){
+				sobad_db::_insert_table(base . 'notify',[
+					'post_id'	=> $idx,
+					'user'		=> $user_id,
+					'department'=> $depart
+				]);
+			}else{
+				sobad_db::_update_single($idx,base . 'notify',[
+					'post_id'	=> $idx,
+					'date'		=> date('Y-m-d H:i:s')
+				]);
+			}
+		}
+	}
+
 	protected static function _schema($_args=array(),$add=false){
 		global $DB_NAME;
 
@@ -593,6 +619,8 @@ abstract class _page{
 			$q = sobad_db::_update_single($id,$schema['table'],$data);
 			$q = self::_update_meta_db($id,$args,$schema);
 		}
+
+		self::_check_notify($id);
 
 		$DB_NAME = $_database;
 		return array('index' => $id, 'data' => $q,'search' => $src,'value' => $args);

@@ -27,7 +27,12 @@ $pages->_get();
 
 // Check Notification
 
-$id_notif = isset($_POST['data']) ? $_POST['data'] : '';
+$data_notif = isset($_POST['data']) ? $_POST['data'] : '';
+$data_notif = explode('#', $data_notif);
+
+$id_notif = $data_notif[0];
+$post_id = $data_notif[1];
+
 $id_user = get_id_user();
 
 $status = $break = false;
@@ -72,15 +77,12 @@ if(!empty($id_notif)){
 	}
 
 	if($status){
-		sobad_db::_insert_table(base . 'notify',[
+		sobad_db::_update_multiple("notify_id='$notify_id' AND post_id='$post_id'",base . 'notify',[
 			'content'	=> $content,
 			'status'	=> 1,
 			'type'		=> $type,
 			'link'		=> $link,
-			'user'		=> $id_user,
-			'department'=> $role,
 			'icon'		=> $icon,
-			'notify_id'	=> $notify_id
 		]);
 	}
 }
