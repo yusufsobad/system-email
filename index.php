@@ -60,9 +60,10 @@ global $body;
 
     <script type="text/javascript">
     	var object = "<?= $menu ;?>";
-    	var system = "<?= URL ;?>";
-    	var hosting = "<?= SITE.'://'.HOSTNAME ;?>/";
-    	var websocket = "<?= WEBSOCKET ;?>";
+    	const system = "<?= URL ;?>";
+    	const hosting = "<?= SITE.'://'.HOSTNAME ;?>/";
+    	const websocket = "<?= WEBSOCKET ;?>";
+    	const notify_status = <?= defined('notify') ? notify : 0 ;?>;
     </script>
 
 </head>

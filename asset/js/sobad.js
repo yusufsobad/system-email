@@ -1,10 +1,10 @@
 // support jQuery Core
-var server = hosting + system;
+const server = hosting + system;
 
-var url_ajax = "include/ajax.php";
-var url_preview = "include/preview.php";
-var url_sending = "include/sending.php";
-var url_notif = "include/notify.php";
+const url_ajax = "include/ajax.php";
+const url_preview = "include/preview.php";
+const url_sending = "include/sending.php";
+const url_notif = "include/notify.php";
 var filter = "";
 var uploads = "";
 var repeater = "";
@@ -796,7 +796,7 @@ function sobad_callback(id, response, func, msg) {
         toastr.success(result["msg"]);
       }
 
-      if (result['notify']) {
+      if (result['notify'] && notify_status) {
         sobad_notify(result['id_notify']);
       }
 
@@ -825,4 +825,6 @@ function sobad_callback(id, response, func, msg) {
   }
 }
 
-sobad_notify('#');
+if(notify_status){
+	sobad_notify('#');
+}
