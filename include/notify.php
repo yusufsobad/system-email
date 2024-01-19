@@ -57,8 +57,6 @@ if(!empty($id_notif)){
 					$type = $val['type'] ?? 0;
 					$post_id = $val['post_id'] ?? $post_id;
 
-					$notify_id = $ky;
-
 					if(isset($val['link']) && !empty($val['link'])){
 						$link = $val['link'];
 						$newtab = isset($val['newtab']) && !empty($val['newtab']) ? $val['newtab'] : false;
@@ -79,7 +77,7 @@ if(!empty($id_notif)){
 	}
 
 	if($status){
-		$where = "AND notify_id='$notify_id' AND post_id='$post_id' AND user='$id_user' AND department='$role'";
+		$where = "AND notify_id='$id_notif' AND post_id='$post_id' AND user='$id_user' AND department='$role'";
 
 		$check = sobad_notify::get_all(['ID'],$where);
 		if(!isset($check[0])){
@@ -92,10 +90,10 @@ if(!empty($id_notif)){
 				'type'		=> $type,
 				'link'		=> $link,
 				'icon'		=> $icon,
-				'notify_id'	=> $notify_id
+				'notify_id'	=> $id_notif
 			]);
 		}else{
-			sobad_db::_update_multiple("notify_id='$notify_id' AND post_id='$post_id'",base . 'notify',[
+			sobad_db::_update_multiple("notify_id='$id_notif' AND post_id='$post_id'",base . 'notify',[
 				'post_id'	=> $post_id,
 				'date'		=> date('Y-m-d H:i:s'),
 				'content'	=> $content,
@@ -133,7 +131,7 @@ class sobad_notification{
 		$role = $_SESSION[_prefix.'page'];
 		$id_user = get_id_user();
 
-		$where = "AND status='1' ORDER BY inserted DESC";
+		$where = "AND status='1' ORDER BY date DESC";
 		$notif = sobad_notify::get_all([],$where);
 
 		ob_start();
