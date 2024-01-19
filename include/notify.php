@@ -42,7 +42,12 @@ $icon = 'toast toast-info ';
 
 if(!empty($id_notif)){
 	foreach ($notify as $key => $value) {
-		if($key == $id_notif){
+		$frekuensi = defined('frekuensi_notif') ? frekuensi_notif : 0;
+		$notify_id = $key . 'fn' . $frekuensi;
+
+		if($notify_id == $id_notif){
+			$id_notif = $key;
+			
 			foreach ($value as $ky => $val) {
 				if($role == $val['role']){
 					if(!isset($val['user'][0])){

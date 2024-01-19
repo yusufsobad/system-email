@@ -99,6 +99,12 @@ define('convToPDF','createpdf');
 
 define('base','');
 
+// Notification
+define('notify', 1); // 0 : Off , 1 : On
+
+// Frekuensi Notification
+define('frekuensi_notif', 0);
+
 // Temporary table
 $temp_table = array(
 	'' // classname blueprint
