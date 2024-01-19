@@ -522,25 +522,6 @@ abstract class _page{
 		if(isset($_POST['notify']) && !empty($_POST['notify'])){
 			$notify = $_POST['notify'];
 			$_POST['notify'] .= '#' . $idx;
-
-			$user_id = get_id_user();
-			$depart = $_SESSION[_prefix . 'page'];
-
-			$where = "AND notify_id='$notify' AND post_id='$idx' user='$user_id' AND department='$depart'";
-
-			$check = sobad_notify::get_all(['ID'],$where);
-			if(!isset($check[0])){
-				sobad_db::_insert_table(base . 'notify',[
-					'post_id'	=> $idx,
-					'user'		=> $user_id,
-					'department'=> $depart
-				]);
-			}else{
-				sobad_db::_update_single($idx,base . 'notify',[
-					'post_id'	=> $idx,
-					'date'		=> date('Y-m-d H:i:s')
-				]);
-			}
 		}
 	}
 

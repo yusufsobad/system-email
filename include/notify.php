@@ -55,6 +55,8 @@ if(!empty($id_notif)){
 					$msg = $content = $val['message'] ?? '';
 					$title = $val['title'] ?? '';
 					$type = $val['type'] ?? 0;
+					$post_id = $val['post_id'] ?? $post_id;
+
 					$notify_id = $ky;
 
 					if(isset($val['link']) && !empty($val['link'])){
@@ -77,13 +79,32 @@ if(!empty($id_notif)){
 	}
 
 	if($status){
-		sobad_db::_update_multiple("notify_id='$notify_id' AND post_id='$post_id'",base . 'notify',[
-			'content'	=> $content,
-			'status'	=> 1,
-			'type'		=> $type,
-			'link'		=> $link,
-			'icon'		=> $icon,
-		]);
+		$where = "AND notify_id='$notify_id' AND post_id='$post_id' AND user='$id_user' AND department='$role'";
+
+		$check = sobad_notify::get_all(['ID'],$where);
+		if(!isset($check[0])){
+			sobad_db::_insert_table(base . 'notify',[
+				'post_id'	=> $post_id,
+				'user'		=> $id_user,
+				'department'=> $role,
+				'content'	=> $content,
+				'status'	=> 1,
+				'type'		=> $type,
+				'link'		=> $link,
+				'icon'		=> $icon,
+				'notify_id'	=> $notify_id
+			]);
+		}else{
+			sobad_db::_update_multiple("notify_id='$notify_id' AND post_id='$post_id'",base . 'notify',[
+				'post_id'	=> $post_id,
+				'date'		=> date('Y-m-d H:i:s'),
+				'content'	=> $content,
+				'status'	=> 1,
+				'type'		=> $type,
+				'link'		=> $link,
+				'icon'		=> $icon,
+			]);
+		}
 	}
 }
 
