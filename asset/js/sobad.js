@@ -135,7 +135,7 @@ function sobad_menu_notif(obj){
 			$('span[id=' + value['id'] + ']').removeClass('hide');
 		}
 
-		$('#' + value['id']).html('<small>' + value['notify'] + '</small>');
+		$('span[id=' + value['id'] + ']').html('<small>' + value['notify'] + '</small>');
 	}
 }
 
