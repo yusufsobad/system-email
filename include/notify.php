@@ -47,7 +47,7 @@ if(!empty($id_notif)){
 
 		if($notify_id == $id_notif){
 			$id_notif = $key;
-			
+
 			foreach ($value as $ky => $val) {
 				if($role == $val['role']){
 					if(!isset($val['user'][0])){
@@ -136,7 +136,7 @@ class sobad_notification{
 		$role = $_SESSION[_prefix.'page'];
 		$id_user = get_id_user();
 
-		$where = "AND `".base . "notify`.status='1' ORDER BY date DESC";
+		$where = "AND `".base . "notify`.department='$role' AND `".base . "notify`.user='$id_user' AND `".base . "notify`.status='1' ORDER BY date DESC";
 		$notif = sobad_notify::get_all([],$where);
 
 		ob_start();
