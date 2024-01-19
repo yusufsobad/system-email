@@ -36,7 +36,7 @@ abstract class _page{
 				$post = static::$post;
 				$where = static::$where_notify;
 
-				$notif = sobad_notify::get_all(['ID','post_id'],"AND $where AND status='1' GROUP BY post_id");
+				$notif = sobad_notify::get_all(['ID','post_id'],"AND $where AND ".base . "notify.status='1' GROUP BY post_id");
 				return count($notif);
 			}
 		}

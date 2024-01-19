@@ -77,7 +77,7 @@ if(!empty($id_notif)){
 	}
 
 	if($status){
-		$where = "AND notify_id='$id_notif' AND post_id='$post_id' AND user='$id_user' AND department='$role'";
+		$where = "AND ".base . "notify.notify_id='$id_notif' AND ".base . "notify.post_id='$post_id' AND ".base . "notify.user='$id_user' AND ".base . "notify.department='$role'";
 
 		$check = sobad_notify::get_all(['ID'],$where);
 		if(!isset($check[0])){
@@ -131,7 +131,7 @@ class sobad_notification{
 		$role = $_SESSION[_prefix.'page'];
 		$id_user = get_id_user();
 
-		$where = "AND status='1' ORDER BY date DESC";
+		$where = "AND ".base . "notify.status='1' ORDER BY date DESC";
 		$notif = sobad_notify::get_all([],$where);
 
 		ob_start();
