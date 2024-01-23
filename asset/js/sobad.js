@@ -1,5 +1,6 @@
 // support jQuery Core
 const server = hosting + system;
+const socket = io(websocket);
 
 var url_ajax = "include/ajax.php";
 const url_preview = "include/preview.php";
