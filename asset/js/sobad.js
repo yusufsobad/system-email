@@ -714,6 +714,16 @@ function mask_decimal3(val) {
   });
 }
 
+function mask_decimalDigit(val,digit) {
+  $(val).maskMoney({
+    allowNegative: true,
+    thousands: ".",
+    decimal: ",",
+    allowZero: true,
+    precision: digit,
+  });
+}
+
 function number_format(x) {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 }
