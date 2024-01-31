@@ -24,11 +24,11 @@ function format_nominal($nominal){
 	return number_format($nominal,$val[0],$val[1],$val[2]);
 }
 
-function format_decimal($nominal){
+function format_decimal($nominal,$precision=1){
 	$current = get_locale();
 	$args = array(
-		'id_ID'	=> array(1,',','.'),
-		'en_US'	=> array(1,'.',','),
+		'id_ID'	=> array($precision,',','.'),
+		'en_US'	=> array($precision,'.',','),
 	);
 	
 	$val = $args[$current];
