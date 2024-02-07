@@ -218,9 +218,9 @@ abstract class _class{
 		return self::_check_join($where,$args,$type);
 	}
 
-	public static function check_meta($id=0,$key=''){
+	public static function check_meta($id=0,$key='',$limit=''){
 		$inner = "LEFT JOIN `".static::$tbl_meta."` ON `".static::$table."`.ID = `".static::$tbl_meta."`.meta_id ";;
-		$where = $inner."WHERE meta_id='$id' AND meta_key='$key'";
+		$where = $inner."WHERE meta_id='$id' AND meta_key='$key' $limit";
 
 		return self::_get_data($where,array('`'.static::$tbl_meta.'`.ID'));
 	}
