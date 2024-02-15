@@ -239,14 +239,6 @@ function sobad_selectOption_search(data, id) {
 
 // function button
 function sobad_button(val, spin) {
-  var id = $(val).attr("data-load");
-
-  var ajx = $(val).attr("data-sobad");
-  var lbl = $(val).attr("id");
-  var msg = $(val).attr("data-alert");
-  var tp = $(val).attr("data-type");
-  var notif = $(val).attr("data-notify");
-  var _object = $(val).attr("object");
   var alert = $(val).attr("data-alertbefore");
 
   if(alert){
@@ -264,9 +256,24 @@ function sobad_button(val, spin) {
     }).then((willSubmit) => {
         if (!willSubmit) {
             return false;
+        }else{
+            sobad_button_execution(val,spin);
         }
     });
+  }else{
+      sobad_button_execution(val,spin);
   }
+}
+
+function sobad_button_execution(val,spin){
+  var id = $(val).attr("data-load");
+
+  var ajx = $(val).attr("data-sobad");
+  var lbl = $(val).attr("id");
+  var msg = $(val).attr("data-alert");
+  var tp = $(val).attr("data-type");
+  var notif = $(val).attr("data-notify");
+  var _object = $(val).attr("object");
 
   // Object Tambahan
   var object_func = _object || object;
