@@ -90,6 +90,12 @@ function newpage_button($val){
 }
 
 function hapus_button($val){
+	$val['alert-before'] = $val['alert-before'] ?? true;
+	$val['alert-title'] = $val['alert-title'] ?? 'want to delete it?';
+	$val['alert-icon'] = $val['alert-icon'] ?? 'warning';
+	$val['alert-type'] = $val['alert-type'] ?? 'danger';
+	$val['alert-button'] = $val['alert-button'] ?? 'Yes';
+
 	return _click_button($val);
 }
 
@@ -235,9 +241,15 @@ function buat_button($val=array()){
 	if(isset($val['script'])){
 		$onclick = $val['script'];
 	}
+
+	$alertbefore = $val['alert-before'] ?? false;
+	$alerttitle = $val['alert-title'] ?? '';
+	$alerticon = $val['alert-icon'] ?? '';
+	$alerttype = $val['alert-type'] ?? '';
+	$alertbutton = $val['alert-button'] ?? '';
 	
 	$btn = '
-	<a id="'.$val['ID'].'" data-toggle="'.$val['toggle'].'" data-sobad="'.$val['func'].'" data-load="'.$val['load'].'" data-type="'.$type.'" data-notify="'.$notif.'" data-alert="'.$alert.'" href="'.$val['href'].'" class="btn '.$class.' '.$val['color'].' btn_data_malika" data-uri="'.$uri.'" onclick="'.$onclick.'" '.$status.'>
+	<a id="'.$val['ID'].'" data-toggle="'.$val['toggle'].'" data-sobad="'.$val['func'].'" data-load="'.$val['load'].'" data-type="'.$type.'" data-notify="'.$notif.'" data-alert="'.$alert.'" data-alertbefore="'.$alertbefore.'" data-alerttitle="'.$alerttitle.'" data-alerticon="'.$alerticon.'" data-alerttype="'.$alerttype.'" data-alertbutton="'.$alertbutton.'" href="'.$val['href'].'" class="btn '.$class.' '.$val['color'].' btn_data_malika" data-uri="'.$uri.'" onclick="'.$onclick.'" '.$status.'>
 		<i class="'.$val['icon'].'"></i> '.$val['label'].'
 	</a>';
 	

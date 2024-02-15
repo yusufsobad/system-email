@@ -247,6 +247,26 @@ function sobad_button(val, spin) {
   var tp = $(val).attr("data-type");
   var notif = $(val).attr("data-notify");
   var _object = $(val).attr("object");
+  var alert = $(val).attr("data-alertbefore");
+
+  if(alert){
+      var sw_title = $(val).attr("data-alerttitle");
+      var sw_icon = $(val).attr("data-alerticon");
+      var sw_type = $(val).attr("data-alerttype");
+      var sw_btn = $(val).attr("data-alertbutton");
+
+      swal({
+        title: sw_title,
+        text: '',
+        icon: sw_icon,
+        type: sw_type,
+        buttons: ['Cancel', sw_btn],
+    }).then((willSubmit) => {
+        if (!willSubmit) {
+            return false;
+        }
+    });
+  }
 
   // Object Tambahan
   var object_func = _object || object;

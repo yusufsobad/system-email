@@ -443,6 +443,22 @@ if(!class_exists('vendor_script')){
 		
 			return $js;
 		}
+
+		private function _js_sweetalert($idx=array()){
+			$loc = $this->lokasi();
+			$js = array(
+				'contextmenu'			=> $loc.'sweetalert.min.js',
+			);
+			
+			$check = array_filter($idx);
+			if(!empty($check)){
+				foreach($idx as $key){
+					$js[$key];
+				}
+			}
+		
+			return $js;
+		}
 	}
 
 }
