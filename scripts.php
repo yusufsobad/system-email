@@ -431,7 +431,7 @@ if(!class_exists('vendor_script')){
 		private function _js_multislider($idx=array()){
 			$loc = $this->lokasi();
 			$js = array(
-				'contextmenu'			=> $loc.'multislider.min.js',
+				'multislider'			=> $loc.'multislider.min.js',
 			);
 			
 			$check = array_filter($idx);
@@ -447,7 +447,7 @@ if(!class_exists('vendor_script')){
 		private function _js_sweetalert($idx=array()){
 			$loc = $this->lokasi();
 			$js = array(
-				'contextmenu'			=> $loc.'sweetalert.min.js',
+				'sweetalert'			=> $loc.'sweetalert.min.js',
 			);
 			
 			$check = array_filter($idx);
