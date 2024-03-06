@@ -602,20 +602,20 @@ class daftar_mail extends _page{
 				}
 				
 				if(! in_array($idx,$list_group)){
-					array_push($clist,$idx);
+					array_push($list_group,$idx);
 				}
 	        }
 
 	        // check empty mail
-	        foreach ($clist as $key => $val) {
+	        foreach ($list_group as $key => $val) {
 	        	if(empty($val)){
-	        		unset($clist[$key]);
+	        		unset($list_group[$key]);
 	        	}
 	        }
 
 			// Check mail group
 			$arg = array(
-				'meta_value'	=> implode(',',$clist),
+				'meta_value'	=> implode(',',$list_group),
 			);
 			$q = sobad_db::_update_multiple($where,'email-group-meta',$arg);
 			
