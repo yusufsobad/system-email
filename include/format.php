@@ -24,6 +24,20 @@ function format_nominal($nominal){
 	return number_format($nominal,$val[0],$val[1],$val[2]);
 }
 
+function format_decimal_auto($nominal){
+	$decimal = strlen(substr(strrchr($nominal, "."), 1));
+
+	$current = get_locale();
+	$args = array(
+		'id_ID'	=> array($decimal,',','.'),
+		'en_US'	=> array($decimal,'.',','),
+	);
+	
+	$val = $args[$current];
+	
+	return number_format($nominal,$val[0],$val[1],$val[2]);
+}
+
 function format_decimal($nominal,$precision=1){
 	$current = get_locale();
 	$args = array(
