@@ -25,6 +25,7 @@ function format_nominal($nominal){
 }
 
 function format_decimal_auto($nominal){
+	$nominal = floatval($nominal);
 	$decimal = strlen(substr(strrchr($nominal, "."), 1));
 
 	$current = get_locale();
