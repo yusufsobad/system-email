@@ -45,6 +45,9 @@ define('URL','cordova-v3');
 // set web socket
 define('WEBSOCKET', SITE . '://' . HOSTNAME . ':3000');
 
+// set url Firebase IO
+define('FIREBASEIO', "https://project.firebaseio.com/");
+
 // set check table
 define('ABOUT','');
 
