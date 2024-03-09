@@ -65,35 +65,39 @@ $(window).on("popstate", function () {
 var audio = new Audio(server + '/asset/audio/notif.mp3');
 
 dbRef.on("child_changed", function(data) {
-	$.ajax({
-		url: server + "/" + url_notif,
-		type: "POST",
-		data: "data=" + data.val(),
-		success: function (response) {
-			result = JSON.parse(response);
-
-		  	if(result['notify']){
-  				audio.play();
-  				toastr.options = {
-  				    progressBar: true,
-  				    closeButton: true,
-  				    iconClasses: {
-  				        info: result['icon'],
-  				    }
-				};
-
-				toastr.info(result['msg'], result['title'], {timeOut: 15000})
-			}
-
-			sobad_notification(result);
-		},
-		error: function (jqXHR) {
-		  if (jqXHR.status == 0) {
-		    alert(" fail to connect, please check your connection settings");
-		  }
-		},
-	});
+	sobad_ajax_notification(data.val());
 });
+
+function sobad_ajax_notification(data){
+  $.ajax({
+    url: server + "/" + url_notif,
+    type: "POST",
+    data: "data=" + data,
+    success: function (response) {
+      result = JSON.parse(response);
+
+        if(result['notify']){
+          audio.play();
+          toastr.options = {
+              progressBar: true,
+              closeButton: true,
+              iconClasses: {
+                  info: result['icon'],
+              }
+        };
+
+        toastr.info(result['msg'], result['title'], {timeOut: 15000})
+      }
+
+      sobad_notification(result);
+    },
+    error: function (jqXHR) {
+      if (jqXHR.status == 0) {
+        alert(" fail to connect, please check your connection settings");
+      }
+    },
+  });
+}
 
 function sobad_notification(data){
 	// Bell Notification
@@ -857,5 +861,5 @@ function sobad_callback(id, response, func, msg) {
 }
 
 if(notify_status){
-	sobad_notify('#' + d.getTime());
+	sobad_ajax_notification('#');
 }
