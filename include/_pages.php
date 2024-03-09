@@ -52,13 +52,15 @@ abstract class _page{
 			$data_notif = base64_decode($data_notif);
 			$data_notif = explode('#', $data_notif);
 
-			$idn = $data_notif[0];
-			$post_id = $data_notif[1];
+			$idn = $data_notif[0] ?? 0;
+			$post_id = $data_notif[1] ?? 0;
 
-			sobad_db::_update_single($post_id,base . 'notify',[
-				'post_id'	=> $post_id,
-				'status'	=> 0
-			]);
+			if(!empty($idn)){
+				sobad_db::_update_single($idn,base . 'notify',[
+					'post_id'	=> $post_id,
+					'status'	=> 0
+				]);
+			}
 		}
 	}
 
