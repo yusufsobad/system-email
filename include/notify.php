@@ -109,7 +109,7 @@ if(!empty($id_notif)){
 		if(!empty($link)){
 			$base = $idn . '#' . $post_id;
 			$base = base64_encode($base);
-			$link = '/?notify=' . $base;
+			$link .= '/?notify=' . $base;
 
 			$newtab = $newtab ? 'target="_blank"' : '';
 			$msg = '<a href="'.$link.'" '.$newtab.'> '.$msg.' </a>';
