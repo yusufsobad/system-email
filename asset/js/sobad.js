@@ -857,5 +857,5 @@ function sobad_callback(id, response, func, msg) {
 }
 
 if(notify_status){
-	sobad_notify('#');
+	sobad_notify('#' + d.getTime());
 }
