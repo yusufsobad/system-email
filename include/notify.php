@@ -36,7 +36,7 @@ $post_id = $data_notif[1];
 $id_user = get_id_user();
 
 $status = $break = false;
-$msg = $title = $link = $content = '';
+$msg = $title = $link = $content = $newtab = '';
 $type = 0;
 $icon = 'toast toast-info ';
 
@@ -65,9 +65,6 @@ if(!empty($id_notif)){
 					if(isset($val['link']) && !empty($val['link'])){
 						$link = $val['link'];
 						$newtab = isset($val['newtab']) && !empty($val['newtab']) ? $val['newtab'] : false;
-
-						$newtab = $newtab ? 'target="_blank"' : '';
-						$msg = '<a href="'.$val['link'].'" '.$newtab.'> '.$msg.' </a>';
 					}
 
 					$break = true;
@@ -86,7 +83,7 @@ if(!empty($id_notif)){
 
 		$check = sobad_notify::get_all(['ID'],$where);
 		if(!isset($check[0])){
-			sobad_db::_insert_table(base . 'notify',[
+			$idn = sobad_db::_insert_table(base . 'notify',[
 				'post_id'	=> $post_id,
 				'user'		=> $id_user,
 				'department'=> $role,
@@ -98,7 +95,7 @@ if(!empty($id_notif)){
 				'notify_id'	=> $id_notif
 			]);
 		}else{
-			sobad_db::_update_multiple("notify_id='$id_notif' AND post_id='$post_id'",base . 'notify',[
+			$idn = sobad_db::_update_multiple("notify_id='$id_notif' AND post_id='$post_id'",base . 'notify',[
 				'post_id'	=> $post_id,
 				'date'		=> date('Y-m-d H:i:s'),
 				'content'	=> $content,
@@ -107,6 +104,15 @@ if(!empty($id_notif)){
 				'link'		=> $link,
 				'icon'		=> $icon,
 			]);
+		}
+
+		if(!empty($link)){
+			$base = $idn . '#' . $post_id;
+			$base = base64_encode($base);
+			$link = '/?notify=' . $base;
+
+			$newtab = $newtab ? 'target="_blank"' : '';
+			$msg = '<a href="'.$link.'" '.$newtab.'> '.$msg.' </a>';
 		}
 	}
 }

@@ -44,8 +44,29 @@ abstract class _page{
 		return 0;
 	}
 
+	public static function _change_notify(){
+		// Check Notification
+
+		$data_notif = isset($_GET['notify']) ? $_GET['notify'] : '';
+		if(!empty($data_notif)){
+			$data_notif = base64_decode($data_notif);
+			$data_notif = explode('#', $data_notif);
+
+			$idn = $data_notif[0]
+			$post_id = $data_notif[1];
+
+			sobad_db::_update_single($post_id,base . 'notify',[
+				'post_id'	=> $post_id,
+				'status'	=> 0
+			]);
+		}
+	}
+
 	public static function _sidemenu($data=''){
 		$func = 'layout';
+
+		// Check url notif
+		self::_change_notify();
 
 		// Check url menu
 		$uri = explode('/',$data);
