@@ -64,7 +64,7 @@ $(window).on("popstate", function () {
 
 var audio = new Audio(server + '/asset/audio/notif.mp3');
 
-dbRef.on("child_added", function(data) {
+dbRef.on("child_changed", function(data) {
 	$.ajax({
 		url: server + "/" + url_notif,
 		type: "POST",
