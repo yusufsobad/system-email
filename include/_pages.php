@@ -52,7 +52,7 @@ abstract class _page{
 			$data_notif = base64_decode($data_notif);
 			$data_notif = explode('#', $data_notif);
 
-			$idn = $data_notif[0]
+			$idn = $data_notif[0];
 			$post_id = $data_notif[1];
 
 			sobad_db::_update_single($post_id,base . 'notify',[
