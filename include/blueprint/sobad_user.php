@@ -63,10 +63,11 @@ class kmi_user{
 
 		//Check module -> departement
 		$return = array();
-		$module = kmi_module::get_all(array('status'),"AND user_id='$user'");
+		$module = kmi_module::get_all(array('status','admin'),"AND user_id='$user'");
 		$check = array_filter($module);
 		if(!empty($check) && $module[0]['status']==1){
 			$data[0]['dept'] = 'mail';
+			$data[0]['admin'] = $module[0]['admin'];
 			return $data;
 		}
 

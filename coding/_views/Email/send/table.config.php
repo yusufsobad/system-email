@@ -1,5 +1,7 @@
 <?php
 
+$asset = 'https://s.soloabadi.com/system-absen/asset/img/user/';
+
 $config['data'] = array('data' => $kata, 'value' => $search);
 $config['search'] = array('Semua', 'nama', 'email','diskripsi');
 
@@ -154,6 +156,45 @@ foreach($data as $key => $val){
 	$datetime = strtotime($val['date']);
 	$date = format_date_id($val['date']);
 	$time = date('H:i:s',$datetime);
+
+	$user = kmi_user::get_id($val['user'],['ID','name','picture']);
+	$user['pict'] = empty($user[0]['notes_pict']) ? 'no-profile.jpg' : $user[0]['notes_pict'];
+    $user['name'] = empty($user[0]['name']) ? '-' : $user[0]['name'];
+
+	// Membuat Image Circle
+	$w = '90%';
+
+	$w = str_replace('%', '', $w);
+    $d = 45 * (int) $w / 100 ;
+    $d = round($d);
+    
+    $fs = 14 * (int) $w / 100;
+    $m = (int) $w / 8;
+
+    $style = '
+    	background: #e0e0e0;
+    	width: '.$d.'px;
+    	height: '.$d.'px;
+    	border-radius: 50% !important;
+    	display: flex;
+    	justify-content: center;
+    	align-items: center;'
+    ;
+
+    $ts = '
+    	display: flex;
+    	align-items: center;
+    	height: 36px;
+    	font-size: '.$fs.'px !important;
+    	margin-left: '.$m.'px;'
+    ;
+
+	$img = '
+        <div style="display: inline-flex;">
+            <img width="100%" style="' . $style . '"  src="' . $asset . $user['pict'] . '">
+            <label style="'.$ts.'">' . $user['name'] . '</label>
+        </div>
+                ';
 	
 	$config['table'][$key]['tr'] = array('');
 	$config['table'][$key]['td'] = array(
@@ -175,6 +216,12 @@ foreach($data as $key => $val){
 			$date.' '.$time,
 			true
 		),
+		'created'		=> array(
+			'center',
+			'10%',
+			$img,
+			false
+		)
 		'status'		=> array(
 			'center',
 			'7%',
@@ -216,6 +263,10 @@ foreach($data as $key => $val){
 			'8%',
 			hapus_button($hapus),
 			false
-		)
+		),
 	);
+
+	if(!$admin){
+		unset($config['table'][$key]['td']['created']);
+	}
 }

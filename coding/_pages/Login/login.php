@@ -84,7 +84,8 @@ class login_system{
 						'ID'		=> 0,
 						'dept'		=> 'administrator',
 						'name'		=> 'Admin',
-						'jabatan'	=> '-'
+						'jabatan'	=> '-',
+						'admin'		=> 1
 					)
 				);
 			}
@@ -115,6 +116,7 @@ class login_system{
 			$_SESSION[$prefix.'name'] = $r['name'];
 			$_SESSION[$prefix.'picture'] = $link;
 			$_SESSION[$prefix.'divisi'] = $r['jabatan'];
+			$_SESSION[$prefix.'admin'] = $r['admin'];
 
 			setcookie('id',$r['ID'],time() + (60*60*10));
 			setcookie('name',$user,time() + (60*60*10));

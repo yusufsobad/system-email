@@ -25,13 +25,16 @@ class send_mail extends _page{
 			'template',
 			'footer',
 			'name',
-			'date'
+			'date',
+			'user'
 		);
 
 		return $args;
 	}
 
 	protected static function table(){
+		$admin = isset($_SESSION[_prefix . 'admin']) ? $_SESSION[_prefix . 'admin'] : 0;
+
 		$data = array();
 		$args = self::_array();
 		$type = self::$type;
@@ -42,7 +45,10 @@ class send_mail extends _page{
 		$_search = '';$kata = '';
 
 		$user = get_id_user();
-		$where = "AND `email-log`.user='$user' AND `email-log`.trash='0'";
+
+		$whr = $admin ? "AND `email-log`.user='$user'" : "";
+		$where = $whr . " AND `email-log`.trash='0'";
+
 		if(self::$search){		
 			$src = self::like_search($args,$where);
 			$cari = $src[0];
@@ -67,6 +73,7 @@ class send_mail extends _page{
             'start'     => $start,
             'sum_data'  => $sum_data,
             'nLimit'    => $nLimit,
+            'admin'		=> $admin
         );
 
 		return self::_loadView('table',$data);
