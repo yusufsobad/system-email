@@ -19,7 +19,7 @@ class dash_mail{
 		$user = empty($user) ? 0 : $user;
 
 		$button = '';
-		$users = kmi_user::get_all(['ID','name','_nickname'],"AND ID IN ($user)");
+		$users = kmi_user::get_all(['ID','name','_nickname'],"AND `abs-user`.ID IN ($user)");
 		foreach ($users as $key => $val) {
 			$cls = isset($_GET['user']) && $val['ID'] == $_GET['user'] ? 'btn-primary' : 'btn-default';
 			$button .= '<a href="'.$url.'?user='.$val['ID'].'" class="btn '.$cls.'">'.$val['_nickname'].'</a>';
