@@ -7,7 +7,7 @@ require dirname(__FILE__).'/Dashboard/include.php';
 
 class dash_mail{
 	private static function head_title(){
-		$url = get_system_url() . '/';
+		$url = get_system_url() . '/dashboard/';
 
 		$user = [];
 		$module = kmi_module::get_all(['user_id'],"AND status='1' AND admin='0'");
@@ -55,7 +55,7 @@ class dash_mail{
 		);
 		
 		$data[] = array(
-			'style'		=> array(),
+			'style'		=> array('dash_mail','_style'),
 			'script'	=> array('dash_mail','_script'),
 			'func'		=> 'sobad_dashboard',
 			'data'		=> self::_data()
