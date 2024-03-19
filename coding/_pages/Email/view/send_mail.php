@@ -46,7 +46,7 @@ class send_mail extends _page{
 
 		$user = get_id_user();
 
-		$whr = $admin ? "AND `email-log`.user='$user'" : "";
+		$whr = !$admin ? "AND `email-log`.user='$user'" : "";
 		$where = $whr . " AND `email-log`.trash='0'";
 
 		if(self::$search){		
