@@ -69,7 +69,7 @@ class kmi_send extends _class{
 
 	public static function get_log_metas($args=array(),$limit=''){
 		self::$table = 'email-log-meta';
-		$id_user = get_id_user();
+		$id_user = isset($_GET['user']) ? $_GET['user'] : get_id_user();
 
 		$user = !empty($id_user)?"`email-log-meta`.user='$id_user' AND":"";
 
@@ -97,7 +97,7 @@ class kmi_send extends _class{
 	}
 	
 	public static function get_status_mail($status='0',$limit=''){
-		$id_user = get_id_user();
+		$id_user = isset($_GET['user']) ? $_GET['user'] : get_id_user();
 		
 		$where = "AND status IN ($status) AND `email-log-meta`.user='$id_user' $limit";
 		return self::get_log_send($where);
