@@ -33,10 +33,13 @@ abstract class _smart_page extends _page{
 		return array_keys($array);
 	}
 
-	protected static function smart_table($where=''){
+	protected static function smart_table($where='',$pagination=false){
 		$data = array();
 		$args = self::_array();
-		$type = self::$type;
+		$type = static::$type;
+
+		$start = intval(parent::$page);
+		$nLimit = intval(parent::$limit);
 
 		$tp = str_replace('tab_', '', $type);
 		$tp = intval($tp);
@@ -52,16 +55,27 @@ abstract class _smart_page extends _page{
 			$cari=$where;
 		}
 
-		$args = self::_gets_db($args, $where);
+		$sum_data = 0;
+		if($pagination){
+			$limit = ' LIMIT '.intval(($start - 1) * $nLimit).','.$nLimit;
+			$where .= $limit;
 
+			$sum_data = static::_count_db('1=1 ' . $cari,$args);
+		}
+
+		$args = static::_gets_db($args,$where);
+		
 		$data = array(
-            'kata'      => $kata,
-            'search'    => $_search,
-            'data'      => $args,
-            'type'		=> $type
+            'kata' 		=> $kata,
+            'search' 	=> $_search,
+            'type' 		=> $type,
+            'data' 		=> $args,
+            'start' 	=> $start,
+            'sum_data' 	=> $sum_data,
+            'limit' 	=> $nLimit,
         );
 
-		return self::_loadView('table',$data);
+		return static::_loadView('table',$data);
 	}
 
 	private static function head_title(){
@@ -160,11 +174,11 @@ abstract class _smart_page extends _page{
 	// ----------------------------------------------------------
 	public static function add_form(){
 		$type = isset($_POST['type']) ? $_POST['type'] : '';
-		$data = self::_array_default();
+		$data = static::_array_default();
 
-		$config =self::_loadView('form',array('data' => $data));
+		$config = static::_loadView('form',array('data' => $data));
 		$data = array(
-			'title'		=> 'Tambah data module',
+			'title'		=> 'Add Data',
 			'link'		=> '_add_db',
 			'data'		=> $config,
 			'type'		=> $type
@@ -176,9 +190,9 @@ abstract class _smart_page extends _page{
 	protected static function edit_form($data=array()){
 		$type = isset($_POST['type']) ? $_POST['type'] : '';
 
-		$config =self::_loadView('form',array('data' => $data));
+		$config = static::_loadView('form',array('data' => $data));
 		$data = array(
-			'title'		=> 'Edit data module',
+			'title'		=> 'Edit Data',
 			'link'		=> '_update_db',
 			'data'		=> $config,
 			'type'		=> $type

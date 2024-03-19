@@ -1,0 +1,49 @@
+/* ALERT MODAL */
+    .swal-modal {
+        border-radius: 27px !important;
+        padding: 20px;
+    }
+
+    .swal-title {
+        font-size: 21px;
+        color: black
+    }
+
+    .swal-text {
+        background: #F3F3F3;
+        width: 80%;
+        padding: 11px;
+        border-radius: 10px !important;
+        text-align: center;
+        font-size: 14px;
+    }
+
+    button.swal-button.swal-button--cancel {
+        border-radius: 20px !important;
+        border: 1px #D51414 solid;
+        color: #D51414;
+        background: #FFF;
+    }
+
+    button.swal-button.swal-button--confirm {
+        border-radius: 20px !important;
+        background: #009EF7;
+        border: 1px solid #009EF7;
+    }
+
+    .swal-icon.swal-icon--warning {
+        border-radius: 50px !important;
+    }
+
+    .swal-footer {
+        display: flex;
+        justify-content: center;
+    }
+
+    #category_col .form-group label {
+        display: none;
+    }
+
+    span.fa.fa-check.check-mark {
+        color: #888 !important;
+    }

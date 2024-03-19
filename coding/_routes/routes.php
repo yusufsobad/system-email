@@ -5,7 +5,7 @@
 // registry page
 $args = array();
 $args['login'] = array(
-	'home'	=> true,
+	'home'	=> false,
 	'view'	=> 'Login.login',
 	'page'	=> 'login_system'
 );

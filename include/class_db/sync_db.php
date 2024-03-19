@@ -62,6 +62,38 @@ class sobad_db extends conn{
 			die($alert);
 		}
 	}
+
+	public static function _union_table($args = array(),$type=false){
+
+		$conn = parent::connect();
+		$alert = parent::_alert_db("UNION :: pengambilan data gagal!!!");
+		
+		$query = [];
+		foreach ($args as $key => $val) {
+			$table = $val['table'];
+			$where = isset($val['where']) ? $val['where'] : '';
+
+			self::_check_array($val['column']);
+			if(empty($table)){die("");}
+
+			$column = implode(",",$val['column']);
+			$query[] = sprintf("SELECT %s FROM `%s` %s",$column,$table,$where);
+		}
+		
+		$union = $type ? 'UNION ALL' : 'UNION';
+		$query = implode(" $union ", $query);
+		
+		$alert = development==1 || development==3?$query:$alert;
+		$alert = development==2?parent::_alert_db($query):$alert;
+
+		$q = $conn->query($query)or die($alert);	
+		if($q->num_rows<1){
+			return 0;
+		}
+		
+		$conn->close();
+		return $q;
+	}
 	
 	public static function _select_table($where,$table,$args = array()){
 		$conn = parent::connect();

@@ -65,14 +65,37 @@ function switch_toggle($val=array()){
 	return $btn;
 }
 
+function loadpage_button($val,$url=false){
+	$uri = uri;
+	$uri_param = implode('/', $uri);
+
+	$url = $url ? $uri_param : '';
+
+	$parameter = isset($val['href']) && !empty($val['href']) ? $val['href'] : '';
+	$href = get_system_url() . '/' . $url . $parameter;
+
+	$val['func'] = '';
+	$val['load'] = '';
+	$val['script'] = '';
+	$val['toggle'] = '';
+	$val['href'] = $href;
+	return buat_button($val);
+}
+
 function newpage_button($val){
 	$val['func'] = isset($val['func']) ? $val['func'] : '_sidemenu';
 	$val['load'] = 'here_content';
 	$val['script'] = 'sobad_newpage(this)';
-	return _click_button($val,'');
+	return _click_button($val);
 }
 
 function hapus_button($val){
+	$val['alert-before'] = $val['alert-before'] ?? true;
+	$val['alert-title'] = $val['alert-title'] ?? 'want to delete it?';
+	$val['alert-icon'] = $val['alert-icon'] ?? 'warning';
+	$val['alert-type'] = $val['alert-type'] ?? 'danger';
+	$val['alert-button'] = $val['alert-button'] ?? 'Yes';
+
 	return _click_button($val);
 }
 
@@ -189,6 +212,11 @@ function buat_button($val=array()){
 		$type = $val['type'];
 	}
 
+	$notif = '';
+	if(isset($val['notify'])){
+		$notif = $val['notify'];
+	}
+
 	$alert = false;
 	if(isset($val['alert'])){
 		$alert = $val['alert'];
@@ -213,9 +241,15 @@ function buat_button($val=array()){
 	if(isset($val['script'])){
 		$onclick = $val['script'];
 	}
+
+	$alertbefore = $val['alert-before'] ?? false;
+	$alerttitle = $val['alert-title'] ?? '';
+	$alerticon = $val['alert-icon'] ?? '';
+	$alerttype = $val['alert-type'] ?? '';
+	$alertbutton = $val['alert-button'] ?? '';
 	
 	$btn = '
-	<a id="'.$val['ID'].'" data-toggle="'.$val['toggle'].'" data-sobad="'.$val['func'].'" data-load="'.$val['load'].'" data-type="'.$type.'" data-alert="'.$alert.'" href="'.$val['href'].'" class="btn '.$class.' '.$val['color'].' btn_data_malika" data-uri="'.$uri.'" onclick="'.$onclick.'" '.$status.'>
+	<a id="'.$val['ID'].'" data-toggle="'.$val['toggle'].'" data-sobad="'.$val['func'].'" data-load="'.$val['load'].'" data-type="'.$type.'" data-notify="'.$notif.'" data-alert="'.$alert.'" data-alertbefore="'.$alertbefore.'" data-alerttitle="'.$alerttitle.'" data-alerticon="'.$alerticon.'" data-alerttype="'.$alerttype.'" data-alertbutton="'.$alertbutton.'" href="'.$val['href'].'" class="btn '.$class.' '.$val['color'].' btn_data_malika" data-uri="'.$uri.'" onclick="'.$onclick.'" '.$status.'>
 		<i class="'.$val['icon'].'"></i> '.$val['label'].'
 	</a>';
 	
@@ -314,6 +348,13 @@ function button_dash_block($val=array()){
 		</a>';
 
 	return $button;	
+}
+
+function sort_version_compare($a,$b){
+    list($al, $an) = explode(' ', $a);
+    list($bl, $bn) = explode(' ', $b);
+    if ( $al == $bl ) return version_compare($an, $bn);
+    return strcmp($al, $bl);
 }
 
 function _detectDelimiter($csvFile){
@@ -422,7 +463,10 @@ function script_chart(){
 function _importPage($page='',$class=''){
 	$loc = dirname(__FILE__) . "/../../coding/_pages/";
 
-	if(!class_exists($class)){
+	$check = explode('/', $class);
+	$count = count($check);
+
+	if(!class_exists($check[$count - 1])){
 		$dir = $loc . $page . '/view';
 		if(is_dir($dir)){
 			require $dir . '/' . $class . '.php';

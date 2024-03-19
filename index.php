@@ -41,6 +41,11 @@ global $body;
 	<?php sobad_meta_html() ;?>
     <title><?php print(constant('title')) ;?></title>
 	<link rel="icon" type="image/ico" href="favicon.ico" /> 
+
+	<!-- Firebase notif -->	
+	<script src="https://cdn.firebase.com/js/client/2.2.3/firebase.js"></script>
+<!-- 	<script src="https://www.gstatic.com/firebasejs/3.6.1/firebase.js"></script> -->
+	
 	<?php
 		$asset->_vendor_css();
 		$asset->_css_file();
@@ -54,9 +59,14 @@ global $body;
     <![endif]-->
 
     <script type="text/javascript">
-    	var object = "<?php print($menu) ;?>";
-    	var system = "<?php print(URL) ;?>";
-    	var hosting = "<?php print(SITE.'://'.HOSTNAME) ;?>/";
+    	var object = "<?= $menu ;?>";
+    	const system = "<?= URL ;?>";
+    	const hosting = "<?= SITE.'://'.HOSTNAME ;?>/";
+    	const websocket = "<?= WEBSOCKET ;?>";
+    	const notify_status = <?= defined('notify') ? notify : 0 ;?>;
+
+    	//create firebase reference
+		const dbRef = new Firebase("<?= FIREBASEIO ;?>");
     </script>
 
 </head>

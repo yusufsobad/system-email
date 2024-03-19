@@ -113,11 +113,20 @@ class sobad_ajax{
 		
 		$finish = self::_set_microtime($start);
 
+		$sts_notif = false;
+		$notify = '';
+		if(isset($_POST['notify']) && !empty($_POST['notify'])){
+			$sts_notif = true;
+			$notify = $_POST['notify'];
+		}
+		
 		$ajax = array(
-			'status' => "success",
-			'msg'    => "success",
-			'data'	 => $msg,
-			'func'	 => 'sobad_'.$_func
+			'status' 	=> "success",
+			'msg'    	=> "success",
+			'data'	 	=> $msg,
+			'func'	 	=> 'sobad_'.$_func,
+			'notify' 	=> $sts_notif,
+			'id_notify'	=> $notify
 		);
 
 		if($develop) $ajax['time'] = $finish;

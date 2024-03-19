@@ -15,6 +15,8 @@ abstract class _page{
 
 	protected static $list_meta = '';
 
+	protected static $where_notify = "";
+
 	// ----------------------------------------------------------
 	// Layout Pages  --------------------------------------------
 	// ----------------------------------------------------------
@@ -28,8 +30,45 @@ abstract class _page{
 		return sobad_asset::_loadView($loc,$data);
 	}
 
+	public static function _notify(){
+		if(property_exists(new static, 'post')){
+			if(!empty(static::$where_notify)){
+				$post = static::$post;
+				$where = static::$where_notify;
+
+				$notif = sobad_notify::get_all(['ID','post_id'],"AND $where AND `".base . "notify`.status='1' GROUP BY post_id");
+				return count($notif);
+			}
+		}
+
+		return 0;
+	}
+
+	public static function _change_notify(){
+		// Check Notification
+
+		$data_notif = isset($_GET['notify']) ? $_GET['notify'] : '';
+		if(!empty($data_notif)){
+			$data_notif = base64_decode($data_notif);
+			$data_notif = explode('#', $data_notif);
+
+			$idn = $data_notif[0] ?? 0;
+			$post_id = $data_notif[1] ?? 0;
+
+			if(!empty($idn)){
+				sobad_db::_update_single($idn,base . 'notify',[
+					'post_id'	=> $post_id,
+					'status'	=> 0
+				]);
+			}
+		}
+	}
+
 	public static function _sidemenu($data=''){
 		$func = 'layout';
+
+		// Check url notif
+		self::_change_notify();
 
 		// Check url menu
 		$uri = explode('/',$data);
@@ -394,6 +433,10 @@ abstract class _page{
 	}
 
 	public static function _import(){
+		return self::_filter_import_files(true);
+	}
+
+	public static function _filter_import_files($return=true){
 		$fileName = $_FILES["data"]["tmp_name"];
 		
 		if ($_FILES["data"]["size"] > 0) {
@@ -447,8 +490,10 @@ abstract class _page{
 		        $status = false;
 	        }
 			
-			$pg = isset($_POST['page'])?$_POST['page']:1;
-			return self::_get_table($pg);
+			if($return){
+				$pg = isset($_POST['page'])?$_POST['page']:1;
+				return self::_get_table($pg);
+			}
 	    }
 	}
 
@@ -495,6 +540,13 @@ abstract class _page{
 	// ----------------------------------------------------------
 	// Function Update to database ------------------------------
 	// ----------------------------------------------------------
+
+	protected static function _check_notify($idx=0){
+		if(isset($_POST['notify']) && !empty($_POST['notify'])){
+			$notify = $_POST['notify'];
+			$_POST['notify'] .= '#' . $idx;
+		}
+	}
 
 	protected static function _schema($_args=array(),$add=false){
 		global $DB_NAME;
@@ -571,6 +623,8 @@ abstract class _page{
 			$q = sobad_db::_update_single($id,$schema['table'],$data);
 			$q = self::_update_meta_db($id,$args,$schema);
 		}
+
+		self::_check_notify($id);
 
 		$DB_NAME = $_database;
 		return array('index' => $id, 'data' => $q,'search' => $src,'value' => $args);
