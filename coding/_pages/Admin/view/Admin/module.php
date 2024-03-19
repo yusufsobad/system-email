@@ -78,6 +78,12 @@ class module_admin extends _page{
 					$status,
 					true
 				),
+				'Admin'	=> array(
+					'left',
+					'10%',
+					$vals['admin'] ? 'Yes' : 'No',
+					true
+				),
 				'Edit'			=> array(
 					'center',
 					'10%',

@@ -221,7 +221,7 @@ foreach($data as $key => $val){
 			'10%',
 			$img,
 			false
-		)
+		),
 		'status'		=> array(
 			'center',
 			'7%',
