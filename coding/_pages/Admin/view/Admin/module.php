@@ -13,7 +13,8 @@ class module_admin extends _page{
 		$args = array(
 			'ID',
 			'user_id',
-			'status'
+			'status',
+			'admin'
 		);
 
 		return $args;
@@ -141,7 +142,7 @@ class module_admin extends _page{
 	// ----------------------------------------------------------
 
 	public static function add_form(){
-		$vals = array(0,0,1);
+		$vals = array(0,0,1,0);
 		$vals = array_combine(self::_array(), $vals);
 
 		$args = array(
@@ -214,6 +215,24 @@ class module_admin extends _page{
 					),
 					1	=> array(
 						'title'		=> 'Enabled',
+						'value'		=> 1
+					),
+				)
+			),
+			array(
+				'func'			=> 'opt_box',
+				'type'			=> 'radio',
+				'key'			=> 'admin',
+				'label'			=> 'Admin',
+				'inline'		=> true,
+				'value'			=> $vals['admin'],
+				'data'			=> array(
+					0	=> array(
+						'title'		=> 'No',
+						'value'		=> 0
+					),
+					1	=> array(
+						'title'		=> 'Yes',
 						'value'		=> 1
 					),
 				)
