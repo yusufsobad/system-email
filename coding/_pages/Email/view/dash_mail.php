@@ -7,8 +7,26 @@ require dirname(__FILE__).'/Dashboard/include.php';
 
 class dash_mail{
 	private static function head_title(){
+		$url = get_system_url() . '/';
+
+		$user = [];
+		$module = kmi_module::get_all(['user_id'],"AND status='1' AND admin='0'");
+		foreach ($module as $key => $val) {
+			$user[] = $val['user_id'];
+		}
+
+		$user = implode(',', $user);
+		$user = empty($user) ? 0 : $user;
+
+		$button = '';
+		$users = kmi_user::get_all(['ID','name','_nickname'],"AND ID IN ($user)");
+		foreach ($users as $key => $val) {
+			$cls = isset($_GET['user']) && $val['ID'] == $_GET['user'] ? 'btn-primary' : 'btn-default';
+			$button .= '<a href="'.$url.'?user='.$val['ID'].'" class="btn '.$cls.'">'.$val['_nickname'].'</a>';
+		}
+
 		$args = array(
-			'title'	=> 'Dashboard <small>reports & statistics</small>',
+			'title'	=> 'Dashboard <small>reports & statistics</small><br>' . $button,
 			'link'	=> array(
 				0	=> array(
 					'func'	=> 'dash_purchase',
@@ -22,6 +40,8 @@ class dash_mail{
 	}
 
 	public static function _sidemenu(){
+		$_SESSION[_prefix . 'user_dashboard'] = isset($_GET['user']) ? $_GET['user'] : get_id_user();
+
 		$label = array();
 		$data = array();
 
@@ -50,6 +70,7 @@ class dash_mail{
 	}
 
 	public static function _getChart(){
+		$_GET['user'] = $_SESSION[_prefix . 'user_dashboard'];
 		return dash_chart::_chart();
 	}
 
