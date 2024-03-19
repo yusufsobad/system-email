@@ -164,37 +164,23 @@ foreach($data as $key => $val){
 	// Membuat Image Circle
 	$w = '90%';
 
-	$w = str_replace('%', '', $w);
-    $d = 45 * (int) $w / 100 ;
-    $d = round($d);
-    
-    $fs = 14 * (int) $w / 100;
-    $m = (int) $w / 8;
-
-    $style = '
-    	background: #e0e0e0;
-    	width: '.$d.'px;
-    	height: '.$d.'px;
-    	border-radius: 50% !important;
-    	display: flex;
-    	justify-content: center;
-    	align-items: center;'
+	$style = '
+        background: #e0e0e0;
+        width: 45px;
+        height: 45px;
+        border-radius: 50% !important;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;'
     ;
 
-    $ts = '
-    	display: flex;
-    	align-items: center;
-    	height: 36px;
-    	font-size: '.$fs.'px !important;
-    	margin-left: '.$m.'px;'
-    ;
-
-	$img = '
-        <div style="display: inline-flex;">
-            <img width="100%" style="' . $style . '"  src="' . $asset . $user['pict'] . '">
-            <label style="'.$ts.'">' . $user['name'] . '</label>
-        </div>
-                ';
+    $img = '<div style="display: grid;justify-content: space-between;text-align:center;" >
+                <div style="' . $style . '">
+                    <img width="'.$w.'" style=""  src="' . $asset . $user['pict'] . '">
+                </div>
+                ' . $user['name'] . '
+            </div>';
 	
 	$config['table'][$key]['tr'] = array('');
 	$config['table'][$key]['td'] = array(
