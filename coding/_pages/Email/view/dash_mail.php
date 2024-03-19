@@ -21,7 +21,7 @@ class dash_mail{
 		$button = '';
 		$users = kmi_user::get_all(['ID','name','_nickname'],"AND `abs-user`.ID IN ($user)");
 		foreach ($users as $key => $val) {
-			$cls = isset($_GET['user']) && $val['ID'] == $_GET['user'] ? 'btn-primary' : 'btn-default';
+			$cls = isset($_GET['user']) && $val['ID'] == $_GET['user'] ? 'btn-primary' : 'btn-default-border';
 			$button .= '<a href="'.$url.'?user='.$val['ID'].'" class="btn '.$cls.'">'.$val['_nickname'].'</a>';
 		}
 
@@ -218,6 +218,13 @@ class dash_mail{
 			<style type="text/css">
 				.portlet > .portlet-title{
 					border-bottom: unset;
+				}
+
+				.btn-default-border{
+				    color: #009EF7 !important;
+    				border-color: #009EF7 !important;
+				    background-color: #fff !important;
+				    border: 1px solid;
 				}
 			</style>
 		<?php
