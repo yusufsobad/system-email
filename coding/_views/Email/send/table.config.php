@@ -157,9 +157,9 @@ foreach($data as $key => $val){
 	$date = format_date_id($val['date']);
 	$time = date('H:i:s',$datetime);
 
-	$user = kmi_user::get_id($val['user'],['ID','name','picture']);
+	$user = kmi_user::get_id($val['user'],['ID','name','picture','_nickname']);
 	$user['pict'] = empty($user[0]['notes_pict']) ? 'no-profile.jpg' : $user[0]['notes_pict'];
-    $user['name'] = empty($user[0]['name']) ? '-' : $user[0]['name'];
+    $user['name'] = empty($user[0]['_nickname']) ? '-' : $user[0]['_nickname'];
 
 	// Membuat Image Circle
 	$w = '90%';
