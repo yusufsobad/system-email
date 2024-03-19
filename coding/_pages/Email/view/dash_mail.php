@@ -40,8 +40,6 @@ class dash_mail{
 	}
 
 	public static function _sidemenu(){
-		$_SESSION[_prefix . 'user_dashboard'] = isset($_GET['user']) ? $_GET['user'] : get_id_user();
-
 		$label = array();
 		$data = array();
 
@@ -70,7 +68,7 @@ class dash_mail{
 	}
 
 	public static function _getChart(){
-		$_GET['user'] = $_SESSION[_prefix . 'user_dashboard'];
+		$_GET['user'] = isset($_POST['user']) ? $_POST['user'] : get_id_user();
 		return dash_chart::_chart();
 	}
 
@@ -256,6 +254,7 @@ class dash_mail{
 	}
 
 	public static function _script(){
+		$user = isset($_GET['user']) ? $_GET['user'] : get_id_user();
 		?>
 			<script type="text/javascript">
 				var dash_year = <?php echo date('Y') ;?>;
@@ -267,7 +266,7 @@ class dash_mail{
 							var id = $('.chart_malika:eq('+i+')').attr('data-load');
 							var tp = $('.chart_malika:eq('+i+')').attr('data-type');
 				
-							data = "ajax="+ajx+"&object="+object+"&data="+dash_year+"&type="+tp;
+							data = "ajax="+ajx+"&object="+object+"&data="+dash_year+"&type="+tp+"&user="+<?= $user ;?>;
 							sobad_ajax(id,data,load_chart_dash);
 						}
 					}
