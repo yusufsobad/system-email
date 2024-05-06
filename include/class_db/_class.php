@@ -517,7 +517,7 @@ abstract class _class{
 			$limit = empty($limit)?'1=1':$limit;
 			$where = "WHERE $limit";
 
-			$filter = self::_filter_by_blueprint($where,$column,$type);
+			$filter = $blueprint::_filter_by_blueprint($where,$column,$type);
 
 			$select[] = [
 				'table'		=> $blueprint::$table,
