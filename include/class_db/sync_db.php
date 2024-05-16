@@ -77,7 +77,7 @@ class sobad_db extends conn{
 			if(empty($table)){die("");}
 
 			$column = implode(",",$val['column']);
-			$query[] = sprintf("SELECT %s FROM `%s` %s",$column,$table,$where);
+			$query[] = sprintf("SELECT %s FROM `%s`.`%s` %s",$column,$database,$table,$where);
 		}
 		
 		$union = $type ? 'UNION ALL' : 'UNION';

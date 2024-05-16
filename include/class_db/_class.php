@@ -2,6 +2,8 @@
 
 abstract class _class{
 
+	private static $_database = '';
+
 	private static $_join = array();
 	
 	private static $_inner = '';
@@ -255,7 +257,8 @@ abstract class _class{
 				$temp_table = "temp-" . $temp[$type]['temp'];
 				self::$_temp_table = $temp_table;
 
-				self::$_inner .= "LEFT JOIN `" . $table . "` ON `" . $temp_table . "`.reff_temp = `" . $table . "`.ID ";
+				$dbase = !empty(self::$_database) ? '`' . self::$_database . '`.' : '';
+				self::$_inner .= "LEFT JOIN " . $dbase . "`" . $table . "` ON `" . $temp_table . "`.reff_temp = `" . $table . "`.ID ";
 			}else{
 				self::$_temp = false;
 			}
@@ -292,7 +295,8 @@ abstract class _class{
 		$j_logs='';
 		foreach ($args as $key => $val) {
 			if(in_array($val, $user)){
-				self::$_join[] = "`".static::$table."`.$val";
+				$dbase = !empty(self::$_database) ? '`' . self::$_database . '`.' : '';
+				self::$_join[] = $dbase . "`".static::$table."`.$val";
 			}
 		}
 
@@ -333,10 +337,13 @@ abstract class _class{
 				$key = !empty($alias) ? "_" . $alias : "_" . $_key;
 				
 				foreach($val['column'] as $ky => $vl){
-					self::$_join[] = "$key.$vl AS ".$vl."_".substr($key,1,4);
+					$dbase = !empty(self::$_database) ? '`' . self::$_database . '`.' : '';
+					self::$_join[] = $dbase . "$key.$vl AS ".$vl."_".substr($key,1,4);
 				}
 				
-				$database = isset($val['database'])?$val['database']:'';
+				$database = isset($val['database']) ? $val['database'] . '.' : '';
+				$database = !empty(self::$_database) ? '`' . self::$_database . '`.' : $database;
+
 				$tbl = $val['table'];
 				$col = $val['key'];
 
@@ -364,14 +371,17 @@ abstract class _class{
 			$key = !empty($alias) ? "_" . $alias : "_" . $val['key'];
 			
 			foreach($val['column'] as $ky => $vl){
-				self::$_join[] = "$key.$vl AS ".$vl."_".substr($key,1,4);
+				$dbase = !empty(self::$_database) ? '`' . self::$_database . '`.' : '';
+				self::$_join[] = $dbase . "$key.$vl AS ".$vl."_".substr($key,1,4);
 			}
 			
-			$database = isset($val['database'])?$val['database']:'';
+			$database = isset($val['database'])?$val['database'] . '.' : '';
+			$database = !empty(self::$_database) ? '`' . self::$_database . '`.' : $database;
+
 			$tbl = $val['table'];
 			$col = $val['key'];
 
-			$tbl = !empty($database)?$database.'.`'.$tbl.'`':'`'.$tbl.'`';
+			$tbl = !empty($database)?$database.'`'.$tbl.'`':'`'.$tbl.'`';
 			self::$_inner .= "LEFT JOIN $tbl AS $key ON `$table`.ID = $key.$col ";
 			
 			if(isset($val['detail'])){
@@ -392,17 +402,19 @@ abstract class _class{
 		$lst = isset($joined['column'])?$joined['column']:self::list_join();
 		$tbl = $joined['table'];
 		$col = $joined['key'];
+
+		$dbase = !empty(self::$_database) ? '`' . self::$_database . '`.' : '';
 	
 		$inner = '';
 		foreach($args as $key => $val){
 			if(in_array($val,$lst)){
 				if($val=='id_join'){
-					self::$_join[] = "`$tbl`.ID AS id_join";
+					self::$_join[] = $dbase . "`$tbl`.ID AS id_join";
 				}else{
-					self::$_join[] = "`$tbl`.$val";
+					self::$_join[] = $dbase . "`$tbl`.$val";
 				}
 				
-				$inner = "LEFT JOIN `$tbl` ON `$table`.ID = `$tbl`.$col ";
+				$inner = "LEFT JOIN $dbase`$tbl` ON $dbase`$table`.ID = $dbase`$tbl`.$col ";
 			}
 		}
 
@@ -424,8 +436,10 @@ abstract class _class{
 
 		foreach ($args as $key => $val) {
 			if(in_array($val, $meta)){
+				$dbase = !empty(self::$_database) ? '`' . self::$_database . '`.' : '';
+
 				self::$_join[] = str_replace('{{key}}', $val, $select);
-				$inner = "LEFT JOIN `".static::$tbl_meta."` ON `".static::$table."`.ID = `".static::$tbl_meta."`.meta_id ";
+				$inner = "LEFT JOIN " . $dbase . "`".static::$tbl_meta."` ON " . $dbase . "`".static::$table."`.ID = " . $dbase . "`".static::$tbl_meta."`.meta_id ";
 
 				$group_by = static::$group;
 				if(strpos($group, "ORDER BY") !== false){
@@ -486,12 +500,14 @@ abstract class _class{
 					[
 						blueprint 	=> static::class  // optional
 						column  	=> [], // default
+						database 	=> ''  // optional
 						where 		=> '', // optional
 						type 		=> ''  // optional
 					],
 					[
 						blueprint 	=> static::class  // optional
 						column  	=> [], // default
+						database 	=> ''  // optional
 						where 		=> '', // optional
 						type 		=> ''  // optional
 					],
@@ -505,6 +521,9 @@ abstract class _class{
 		foreach ($data as $key => $val) {
 			$blueprint = isset($val['blueprint']) ? $val['blueprint'] : static::class;
 			$column = isset($val['column']) ? $val['column'] : [];
+
+			$database = isset($val['database']) ? $val['database'] : $DB_NAME;
+			self::$_database = $database;
 
 			$limit = isset($val['where']) ? $val['where'] : '';
 			$type = isset($val['type']) ? $val['type'] : '';
@@ -520,11 +539,14 @@ abstract class _class{
 			$filter = $blueprint::_filter_by_blueprint($where,$column,$type);
 
 			$select[] = [
+				'database'	=> $database,
 				'table'		=> $blueprint::$table,
 				'column'	=> $filter['column'],
 				'where'		=> $filter['where']
 			];
 		}
+
+		self::$_database = '';
 
 		$q = sobad_db::_union_table($select,$type_union);
 		if($q!==0){
