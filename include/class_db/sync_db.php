@@ -71,6 +71,7 @@ class sobad_db extends conn{
 		$query = [];
 		foreach ($args as $key => $val) {
 			$table = $val['table'];
+			$database = $val['database'];
 			$where = isset($val['where']) ? $val['where'] : '';
 
 			self::_check_array($val['column']);
