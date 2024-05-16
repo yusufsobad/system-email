@@ -295,8 +295,7 @@ abstract class _class{
 		$j_logs='';
 		foreach ($args as $key => $val) {
 			if(in_array($val, $user)){
-				$dbase = !empty(self::$_database) ? '`' . self::$_database . '`.' : '';
-				self::$_join[] = $dbase . "`".static::$table."`.$val";
+				self::$_join[] = "`".static::$table."`.$val";
 			}
 		}
 
@@ -337,8 +336,7 @@ abstract class _class{
 				$key = !empty($alias) ? "_" . $alias : "_" . $_key;
 				
 				foreach($val['column'] as $ky => $vl){
-					$dbase = !empty(self::$_database) ? '`' . self::$_database . '`.' : '';
-					self::$_join[] = $dbase . "$key.$vl AS ".$vl."_".substr($key,1,4);
+					self::$_join[] = "$key.$vl AS ".$vl."_".substr($key,1,4);
 				}
 				
 				$database = isset($val['database']) ? $val['database'] . '.' : '';
@@ -371,8 +369,7 @@ abstract class _class{
 			$key = !empty($alias) ? "_" . $alias : "_" . $val['key'];
 			
 			foreach($val['column'] as $ky => $vl){
-				$dbase = !empty(self::$_database) ? '`' . self::$_database . '`.' : '';
-				self::$_join[] = $dbase . "$key.$vl AS ".$vl."_".substr($key,1,4);
+				self::$_join[] = "$key.$vl AS ".$vl."_".substr($key,1,4);
 			}
 			
 			$database = isset($val['database'])?$val['database'] . '.' : '';
@@ -409,9 +406,9 @@ abstract class _class{
 		foreach($args as $key => $val){
 			if(in_array($val,$lst)){
 				if($val=='id_join'){
-					self::$_join[] = $dbase . "`$tbl`.ID AS id_join";
+					self::$_join[] = "`$tbl`.ID AS id_join";
 				}else{
-					self::$_join[] = $dbase . "`$tbl`.$val";
+					self::$_join[] = "`$tbl`.$val";
 				}
 				
 				$inner = "LEFT JOIN $dbase`$tbl` ON $dbase`$table`.ID = $dbase`$tbl`.$col ";
