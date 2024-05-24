@@ -480,7 +480,7 @@ abstract class _class{
 		return $data;
 	}
 
-	public static function _get_union($data=array(),$type_union=false){
+	public static function _get_union($data=array(),$type_union=false,$filter=''){
 		global $DB_NAME;
 
 		$union = [];
@@ -500,6 +500,7 @@ abstract class _class{
 						database 	=> ''  // optional
 						where 		=> '', // optional
 						type 		=> ''  // optional
+						base 		=> ''  // optional
 					],
 					[
 						blueprint 	=> static::class  // optional
@@ -507,6 +508,7 @@ abstract class _class{
 						database 	=> ''  // optional
 						where 		=> '', // optional
 						type 		=> ''  // optional
+						base 		=> ''  // optional
 					],
 					...
 				]
@@ -533,19 +535,19 @@ abstract class _class{
 			$limit = empty($limit)?'1=1':$limit;
 			$where = "WHERE $limit";
 
-			$filter = $blueprint::_filter_by_blueprint($where,$column,$type);
+			$_filter = $blueprint::_filter_by_blueprint($where,$column,$type);
 
 			$select[] = [
 				'database'	=> $database,
 				'table'		=> $blueprint::$table,
-				'column'	=> $filter['column'],
-				'where'		=> $filter['where']
+				'column'	=> $_filter['column'],
+				'where'		=> $_filter['where']
 			];
 		}
 
 		self::$_database = '';
 
-		$q = sobad_db::_union_table($select,$type_union);
+		$q = sobad_db::_union_table($select,$type_union,$filter);
 		if($q!==0){
 			while($r=$q->fetch_assoc()){
 
