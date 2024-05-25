@@ -526,8 +526,8 @@ abstract class _class{
 			$database = isset($val['database']) ? $val['database'] : $DB_NAME;
 			self::$_database = $database;
 
-			$database = isset($val['base']) ? $val['base'] : base;
-			$blueprint::$_base = $database;
+			$base = isset($val['base']) ? $val['base'] : base;
+			$blueprint::$_base = $base;
 
 			$limit = isset($val['where']) ? $val['where'] : '';
 			$type = isset($val['type']) ? $val['type'] : '';
