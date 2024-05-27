@@ -528,6 +528,7 @@ abstract class _class{
 
 			$base = isset($val['base']) ? $val['base'] : base;
 			$blueprint::$_base = $base;
+			new $blueprint();
 
 			$limit = isset($val['where']) ? $val['where'] : '';
 			$type = isset($val['type']) ? $val['type'] : '';
