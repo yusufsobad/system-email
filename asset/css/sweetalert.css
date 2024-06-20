@@ -47,3 +47,7 @@
     span.fa.fa-check.check-mark {
         color: #888 !important;
     }
+
+    .swal-overlay--show-modal{
+        z-index: 99999;
+    }

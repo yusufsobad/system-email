@@ -63,7 +63,7 @@ class sobad_db extends conn{
 		}
 	}
 
-	public static function _union_table($args = array(),$type=false){
+	public static function _union_table($args = array(),$type=false,$filter=''){
 
 		$conn = parent::connect();
 		$alert = parent::_alert_db("UNION :: pengambilan data gagal!!!");
@@ -71,17 +71,19 @@ class sobad_db extends conn{
 		$query = [];
 		foreach ($args as $key => $val) {
 			$table = $val['table'];
+			$database = $val['database'];
 			$where = isset($val['where']) ? $val['where'] : '';
 
 			self::_check_array($val['column']);
 			if(empty($table)){die("");}
 
 			$column = implode(",",$val['column']);
-			$query[] = sprintf("SELECT %s FROM `%s` %s",$column,$table,$where);
+			$query[] = sprintf("SELECT %s FROM `%s`.`%s` %s",$column,$database,$table,$where);
 		}
 		
 		$union = $type ? 'UNION ALL' : 'UNION';
 		$query = implode(" $union ", $query);
+		$query .= ' ' . $filter;
 		
 		$alert = development==1 || development==3?$query:$alert;
 		$alert = development==2?parent::_alert_db($query):$alert;
