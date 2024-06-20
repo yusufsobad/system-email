@@ -707,8 +707,9 @@ class send_mail extends _page{
 			case 2:
 			case 3:
 				$args = array(
-			            'meta_date' => date('Y-m-d H:i:s'),
-			            'status' => $type
+			            'meta_date' 	=> date('Y-m-d H:i:s'),
+			            'status' 		=> $type,
+			            'error_note'	=> isset($_SESSION['ERROR_NOTE']) ? $_SESSION['ERROR_NOTE'] : ''
 			        );
 			        
 				$q = sobad_db::_update_single($id,'email-log-meta',$args);
@@ -969,9 +970,11 @@ class send_mail extends _page{
 		
 		$mail->MsgHTML($args['html']);
 		if($mail->Send()){ 
+			$_SESSION['ERROR_NOTE'] = '';
 			return 1;
 		}else{ 
-			die(_error::_alert_db($mail->ErrorInfo));
+			$_SESSION['ERROR_NOTE'] = $mail->ErrorInfo;
+			return 0;
 		}
 	}
 }
