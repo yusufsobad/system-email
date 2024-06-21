@@ -65,6 +65,7 @@ class blast_email{
 				$script->_get_('_js_ckeditor'),
 				//$script->_get_('_js_form_editable'),
 				//$script->_get_('_js_page_modal'),
+				$script->_get_('_js_sweetalert'),
 				$theme->_get_('_js_page_level')
 				//$rich->_get_('_js_core',array('loader'))
 			);
