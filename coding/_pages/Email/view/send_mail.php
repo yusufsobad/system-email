@@ -484,17 +484,17 @@ class send_mail extends _page{
 		$id = str_replace('read_','',$id);
 		intval($id);
 
-		return self::view_send($id,"AND `email-log-meta`.status IN ('4','5')");
+		return self::view_send($id,"AND `email-log-meta`.status IN ('4','5')",4);
 	}
 
 	public static function clickView_send($id=0){
 		$id = str_replace('click_','',$id);
 		intval($id);
 
-		return self::view_send($id,"AND `email-log-meta`.status='5'");	
+		return self::view_send($id,"AND `email-log-meta`.status='5'",5);	
 	}
 
-	public static function view_send($id=0,$limit=''){
+	public static function view_send($id=0,$limit='',$view_type=0){
 		$id = str_replace('view_','',$id);
 		intval($id);
 
@@ -506,9 +506,10 @@ class send_mail extends _page{
 		
 		$meta = kmi_send::get_log_meta($id,$limit);		
 		$data = self::_loadView('table_detail',array(
-			'data'	=> $meta,
-			'type'	=> $id,
-			'group'	=> $status
+			'data'		=> $meta,
+			'type'		=> $id,
+			'group'		=> $status,
+			'view_type'	=> $view_type
 		));
 
 		$args = array(

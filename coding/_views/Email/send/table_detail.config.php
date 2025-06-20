@@ -53,8 +53,15 @@ foreach($data as $key => $val){
 	$status = send_mail::_conv_status($val['status']);
 	$status = '<i class="fa fa-circle" style="color:'.$status[1].'"></i> '.$status[0];
 
-	$datetime = strtotime($val['meta_date']);
-	$date = format_date_id($val['meta_date']);
+	$date_update = $val['meta_date'];
+	if($view_type == 4){
+		$date_update = $val['read_date'];
+	}else if($view_type == 5){
+		$date_update = $val['link_date'];
+	}
+
+	$datetime = strtotime($date_update);
+	$date = format_date_id($date_update);
 	$time = date('H:i:s',$datetime);
 	$date .= ' '.$time;
 	
