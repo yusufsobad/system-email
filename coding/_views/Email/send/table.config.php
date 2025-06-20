@@ -48,6 +48,14 @@ foreach($data as $key => $val){
 		'icon'	=> 'fa fa-eye',
 		'label'	=> 'view'
 	);
+
+	$export = array(
+		'ID'	=> 'excel_' . $id_meta,
+		'func'	=> '_export_excel_detail',
+		'color'	=> 'green',
+		'icon'	=> 'fa fa-file-excel-o',
+		'label'	=> 'export',
+	);
 	
 	// Check jumlah email
 	$tMail = kmi_send::get_log_meta($id_meta);
@@ -236,6 +244,12 @@ foreach($data as $key => $val){
 			'center',
 			'8%',
 			_modal_button($preview),
+			false
+		),
+		'export'		=> array(
+			'center',
+			'8%',
+			print_button($export),
 			false
 		),
 		'Edit'			=> array(

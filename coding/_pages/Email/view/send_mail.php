@@ -423,6 +423,29 @@ class send_mail extends _page{
 	}
 
 	// ----------------------------------------------------------
+	// Export Data ----------------------------------------------
+	// ----------------------------------------------------------
+
+	public static function _export_excel_detail($data){
+		$id = str_replace('excel_','',$data);
+		$id = intval($id);
+
+		ob_start();
+		header("Content-type: application/vnd-ms-excel");
+		header("Content-Disposition: attachment; filename=Data Blast Email.xls");
+
+		self::_html($id);
+		return ob_get_clean();
+	}
+
+	public static function _html($id){
+		$data = kmi_send::get_id($id)[0];
+		$details = kmi_send::get_log_meta($id);
+
+		report::view('Email/detail_data',compact('data','details'));
+	}
+
+	// ----------------------------------------------------------
 	// Database send mail ---------------------------------------
 	// ----------------------------------------------------------	
 
