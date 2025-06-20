@@ -39,9 +39,9 @@
                 $from = $data['type_to_m']==4?'Group : '.$data['name_to_m']:$data['email_to_m'];
 
                 // ────── ambil raw value ──────
-                $metaRaw  = $value['meta_date']  ?? null;      // kolom 1 (meta)
-                $readRaw = $value['read_date']  ?? null;      // kolom 2 (read #1)
-                $linkRaw = $value['link_date']  ?? null;      // kolom 3 (read #2) – ubah jika punya kunci berbeda
+                $metaRaw = $value['meta_date']  ?? null;      // kolom 1 (meta)
+                $readRaw = $value['read_date']  ?? null;      // kolom 2 (read)
+                $linkRaw = $value['link_date']  ?? null;      // kolom 3 (link)
 
                 // ────── fungsi format singkat ──────
                 $fmtDate = function ($raw) {
@@ -56,8 +56,8 @@
                 };
 
                 // ────── hasil format ──────
-                $metaDate  = $fmtDate($metaRaw);
-                $metaTime  = $fmtTime($metaRaw);
+                $metaDate = $fmtDate($metaRaw);
+                $metaTime = $fmtTime($metaRaw);
 
                 $readDate = $fmtDate($readRaw);
                 $readTime = $fmtTime($readRaw);

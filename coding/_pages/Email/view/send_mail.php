@@ -770,7 +770,8 @@ class send_mail extends _page{
 					case 4:
 						$args = array(
 							'status'	=> $type,
-							'read_date'	=> date('Y-m-d H:i:s')
+							'read_date'	=> date('Y-m-d H:i:s'),
+							'link_date'	=> '0000-00-00 00:00:00'
 						);
 						break;
 					case 5:
@@ -782,7 +783,9 @@ class send_mail extends _page{
 					default:
 						$args = array(
 							'status'	=> $type,
-							'meta_date'	=> date('Y-m-d H:i:s')
+							'meta_date'	=> date('Y-m-d H:i:s'),
+							'read_date'	=> '0000-00-00 00:00:00',
+							'link_date'	=> '0000-00-00 00:00:00'
 						);
 						break;
 				}
