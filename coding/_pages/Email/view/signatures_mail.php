@@ -34,7 +34,7 @@ class signatures_mail extends template_mail{
 		$_search = '';$kata = '';
 
 		$user = get_id_user();
-		$where = "AND type='1' AND user='$user'";
+		$where = "AND type='1'"; // AND user='$user'
 		if(self::$search){		
 			$src = self::like_search($args,$where);
 			$cari = $src[0];
@@ -42,7 +42,7 @@ class signatures_mail extends template_mail{
             $kata = $src[1];
             $_search = $src[2];
 		}else{
-			$cari='';
+			$cari=$where;
 		}
 		
 		$limit = 'ORDER BY ID DESC LIMIT '.intval(($start - 1) * $nLimit).','.$nLimit;
