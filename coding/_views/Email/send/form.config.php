@@ -76,6 +76,7 @@ $config = array(
 		'key'			=> 'template',
 		'label'			=> 'Content',
 		'class'			=> 'input-circle',
+		'searching'		=> true,
 		'select'		=> $data['template'],
 		'status'		=> $status
 	),
@@ -85,6 +86,7 @@ $config = array(
 		'key'			=> 'footer',
 		'label'			=> 'Signature',
 		'class'			=> 'input-circle',
+		'searching'		=> true,
 		'select'		=> $data['footer'],
 		'status'		=> $status
 	)
