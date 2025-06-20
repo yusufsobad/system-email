@@ -8,13 +8,13 @@
 				<th colspan="16">&nbsp;</th>
 			</tr>
             <tr>
-                <th rownpan="2" style="width:4%;font-family:CalibriBold;text-align:center;border:1px solid #000;">No</th>
-                <th rownpan="2" style="width:14%;font-family:CalibriBold;text-align:center;border:1px solid #000;">Nama Subject Email</th>
-                <th rownpan="2" style="width:8%;font-family:CalibriBold;text-align:center;border:1px solid #000;">Database Group</th>
-                <th rownpan="2" style="width:8%;font-family:CalibriBold;text-align:center;border:1px solid #000;">Tanggal Kirim</th>
-                <th rownpan="2" style="width:10%;font-family:CalibriBold;text-align:center;border:1px solid #000;">Nama Penerima</th>
-                <th rownpan="2" style="width:10%;font-family:CalibriBold;text-align:center;border:1px solid #000;">Nama Instansi</th>
-                <th rownpan="2" style="width:10%;font-family:CalibriBold;text-align:center;border:1px solid #000;">Email</th>
+                <th rowspan="2" style="width:4%;font-family:CalibriBold;text-align:center;border:1px solid #000;">No</th>
+                <th rowspan="2" style="width:14%;font-family:CalibriBold;text-align:center;border:1px solid #000;">Nama Subject Email</th>
+                <th rowspan="2" style="width:8%;font-family:CalibriBold;text-align:center;border:1px solid #000;">Database Group</th>
+                <th rowspan="2" style="width:8%;font-family:CalibriBold;text-align:center;border:1px solid #000;">Tanggal Kirim</th>
+                <th rowspan="2" style="width:10%;font-family:CalibriBold;text-align:center;border:1px solid #000;">Nama Penerima</th>
+                <th rowspan="2" style="width:10%;font-family:CalibriBold;text-align:center;border:1px solid #000;">Nama Instansi</th>
+                <th rowspan="2" style="width:10%;font-family:CalibriBold;text-align:center;border:1px solid #000;">Email</th>
                 <th colspan="2" style="width:6%;font-family:CalibriBold;text-align:center;border:1px solid #000;">Sukses</th>
                 <th colspan="2" style="width:6%;font-family:CalibriBold;text-align:center;border:1px solid #000;">Reading</th>
                 <th colspan="2" style="width:6%;font-family:CalibriBold;text-align:center;border:1px solid #000;">Click Link</th>
@@ -46,12 +46,12 @@
                 // ────── fungsi format singkat ──────
                 $fmtDate = function ($raw) {
                     return (!empty($raw) && $raw !== '0000-00-00 00:00:00')
-                        ? date('d-m-Y', strtotime($raw))
+                        ? format_date_id($raw)
                         : '-';
                 };
                 $fmtTime = function ($raw) {
                     return (!empty($raw) && $raw !== '0000-00-00 00:00:00')
-                        ? date('H:i',   strtotime($raw))
+                        ? date('H:i:s',   strtotime($raw))
                         : '-';
                 };
 
