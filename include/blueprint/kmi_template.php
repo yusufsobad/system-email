@@ -29,14 +29,14 @@ class kmi_template extends _class{
 	public static function get_contents($args=array(),$limit=''){
 		$id_user = get_id_user();
 
-		$where = "AND type=0 AND user='$id_user' $limit";
+		$where = "AND type=0 $limit"; // AND user='$id_user'
 		return self::get_all($args,$where);
 	}
 	
 	public static function get_signatures($args=array(),$limit=''){
 		$id_user = get_id_user();
 
-		$where = "AND type=1 AND user='$id_user' $limit";
+		$where = "AND type=1 $limit"; // AND user='$id_user'
 		return self::get_all($args,$where);
 	}
 

@@ -56,7 +56,7 @@ class send_mail extends _page{
             $kata = $src[1];
             $_search = $src[2];
 		}else{
-			$cari='';
+			$cari=$where;
 		}
 		
 		$limit = 'ORDER BY ID DESC LIMIT '.intval(($start - 1) * $nLimit).','.$nLimit;
