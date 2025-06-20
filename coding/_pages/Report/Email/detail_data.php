@@ -8,13 +8,13 @@
 				<th colspan="16">&nbsp;</th>
 			</tr>
             <tr>
-                <th style="width:4%;font-family:CalibriBold;text-align:center;border:1px solid #000;">No</th>
-                <th style="width:14%;font-family:CalibriBold;text-align:center;border:1px solid #000;">Nama Subject Email</th>
-                <th style="width:8%;font-family:CalibriBold;text-align:center;border:1px solid #000;">Database Group</th>
-                <th style="width:8%;font-family:CalibriBold;text-align:center;border:1px solid #000;">Tanggal Kirim</th>
-                <th style="width:10%;font-family:CalibriBold;text-align:center;border:1px solid #000;">Nama Penerima</th>
-                <th style="width:10%;font-family:CalibriBold;text-align:center;border:1px solid #000;">Nama Instansi</th>
-                <th style="width:10%;font-family:CalibriBold;text-align:center;border:1px solid #000;">Email</th>
+                <th rownpan="2" style="width:4%;font-family:CalibriBold;text-align:center;border:1px solid #000;">No</th>
+                <th rownpan="2" style="width:14%;font-family:CalibriBold;text-align:center;border:1px solid #000;">Nama Subject Email</th>
+                <th rownpan="2" style="width:8%;font-family:CalibriBold;text-align:center;border:1px solid #000;">Database Group</th>
+                <th rownpan="2" style="width:8%;font-family:CalibriBold;text-align:center;border:1px solid #000;">Tanggal Kirim</th>
+                <th rownpan="2" style="width:10%;font-family:CalibriBold;text-align:center;border:1px solid #000;">Nama Penerima</th>
+                <th rownpan="2" style="width:10%;font-family:CalibriBold;text-align:center;border:1px solid #000;">Nama Instansi</th>
+                <th rownpan="2" style="width:10%;font-family:CalibriBold;text-align:center;border:1px solid #000;">Email</th>
                 <th colspan="2" style="width:6%;font-family:CalibriBold;text-align:center;border:1px solid #000;">Sukses</th>
                 <th colspan="2" style="width:6%;font-family:CalibriBold;text-align:center;border:1px solid #000;">Reading</th>
                 <th colspan="2" style="width:6%;font-family:CalibriBold;text-align:center;border:1px solid #000;">Click Link</th>

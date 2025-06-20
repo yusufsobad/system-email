@@ -50,11 +50,12 @@ foreach($data as $key => $val){
 	);
 
 	$export = array(
-		'ID'	=> 'excel_' . $id_meta,
+		'ID'	=> 'excel_0',
 		'func'	=> '_export_excel_detail',
 		'color'	=> 'green',
 		'icon'	=> 'fa fa-file-excel-o',
 		'label'	=> 'export',
+		'type'	=> $id_meta
 	);
 	
 	// Check jumlah email

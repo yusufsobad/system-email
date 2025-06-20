@@ -427,8 +427,7 @@ class send_mail extends _page{
 	// ----------------------------------------------------------
 
 	public static function _export_excel_detail($data){
-		$id = str_replace('excel_','',$data);
-		$id = intval($id);
+		$id = intval($_GET['type']);
 
 		ob_start();
 		header("Content-type: application/vnd-ms-excel");
