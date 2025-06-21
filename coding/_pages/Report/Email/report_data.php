@@ -39,8 +39,8 @@
                 }	
 
                 $status = send_mail::_conv_status($value['status']);
-                $read = count($rMail) .'/'. count($tMail);
-                $link = count($lMail) .'/'. count($tMail);
+                $read = count($rMail) .' / '. count($tMail);
+                $link = count($lMail) .' / '. count($tMail);
 
                 echo '
                 <tr>
@@ -48,7 +48,7 @@
                     <td style="width:23%;font-family:Calibri;border:1px solid #000;">' . $value['subject_mail'] . '</td>
                     <td style="width:23%;font-family:Calibri;border:1px solid #000;">' . $from . '</td>
                     <td style="width:14%;font-family:Calibri;text-align:center;border:1px solid #000;">' . format_date_id($value['date']) . '</td>
-                    <td style="width:12%;font-family:Calibri;border:1px solid #000;">' . $status . '</td>
+                    <td style="width:12%;font-family:Calibri;border:1px solid #000;">' . $status[0] . '</td>
                     <td style="width:12%;font-family:Calibri;border:1px solid #000;">' . $read . '</td>
                     <td style="width:12%;font-family:Calibri;border:1px solid #000;">' . $link . '</td>
                 </tr>
