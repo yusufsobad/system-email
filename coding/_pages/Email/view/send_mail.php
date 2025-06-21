@@ -213,6 +213,15 @@ class send_mail extends _page{
 		return contents_mail::$url;
 	}
 
+	public static function _filter($date = '')
+	{
+		ob_start();
+		self::$type = $_POST['type'];
+		$table = self::table($date);
+		theme_layout('sobad_table', $table);
+		return ob_get_clean();
+	}
+
 	// ----------------------------------------------------------
 	// Form data category ---------------------------------------
 	// ----------------------------------------------------------
