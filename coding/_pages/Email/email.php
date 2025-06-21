@@ -27,14 +27,24 @@ class blast_email{
 
 		// url script jQuery - Vendor
 		$get_jquery = $script->_get_('_js_core',array('jquery-core'));
-		$head[0] = '<script src="'.$get_jquery['jquery-core'].'"></script>';	
+		$get_page = $script->_get_('_js_page_level',array('bootstrap-datepicker','bootstrap-select','bootstrap-summernote'));
+
+		$head[] = '<script src="'.$get_jquery['jquery-core'].'"></script>';	
+
+		$head[] = '<script src="'.$get_page['bootstrap-datepicker'].'"></script>';
+		$head[] = '<script src="'.$get_page['bootstrap-select'].'"></script>';
+		$head[] = '<script src="'.$get_page['bootstrap-summernote'].'"></script>';
+
+		$get_socket = $script->_get_('_js_socket_io');
+		$head[] = '<script src="'.$get_socket['core'].'"></script>';
+		
 
 		// url script css ----->
 		$css = array_merge(
 				$script->_get_('_css_global'),
 				$script->_get_('_css_page_level',array(
 						'bootstrap-select',
-						//'bootstrap-datepicker',
+						'bootstrap-datepicker',
 						//'fullcalender',
 						//'bootstrap-editable',
 						//'bootstrap-wysihtml5',
@@ -55,7 +65,7 @@ class blast_email{
 				$script->_get_('_js_page_level',array(
 						'bootstrap-select',
 						'bootstrap-toastr',
-						'bootstrap-datepicker',
+						//'bootstrap-datepicker',
 						//'boot-wysihtml5',
 						//'bootstrap-wysihtml5',
 						'bootstrap-summernote'
