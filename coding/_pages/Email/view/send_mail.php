@@ -32,8 +32,11 @@ class send_mail extends _page{
 		return $args;
 	}
 
-	protected static function table(){
+	protected static function table($date=''){
 		$admin = isset($_SESSION[_prefix . 'admin']) ? $_SESSION[_prefix . 'admin'] : 0;
+
+		$date = empty($date) ? date('Y-m-d') : $date;
+		$date = strtotime($date);
 
 		$data = array();
 		$args = self::_array();
@@ -44,10 +47,12 @@ class send_mail extends _page{
 
 		$_search = '';$kata = '';
 
+		$y = date('Y', $date);
+		$m = date('m', $date);
 		$user = get_id_user();
 
 		$whr = !$admin ? "AND `email-log`.user='$user'" : "";
-		$where = $whr . " AND `email-log`.trash='0'";
+		$where = $whr . " AND `email-log`.trash='0' AND YEAR(`email-log`.date)='$y' AND MONTH(`email-log`.date)='$m'";
 
 		if(self::$search){		
 			$src = self::like_search($args,$where);
@@ -119,6 +124,54 @@ class send_mail extends _page{
 		);
 		
 		return portlet_admin($opt,$box);
+	}
+
+	public static function action($type='',$add_button = true){
+		$date = date('Y-m');
+
+		$excel = array(
+			'ID'	=> 'excel_0',
+			'func'	=> '_export_excel',
+			'color'	=> 'green',
+			'icon'	=> 'fa fa-file-excel-o',
+			'label'	=> 'Export',
+			'type'	=> $type
+		);
+
+		$add = array(
+			'ID'	=> 'add_0',
+			'func'	=> 'add_form',
+			'color'	=> 'btn-default',
+			'icon'	=> 'fa fa-plus',
+			'label'	=> 'Tambah',
+			'type'	=> $type
+		);
+
+		ob_start();
+		?>
+			<div style="display: inline-flex;margin-right: 20px;" class="input-group input-medium date date-picker" data-date-format="yyyy-mm" data-date-viewmode="months">
+				<input id="monthpicker" type="text" class="form-control" value="<?php print($date); ?>" data-sobad="_filter" data-load="sobad_portlet" data-type="<?php print($type); ?>" name="filter_date" onchange="sobad_filtering(this)">
+			</div>
+			<script type="text/javascript">
+				if (jQuery().datepicker) {
+					$("#monthpicker").datepicker({
+						format: "yyyy-mm",
+						viewMode: "months",
+						minViewMode: "months",
+						rtl: false,
+						orientation: "right",
+						autoclose: true
+					});
+				};
+			</script>
+		<?php
+
+		echo print_button($excel);
+		echo _modal_button($add);
+
+		$date = ob_get_clean();
+
+		return $date;
 	}
 
 	public static function _conv_status($id=0){
@@ -426,6 +479,29 @@ class send_mail extends _page{
 	// Export Data ----------------------------------------------
 	// ----------------------------------------------------------
 
+	public static function _export_excel($data){
+		$id = intval($_GET['type']);
+		$filter = empty($_GET['filter']) ? date('Y-m-d') : $_GET['filter'];
+
+		$_date = strtotime($filter);
+		$y = date('Y', $_date);
+		$m = date('m', $_date);
+		$date = conv_month_id($m) . ' ' . $y;
+
+		ob_start();
+		header("Content-type: application/vnd-ms-excel");
+		header("Content-Disposition: attachment; filename=Report Blast Email - " . $date . ".xls");
+
+		self::_html($y,$m);
+		return ob_get_clean();
+	}
+
+	public static function _html($y,$m){
+		$data = kmi_send::get_all([],"AND YEAR(`email-log`.date)='$y' AND MONTH(`email-log`.date)='$m' AND `email-log`.trash='0'");
+
+		report::view('Email/report_data',compact('data'));
+	}
+
 	public static function _export_excel_detail($data){
 		$id = intval($_GET['type']);
 
@@ -433,11 +509,11 @@ class send_mail extends _page{
 		header("Content-type: application/vnd-ms-excel");
 		header("Content-Disposition: attachment; filename=Data Blast Email.xls");
 
-		self::_html($id);
+		self::_html_detail($id);
 		return ob_get_clean();
 	}
 
-	public static function _html($id){
+	public static function _html_detail($id){
 		$data = kmi_send::get_id($id)[0];
 		$details = kmi_send::get_log_meta($id);
 

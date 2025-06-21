@@ -1,6 +1,6 @@
 <?php
 
-$asset = 'https://s.soloabadi.com/system-absen/asset/img/user/';
+$asset = 'http://soloabadi-server.ddns.net/system-sobad-group/asset/img/user/';
 
 $config['data'] = array('data' => $kata, 'value' => $search);
 $config['search'] = array('Semua', 'nama', 'email','diskripsi');
